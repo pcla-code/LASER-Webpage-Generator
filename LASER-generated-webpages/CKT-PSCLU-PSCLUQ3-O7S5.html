@@ -1,0 +1,179 @@
+
+    <html>
+    <head>
+        <title>KT - Clustering - Q3</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+            .container {
+                background: rgba(255, 255, 255, 0.8);
+                backdrop-filter: blur(10px);
+                border-radius: 12px;
+                padding: 40px;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+                text-align: left;
+                max-width: 700px;
+                width: 100%;
+                margin: 20px;
+            }
+            .header {
+                font-size: 20px;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+            h1 {
+                font-size: 17px;
+                font-weight: 200;
+                margin-bottom: 20px;
+                white-space: pre-line; /* Ensure line breaks are respected */
+            }
+            .input-group {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+            #answer {
+                border: none;
+                border-bottom: 1px solid #000;
+                padding: 10px;
+                font-size: 18px;
+                outline: none;
+                width: 70%;
+            }
+            #submit {
+                background-color: #007BFF;
+                color: white;
+                border: none;
+                padding: 8px 12px;
+                cursor: pointer;
+                font-size: 16px;
+                border-radius: 5px;
+                margin-left: 10px;
+                font-weight: 300;
+            }
+            #submit:disabled {
+                background-color: #ccc;
+            }
+            #hintButton {
+                margin-top: 20px;
+                background-color: #007BFF;
+                color: white;
+                border: none;
+                padding: 8px 12px;
+                cursor: pointer;
+                font-size: 16px;
+                border-radius: 5px;
+                margin-bottom: 20px;
+                font-weight: 300;               
+            }
+            #nextButton {
+                display: none; /* Hidden initially */
+                background-color: #007BFF;
+                color: white;
+                border: none;
+                padding: 8px 12px;
+                cursor: pointer;
+                font-size: 16px;
+                border-radius: 5px;
+                margin-top: 20px;
+                font-weight: 300;
+                text-align: center;
+                text-decoration: none;
+            }
+            #feedback {
+                margin-top: 20px;
+                font-size: 18px;
+                font-weight: bold;
+                min-height: 30px;
+                text-align: center;
+            }
+            .correct {
+                color: green;
+            }
+            .incorrect {
+                color: red;
+            }
+            #hintDisplay {
+                margin-top: 10px;
+                font-style: italic;
+                text-align: center;
+            }
+            .button-center {
+                display: flex;
+                justify-content: center; /* Center-align the hint button */
+            }            
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">KT - Clustering - Q3</div>
+            <h1>What did k-Means do here?<br><br> <br><br><br>Select one:<br>A. It split the lumps in the data approximately evenly in clusters<br>B. It did a median split on two key variables<br>C. It found the least central lump in the data and made it a cluster<br>D. It found the most central lump in the data and made it a cluster</h1> <!-- Using formatted question with line breaks -->
+            <div class="input-group">
+                <input type="text" id="answer" name="answer" placeholder="Your answer">
+                <input type="submit" id="submit" value="Submit" onclick="return checkAnswer()">
+            </div>
+            <div id="feedback"></div>
+
+            <div id="hintDisplay"></div><br>
+
+            <div class="button-center">
+                <button id="hintButton" onclick="showHint()">Show Hint</button>
+            </div>
+            <div class="button-center">
+                <a id="nextButton" href="CKT-PSCLU-PSCLUQ4-HI8t.html">Next</a>
+            </div>
+        </div>
+
+    
+    <script>
+        var hints = [];
+        var hintIndex = 0;
+        function showHint() {
+            if (hintIndex < hints.length) {
+                document.getElementById("hintDisplay").innerHTML = hints[hintIndex];
+                hintIndex++;
+            } else {
+                document.getElementById("hintDisplay").innerHTML = "No more hints to show";
+            }
+        }
+    </script>
+    
+    <script>
+        // Trigger submit on Enter key
+        document.getElementById('answer').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('submit').click();
+            }
+        });
+
+        function checkAnswer() {
+            var answer = document.getElementById('answer').value.trim();
+            var correctAnswers = ['C']; // Corrected to ensure all answers are strings
+            if (correctAnswers.map(a => a.toLowerCase()).includes(answer.toLowerCase())) {
+                document.getElementById('feedback').innerHTML = "Correct!";
+                document.getElementById('feedback').className = "feedback correct";
+                document.getElementById('answer').disabled = true;
+                document.getElementById('submit').disabled = true;
+                document.getElementById('hintButton').style.display = "none";
+                document.getElementById('hintDisplay').style.display = "none";
+                document.getElementById('nextButton').style.display = "inline-block"; // Show next button
+            } else {
+                document.getElementById('feedback').innerHTML = "Incorrect. Try again.";
+                document.getElementById('feedback').className = "feedback incorrect";
+                return false; // Prevent form submission to allow retries
+            }
+            return false; // Prevent form submission
+        }
+    </script>
+    </body>
+    </html>
+    

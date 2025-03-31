@@ -1,0 +1,1414 @@
+Curriculum,Problem Set,Question,Answer,Hint
+KT,Classifier,"Let's build a decision tree on the entire data set, predicting which student is on task. In the data set, you'll see that the variable had already been coded. To evaluate the model, we can use Cohen's Kappa as a measure of the agreement between human and non-human coder, or more simply put whether the machine prediction aligns with the way the human observed and coded as students being on task. What is the kappa? Please use 2 decimal places.
+
+
+You will need to use the following packages:
+
+tree from sklearn
+cohen_kappa_score from sklearn.metrics
+
+Use the following classifier and hyperparameters:
+
+tree.DecisionTreeClassifier(min_samples_split=10)
+",0.73,"First, you will need to import the pandas module, and the decision tree and kappa classes from the sklearn module.
+
+
+
+
+
+from sklearn import tree
+
+from sklearn.metrics import cohen_kappa_score"
+,,,,"It is important to note that Python’s native implementation of decision trees uses the CART (Classification and Regression Trees) algorithm. CART can only take in numerical variables, so you will have to transform string-type variables to numerical variables."
+,,,,"Your current data set has string-type variables. In order to allow CART to use these variables, you will need to perform one-hot encoding on all your string-type variables:
+
+
+
+df = pd.get_dummies(df, columns=['SCHOOL', 'Class', 'CODER', 'Activity'])"
+,,,,"You will then need to create an array containing only the label, or the variable you want to predict. In this case, the label is ONTASK:
+
+
+
+y = df['ONTASK']"
+,,,,"Will you need ONTASK in your list of features when predicting the label?
+
+No, you will then need to remove ONTASK from your data set before building your decision tree:
+
+
+
+X = df.drop(columns=[‘ONTASK'], axis=1)"
+,,,,"You are now ready to build your decision tree. Feed your set of features and the list of ONTASK labels into the DecisionTreeClassifier operator:
+
+
+
+clf = tree.DecisionTreeClassifier(min_samples_split=10)
+
+clf.fit(X, y)"
+,,,,"In order to compute kappa, you will first need to get the values predicted by your model:
+
+
+
+predictions = clf.predict(X)"
+,,,,"Next, you will need to compare the predictions to the actual labels in order to compute kappa:
+
+
+
+kappa = cohen_kappa_score(y, predictions)"
+,,,,"Finally, don't forget to round up the kappa to 2 decimal places:
+
+
+
+print(""kappa:"", round(kappa, 2))"
+,,"That is the correct answer, but the model may be over-fitting to which student it is. What is the kappa if you build the model excluding student? Remember to provide your answer in 2 decimal places.",0.72,Which of your features is used to name the student?
+,,,,"It is STUDENTID. To exclude this feature,  you need to remove this column before building your decision tree:
+X = df1.drop(columns=['STUDENTID'])"
+,,,,"After dropping, re-run the rest of the process, and print kappa. "
+,,Some other features in the data set may make your model overly specific to the current data set. Which data features would not apply outside of the population sampled in the current data set?,School,"A variable will not apply outside of the sample in the current data set, if its values are likely to seen in a different sample. For example, if you used ""State"" in an analysis of U.S. cities, the resultant model might make a prediction based on whether the city was in Connceticut or Massachusetts, and would not be applicable to ""Veracruz"" in Mexico."
+,,,Class,"Will school apply outside the current sample? Not if you collect data from new schools and want to apply your model. So select ""Yes"" for school."
+,,,Coder,"Will class apply outside the current sample? Not if you collect data from new classes and want to apply your model. So select ""Yes"" for class."
+,,,UNIQUEID,"Will grade apply outside the current sample? There are a lot of Kindergarten through 4th grade students out there, so your model will still apply widely, even if you use this variable. So select ""No"" for grade."
+,,,,"Will coder apply outside the current sample? You probably want to apply the model to situations where there isn't a field coder. So select ""Yes"" for coder."
+,,,,"Will gender apply outside the current sample? There are a lot of people for whom the categories used here apply, so your model will still apply widely, even if you use this variable. So select ""No"" for gender."
+,,,,"Will obsnum apply outside the current sample? Yes, this is just capturing how far along in the session the student is. So select ""No"" for obsnum."
+,,,,"Will UNIQUEID apply outside the current sample? No, it is specific to the current data set. So select ""Yes"" for UNIQUEID."
+,,,,"Please select:
+A. School
+B. Class
+D. Coder
+G. UNIQUEID"
+,,"What is the non-cross-validated kappa, if you build the decision tree model (using the same operator), excluding the student and the variables? Recall that you decided to eliminate School, Class, Coder, and UNIQUEID, as well as STUDENTID. Again, provide your answer in decimal places.",0.71,"Before dropping these columns, it is first important to remember that you had initially transformed your string-type variables into numerical values using one-hot encoding. Because of this, the data set you were working with has one additional column for each unique value in each string-type variable. "
+,,,,"In order to drop the necessary columns and perform all other analyses that follow, you will first need to re-trace your steps when conducting one-hot encoding, and this time, get dummy variables for only the string-type variable you want to keep and use in your model (i.e., “Activity”)
+
+df2 = pd.get_dummies(df, columns=['Activity'])"
+,,,,"Now you can drop the necessary columns before building your decision tree.
+
+X = df2.drop(columns=['UNIQUEID', 'SCHOOL', 'Class', 'CODER', 'STUDENTID', 'ONTASK'])"
+,,,,"After dropping, re-run the rest of the process as before, and print kappa."
+,,"What is the non-cross-validated kappa for the same set of variables you used for Question 4 if you use Naive Bayes instead of CART? Please use 2 decimal places.
+
+ 
+
+You will need to use the following packages:
+
+GaussianNB from sklearn.naive_bayes",0.07,"
+For this question, you will need to import the additional Gaussian Naïve Bayes classes.
+
+ 
+
+from sklearn.naive_bayes import GaussianNB"
+,,,,"Instead of feeding your set of features and list of labels into the DecisionTreeClassifier operator, you will instead feed them into the GaussianNB operator.
+
+ 
+
+gnb = GaussianNB()"
+,,,,"You are now ready to build your new model.
+
+ 
+
+gnb.fit(X, y)"
+,,,,"Like earlier, you will need to get the list of your models predictions in order to compute kappa.
+
+
+predictions = gnb.predict(X)"
+,,,,Re-run the rest of your process and print kappa.
+,,"What is the non-cross validated kappa for the same set of variables you used for Question 4 if you use extreme gradient boosting instead of CART? Please use 2 decimal places.
+
+ 
+
+You will need to use the following packages:
+
+XGBClassifier from xgboost
+ 
+
+Use the following classifier and hyperparameters:
+
+XGBClassifier(learning_rate=0.5, n_estimators=200, random_state=5)",0.59,"For this question, you will need to import the additional Extreme Gradient Boosting Classifier package.
+
+from xgboost import XGBClassifier"
+,,,0.22,"Instead of feeding your set of features and list of labels into the DecisionTreeClassifier operator, you will instead feed them into the XGBClassifier operator.
+
+xgb = XGBClassifier()"
+,,,,"Use the attribute values listed in the question when working towards getting your answer to this question, but feel free to play around with these values to see how they affect your model’s performance.
+
+xgb = XGBClassifier(learning_rate=0.5, n_estimators=200, random_state=5)"
+,,,,"Build your new model.
+
+xgb.fit(X, y)"
+,,,,"Like earlier, you will need to get the list of your model's predictions in order to compute kappa.
+
+predictions = xgb.predict(X)"
+,,,,Re-run the rest of your process and print kappa.
+,,"What is the kappa, if you delete School, Class, Coder, UNIQUEID, and STUDENTID, use CART, and conduct 10-fold student-level batch cross-validation using the basic decision tree classifier? Please use 2 decimal places.
+
+ 
+
+You will need to use the following package:
+
+GroupKFold from sklearn.model_selection",0.1,"In order to perform batch cross-validation, you will first need to import the necessary module:
+
+from sklearn.model_selection import GroupKFold"
+,,,,"You will first need to ensure that each student appears in ONLY ONE batch. This way, for example, if the model is trained using Student A’s data, the model cannot also be tested on Student A’s data."
+,,,,"You can do this by creating a dictionary of unique student IDs, each linked to a specific index number.
+
+group_dict = {}
+groups = np.array([])
+
+for index, row in data.iterrows():
+    student_id = row['STUDENTID']
+    if student_id not in group_dict:
+        group_dict[student_id] = index
+    groups = np.append(groups, group_dict[student_id])"
+,,,,"You now need to create the batching variable. Remember, you are creating 10 folds (i.e., each student can only be assigned to one of 10 groups).
+
+gkf = GroupKFold(n_splits=10)"
+,,,,"You are now ready to build your model, this time using batch cross-validation, iterating through your folds using the batching variable you just created. But first, be sure to create a list outside the for-loop to store all 10 kappa values.
+
+kappa_values = list()
+
+for train_index, test_index in gkf.split(X, y, groups=groups):"
+,,,,"All other code stubs in the following hints will be within the newly created for-loop, unless otherwise stated.
+
+Using the training and testing indices, pull the relevant features (from X) and labels (from y) before building a model in this iteration:
+
+    X_train = X.iloc[train_index]
+    X_test = X.iloc[test_index]
+    y_train = y[train_index]
+    y_test = y[test_index]"
+,,,,"You are now ready to build and test your model in this iteration. Be sure to store the kappa value you compute in this loop into the list you originally created outside the for-loop.
+
+    clf = tree.DecisionTreeClassifier(min_samples_split=10)
+    clf.fit(X_train, y_train)
+    predictions = clf.predict(X_test)
+    kappa = cohen_kappa_score(y_test, predictions)
+    kappa_values.append(kappa)"
+,,,,"Once this is done, all that's left to do is get the average kappa and print. Be sure to do this outside the for-loop.
+
+ 
+
+You can do this using mean from the statistics module.
+
+from statistics import mean
+
+print(mean(kappa_values))"
+,,"What is the kappa, for the same set of variables you used for question 4, if you use Naive Bayes, and conduct 10-fold student-level batch cross-validation?
+
+Please use 2 decimal places.",0.06,"Using the same batching and for-loop created in Question 7, replace the existing DecisionTreeClassifier with the GaussianNB operator.
+
+gnb = GaussianNB()"
+,,,,"Re-run the entire process and print the cross-validated kappa. Remember to flatten your list of labels during model fitting.
+
+gnb.fit(X_train, y_train.ravel())"
+,,"What is the kappa, for the same set of variables you used for question 4, if you use Extreme Gradient Boosting, and conduct 10-fold student-level batch cross-validation?
+
+Please use 2 decimal places.",0.11,"Using the same batching and for-loop created in Question 7, replace the existing GaussianNB with the GradientBoostingClassifier operator.
+
+xgb = XGBClassifier(learning_rate=0.5, n_estimators=200, random_state=5)"
+,,,0.1,"Re-run the entire process and print the cross-validated kappa.
+
+xgb.fit(X_train, y_train)"
+,,"Why is the kappa lower for question 7 (decision tree with cross-validation) than question 4 (decision tree with no cross-validation)?
+
+Select one:
+A. K-fold-cross-validation is not as good as leave-out-one cross validation
+B. You shouldn't use kappa with k-fold-cross-validation
+C. Using cross-validation overfits to the training sample
+D. Not using cross-validation overfits to the training sample",D,
+,Diagnostic Metrics,"What is the Pearson correlation between data and predicted (model)? For this question, you should use the regressor dataset.
+
+ 
+
+Round your answer to three decimal places (e.g. 0.24675 should be be rounded as 0.247).",0.705,"You can use stats from scipy library:
+
+ 
+
+from scipy import stats"
+,,,,"You can compute Pearson correlation using pearsonr function:
+
+ 
+
+
+corr, _ = stats.pearsonr(df['data'], df['predicted (model)'])"
+,,,,"Remember to round the correlation coefficient to 3 decimal places:
+
+ 
+
+print('Pearsons correlation: %.3f' % corr)"
+,,"Using the same regressor dataset, what is the RMSE between data and predicted (model)?
+
+ 
+
+Round your answer to three decimal places (e.g. 0.24675 should be be rounded as 0.247).",0.242,"RMSE(Root Mean Squared Error) is the square root of the MSE(Mean Squared Error), or the average of what has been squared after taking the difference between A and B for a given row."
+,,,,"You can compute MSE using mean_squared_error from sklearn.metrics: 
+
+from sklearn.metrics import mean_squared_error"
+,,,,"Compute the MSE between Column A and B:
+
+MSE = mean_squared_error(df['data'], df['predicted (model)'] )"
+,,,,"You can compute the square root of MSE using math library:
+
+import math
+RMSE = math.sqrt(MSE)"
+,,,,"Remember to round the RMSE to 3 decimal places:
+
+print('RMSE:', round(RMSE, 3))"
+,,"What is the MAE between data and predicted (model)?
+
+ 
+
+Round your answer to three decimal places (e.g. 0.24675 should be be rounded as 0.247).",0.202,MAE(Mean Absolute Error) is the average difference between A and B.
+,,,,"You can compute MAE using mean_absolute_error from sklearn.metrics:
+
+from sklearn.metrics import mean_absolute_error"
+,,,,"Compute MAE between the data and the model:
+
+MAE = mean_absolute_error(df['data'], df['predicted (model)'])"
+,,,,"Remember to round the MAE to 3 decimal places:
+
+print('MAE: ', round(MAE, 3))"
+,,"Now, we will switch to the classifier dataset. What is the accuracy of the predicted (model)? Assume a threshold of 0.5.
+
+ 
+
+Give a rounded value rather than including the decimal (e.g. write 57.213% as 57).",73,You can find the accuracy by taking the correct cases divided by the total number of cases.
+,,,,"Remember to round the output:
+
+print('Accuracy: ', round(accuracy*100))"
+,,,,"Take the mean across all cases in the new column:
+
+accuracy = df2['TP/TN'].mean()"
+,,,,"Apply the function to the new column.
+
+df2['TP/TN'] = df2.apply(find_accuracy, axis=1)"
+,,,,"Create a function that assigns 1 if the data says Y and the prediction is over or equal to the threshold, or if the data says N and the prediction is under the threshold. All other case should be assigned 0."
+,,,,"It should look something like this.
+
+def find_accuracy(row):
+    if row['Data'] =='Y' and row['Predicted (Model)'] >= 0.5:
+        val = 1
+    elif row['Data'] =='N' and row['Predicted (Model)'] < 0.5:
+        val = 1
+    else:
+        val = 0
+    return val"
+,,"How well would a detector perform, if it always picked the majority (most common) class? 
+
+ 
+
+Give a rounded value rather than including the decimal (e.g. write 57.213% as 57).",51,"You can find the majority, or the most common class by using .value_counts():
+
+df2['Data'].value_counts()"
+,,,,You will see that there is more N values than Y values.
+,,,,"Find the accuracy by taking the majority divided by all cases:
+
+N/(Y+N)"
+,,,,"Remember to round the result:
+
+print('Accuracy: ', round(N/(Y+N)*100))"
+,,"Based on the accuracy and the frequency of the majority (most common) class, do you think this detector’s performance is better than the base rate?Select one:
+A. Yes
+B. No",A,
+,,"What is this detector’s value for Cohen’s Kappa? Assume a threshold of 0.5.
+
+ 
+
+Round your answer to two decimal places (e.g.0.74821 should be be rounded as 0.75).",0.46,"You can compute Cohen's Kappa using cohen_kappa_score from from sklearn.metrics:
+
+from sklearn.metrics import cohen_kappa_score"
+,,,,"You will need to compare two raters, in this case Column A and B, by representing their performance into binary number."
+,,,,"Create a function that assigns 1 to cases if the prediction is over or equal to the threshold. All other cases should be assigned 0:
+
+def find_kappa(row):
+    if row['Predicted (Model)'] >= 0.5:
+        val = 1
+    else:
+        val = 0
+    return val"
+,,,,"Apply the function to the new column:
+
+df2['Rater1'] = df2.apply(find_kappa, axis=1)"
+,,,,"Create another column that assigns 1 to Y and 0 to N in Column A:
+
+df2['Rater2'] = df2['Data'].map({'Y': 1, 'N': 0})"
+,,,,"You can compute Cohen's Kappa using cohen_kappa_score from from sklearn.metrics:
+
+kappa_score = cohen_kappa_score(df2['Rater1'], df2['Rater2'])"
+,,,,"Remember to round the result to 2 decimal places:
+
+print(""Kappa Score: "", round(kappa_score, 2))"
+,,"Assuming we are trying to predict “Y”, what is this detector’s precision? Also, let's assume a threshold of 0.5.
+
+ 
+
+Round your answer to two decimal places (e.g.0.74821 should be be rounded as 0.75).",0.95,Precision is the number of True Positive divided by the sum of True Positive and False Positive.
+,,,,"You can start by creating a confusion matrix, or a table that shows 4 possibles cases. "
+,,,,"Create a function that classifies whether it's the case of True Positive(TP), True Negative(TN), False Positive(FP) and False Negative(FN): 
+
+def find_precision(row):
+    if row['Data'] =='Y' and row['Predicted (Model)'] >= 0.5:
+        val = 'TP'
+    elif row['Data'] =='N' and row['Predicted (Model)'] < 0.5:
+        val = 'TN'
+    elif row['Data'] =='N' and row['Predicted (Model)'] >= 0.5:
+        val = 'FP'
+    else:
+        val = 'FN'
+    return val"
+,,,,"Now, apply the function to the new column:
+
+df2['Precision'] = df2.apply(find_precision, axis=1)"
+,,,,"Create a matrix that shows the number of each cases (i.e., TP, TN, FP, FN):
+
+TP = df2['Precision'].value_counts()['TP']
+TN = df2['Precision'].value_counts()['TN']
+FP = df2['Precision'].value_counts()['FP']
+FN = df2['Precision'].value_counts()['FN']
+
+matrix = pd.DataFrame({'Detector Off Task': [TN, FN],
+                       'Detector On Task': [FP, TP]},
+                        index= ['Off Task', 'On Task'])"
+,,,,"Compute the precision by dividing the number of TP by the sum of TP and FP:
+
+Precision = TP/(TP+FP)"
+,,,,"Remember to round the precision to 2 decimal places:
+
+print(""Precision: "", round(Precision, 2))"
+,,"Assuming we are trying to predict “Y”, what is this detector’s recall? Also, let's assume a threshold of 0.5.
+
+ 
+
+Round your answer to two decimal places (e.g.0.74821 should be be rounded as 0.75).",0.47,Recall is the number of True Positive(TP) divided by the sum of True Positives(TP) and False Negatives(FN):
+,,,,"You can use the same matrix from Question 8 to compute recall:
+
+Recall = TP/(TP+FN)"
+,,,,"Remember to round the recall to 2 decimal places:
+
+print('Recall: ', round(Recall, 2))"
+,,"Based on the precision and recall, should this detector be used for strong interventions that have a high cost if misapplied, or fail-soft interventions with low benefit and a low cost if misapplied?
+
+ 
+
+
+Select one:
+A. STRONG
+B. FAIL-SOFT
+C. EITHER
+D. NEITHER
+",A,
+,,"What is this detector’s value for AUC ROC? For this question, you can use the roc_auc_score package in the sklearn.metrics.
+
+ 
+
+Round your answer to two decimal places (e.g.0.74821 should be be rounded as 0.75).",0.95,"First, import roc_auc_score from the sklearn.metrics library
+
+from sklearn.metrics import roc_auc_score"
+,,,,"Store the observed and predicted values into separate lists. Be sure to turn the Ys and Ns in the observed column into 1s and 0s, respectively.
+
+y_true = list()
+y_score = list()
+for index, row in df2.iterrows():
+    true = 1 if row['Data'] == 'Y' else 0
+    y_true.append(true)
+    y_score.append(row['Predicted (Model)'])"
+,,,,"Remember to round the AUC ROC (or A') value to 2 decimal places.
+
+print(""AUC ROC: "", round(roc_auc_score(y_true, y_score), 2))"
+,BKT,"On a copy of the dataset, filter out all actions until you only have actions for KC ""VALUING-CAT-FEATURES"". How many rows of data remain?",2473,You can actually create a copy and specify what the copy will contain. 
+,,,,"Here's how you can filter specific rows from the dataset and indicate that it's a different version.
+
+df2 = df[df[""KC""]==""VALUING-CAT-FEATURES""]"
+,,,,One way to get the number of rows is to ask for the shape of the dataset.
+,,,,"You can get the number of rows by using the shape method.
+
+print(""Number of Rows:"", df2.shape[0])"
+,,"Based on the assumptions of Bayesian Knowledge Tracing, we need to delete some rows. Which rows of the firstattempt column, do we need to delete?
+Select from the following 4 options:
+A. Firstattempt = 1
+B. Firstattempt = 0
+C. No rows
+D. All rows",Firstattempt = 0,
+,,Go ahead and delete the rows where it's not the first attempt. How many rows of data remain?,1791,"
+Similar to what we did with the KC, we want to focus on the first-attempts while not losing the original dataset."
+,,,,"You can specify the rows of our interest and give it a different name.
+
+df3 = df2[df2[""firstattempt""]==1]"
+,,,,"You can get the number of rows by using the shape method.
+
+print(""Number of Rows:"", df3.shape[0])"
+,,,,Now count the number of rows. Make sure that you are not counting the header (column name) row.
+,,"Before we start building the model, we need base values: L0, T, S, G. Assign the each values0.3, 0.1, 0.2, and 0.25 respectively.
+
+What is your slip parameter? (If you're not sure what these re",0.2,"Here, we have four parameters -- two for learning and two for performance. What do you think each represent?
+
+L0 = 0.3
+t = 0.1
+s = 0.2
+g = 0.25"
+,,,,"With regards to learning, it's possible that either the student already has the skill even before having to use the skill, which is referred to as P(L0), or acquires the skill from every opportunity to use it, or P(T)."
+,,,,"As for performance, the student can have the skill and still make a mistake. Alternatively, the student can guess it right even without having the skill. "
+,,,,"In Bayesian Knowledge Tracing, ""S"" denotes slip where the skill is known to the student although the performance suggests otherwise. "
+,,"Create three new columns: P(Ln-1), P(Ln-1|RESULT), and P(Ln). Leave the columns below them empty for now. Just temporarily, set up column P(Ln) so that it build on the previous column P(Ln-1) with an increase of 0.1. (This pretends that the student always gets 10% better each time, even going over 100%, which is clearly wrong...; we'll fix it later.)
+
+ 
+
+What should the formula be for column P(Ln-1)? If you're not sure which of these is right, try them out.
+
+A. df3.loc[df3[""Student""] != df3[""Student""].shift(-1), ""P(Ln-1)""] = L0
+B. df3.loc[df3[""Student""] != df3[""Student""].shift(), ""P(Ln-1)""] = L0
+C. df3.loc[df3[""Student""] != df3[""Student""].shift(1), ""P(Ln-1)""] = df3[""Student""].shift(1)
+D. df3.loc[df3[""Student""] == df3[""Student""].shift(), ""P(Ln-1)""] = L0
+E. df3.loc[df3[""Student""] == df3[""Student""].shift(-1), ""P(Ln-1)""] = df3[""P(Ln)""].shift()
+F. df3.loc[df3[""Student""] == df3[""Student""].shift(1), ""P(Ln-1)""] = df3[""P(Ln)""].shift()
+
+Use Comma to seperate multiple options, such as A,B","B,F","One way to create new columns is to insert them. (With this method, we have the freedom to add a column at any position we like and not just at the end.)
+
+df3.insert(8, ""P(Ln-1)"", 0)
+df3.insert(9, ""P(Ln-1|Result)"", 0)
+df3.insert(10, ""P(Ln)"", 0)"
+,,,,"Next, let's set up P(Ln). We want it to build up on the previous row in P(Ln-1) with an increment of 0.1.
+
+df3.loc[:, ""P(Ln)""] = df3.loc[:, ""P(Ln-1)""].shift() + 0.1"
+,,,,"With regards to P(Ln-1), what behavior do you want to see? Ideally, you want to refer to the current knowledge when calculating the new knowledge estimate based on performance. When you encounter a new student, however, you want to refer back to the initial P(L0)."
+,,,,"In other words, we expect the student knowledge to go up steadily by 0.1 with each attempt, and re-set back to 0.3 each time it's a new student. Which formula gives you this result?"
+,,,,"Since P(L) and P(Ln-1) are set up in a way that each builds on another, you need to re-run the same formula to check out the final output. Update P(Ln) to reflect the changes made to P(Ln-1), and vice versa. "
+,,,,"Here's a how you can iterate the process more quickly. In the end, you should see that the NA value in the first row in P(Ln) carries over to the next row in P(Ln-1), and so on and so forth.
+
+for index, row in df.iterrows():
+    df3.loc[:, ""P(Ln)""] = df3.loc[:, ""P(Ln-1)""].shift() + 0.1
+    df3.loc[df3[""Student""] != df3[""Student""].shift(), ""P(Ln-1)""] = l0
+    df3.loc[df3[""Student""] == df3[""Student""].shift(), ""P(Ln-1)""] = df3[""P(Ln)""].shift() "
+,,"With the formula for column P(Ln-1) in place, we now need to set up the first row of column P(Ln). Just temporarily, set column P(Ln-1|Result) to be the same as P(Ln-1). (This eliminates Bayesian updating, which is not correct within BKT...; we'll fix it later.)  Based on the P(T) parameter, what should the formula be for P(Ln) so that it accurately represents learning?
+
+As always, don't be shy to try out the others, and see whether they return you what you expected. If not, consider why they fail.
+
+ A. df3.loc[:, ""P(Ln)""] = df3.loc[:, ""P(Ln-1|Result)""]*t
+B. df3.loc[:, ""P(Ln)""] = (1-df3.loc[:, ""P(Ln-1|Result)""])*t
+C. df3.loc[:, ""P(Ln)""] = df3.loc[:, ""P(Ln-1|Result)""] + df3.loc[:, ""P(Ln-1|Result)""]*t
+D. df3.loc[:, ""P(Ln)""] = df3.loc[:, ""P(Ln-1|Result)""] - (1-df3.loc[:, ""P(Ln-1|Result)""])*t
+E. df3.loc[:, ""P(Ln)""] = df3.loc[:, ""P(Ln-1|Result)""] + (1-df3.loc[:, ""P(Ln-1|Result)""])*t
+",E,"Let's set up the P(Ln-1|Result) before we start exploring the formula.
+
+df3.loc[:, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]"
+,,,,"Think about what behavior you want to see. Ideally, you want to take the current knowledge (based on performance), plus the probability that the student learned if he or she didn't already know the skill."
+,,,,"Since it's set up in a way that P(L), P(Ln-1), and P(Ln-1|Result) builds on another, you need to re-run the same formula to check out the final output.
+
+for index, row in df.iterrows():
+    df3.loc[df3[""Student""] != df3[""Student""].shift(), ""P(Ln-1)""] = l0
+    df3.loc[df3[""Student""] == df3[""Student""].shift(), ""P(Ln-1)""] = df3[""P(Ln)""].shift()
+    df3.loc[:, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]
+ 
+In the end, you should no longer see NA value in the dataset."
+,,,,"You should get a result where P(Ln) is always more than P(Ln-1), but the bigger P(Ln-1) is, the smaller the difference is. And P(Ln) should always be less than 1."
+,,,,"In the list, you have the models that look at only the probability you knew the skill, the models that only look at the probability that you didn't know the skill, and the models that look at both. Which one correctly represents BKT?"
+,,,,"Since BKT looks at both the probability you knew the skill and the probability you didn't know the skill, it's down to two options, whether it's the sum of the probability of future knowledge when you knew the skill and didn't know the skill, or the difference between those  probabilities. Which one is it?"
+,,,,You're looking at the sum of those probabilities!
+,,"What should the formula be for P(Ln-1|Result)?
+A. df3.loc[df3[""right""] == 1, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]*(1-t)/((df3.loc[:, ""P(Ln-1)""]*(1-t)) + (1-df3.loc[:, ""P(Ln-1)""])*t)
+B. df3.loc[df3[""right""] =! 1, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]*t/((df3.loc[:, ""P(Ln-1)""]*t) + (1-df3.loc[:, ""P(Ln-1)""])*(1-t)
+C. df3.loc[df3[""right""] == 1, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]*s/((df3.loc[:, ""P(Ln-1)""]*s) + (1-df3.loc[:, ""P(Ln-1)""])*g)
+D. df3.loc[df3[""right""] != 1, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]*s/((df3.loc[:, ""P(Ln-1)""]*s) + (1-df3.loc[:, ""P(Ln-1)""])*(1-g))
+E. df3.loc[df3[""right""] == 1, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]*(1-g)/((df3.loc[:, ""P(Ln-1)""]*(1-g)) + (1-df3.loc[:, ""P(Ln-1)""])*s)
+F. df3.loc[df3[""right""] != 1, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]*g/((df3.loc[:, ""P(Ln-1)""]*g) + (1-df3.loc[:, ""P(Ln-1)""])*(1-s))
+G. df3.loc[df3[""right""] == 1, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]*(1-s)/((df3.loc[:, ""P(Ln-1)""]*(1-s)) + (1-df3.loc[:, ""P(Ln-1)""])*g)
+H. df3.loc[df3[""right""] != 1, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]*(1-s)/((df3.loc[:, ""P(Ln-1)""]*(1-s)) + (1-df3.loc[:, ""P(Ln-1)""])*g)
+Use Comma to seperate multiple options, such as A,B","D,G","The key question for this problem is: When the student gets the right answer, should the estimate of their updated knowledge be based on the probability they knew it and didn't learn, the probability they knew it and slipped, the probability they knew it and didn't guess, or the probability that they knew it and didn't slip?"
+,,,,"Within BKT, when the student gets the right answer, the estimate of their updated knowledge is based on the probability that they knew it and didn't slip."
+,,"If a student starts the tutor and then gets 3 problems right in a row for the skill, what is his/her final P(Ln) after these three problems?
+A. 0.223
+B. 0.651
+C. 0.856
+D. 0.955
+E. 0.987
+",D,"To answer this question, you need a situation where the student starts the tutor and then gets 3 problems right in a row for the skill.  You can achieve this by just changing the first three responses for some student (who has three or more responses) to 1, 1, 1."
+,,,,"Since student ID of AGUFADE only had two responses, try AOADMAC. "
+,,,,"Specify the row and the column of the value that you want to change. To get the row number, you can either count or simply reset the index according to the current version. 
+
+df3 = df3.reset_index()
+df3.at[3,'right']=1
+df3.at[4,'right']=1"
+,,,,"Then, you should iterate the entire process thus far.
+
+for index, row in df.iterrows():
+    df3.loc[df3[""Student""] != df3[""Student""].shift(), ""P(Ln-1)""] = l0
+    df3.loc[df3[""Student""] == df3[""Student""].shift(), ""P(Ln-1)""] = df3[""P(Ln)""].shift()
+    df3.loc[df3[""right""] == 1, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]*(1-s)/((df3.loc[:, ""P(Ln-1)""]*(1-s)) + (1-df3.loc[:, ""P(Ln-1)""])*g)
+    df3.loc[df3[""right""] != 1, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]*s/((df3.loc[:, ""P(Ln-1)""]*s) + (1-df3.loc[:, ""P(Ln-1)""])*(1-g))
+    df3.loc[:, ""P(Ln)""] = df3.loc[:, ""P(Ln-1|Result)""] + (1-df3.loc[:, ""P(Ln-1|Result)""])*t"
+,,"If a student starts the tutor and then gets 3 problems wrong in a row for the skill, what is his/her final P(Ln)?
+A. 0.192
+B. 0.138
+C. 0.142
+D. 0.431
+E. 0.411",C,"For this question, you need a situation where the student starts the tutor and then gets 3 problems wrong in a row for the skill. You can achieve this by just changing the first three responses for some student (who has three or more responses) to 0, 0, 0. "
+,,,,"Since student ID of AGUFADE only had two responses, try AOADMAC once more."
+,,,,"Again, but on a copy, specify the row and the column of the value that you want to change. This time, set it to 0. 
+
+df4 = df3
+df4.loc[2,['right']]=0
+df4.loc[3,['right']]=0
+df4.loc[4,['right']]=0"
+,,,,"With the  new students' responses, you should iterate the same process.
+
+for index, row in df.iterrows():
+    df4.loc[df4[""Student""] != df4[""Student""].shift(), ""P(Ln-1)""] = l0
+    df4.loc[df4[""Student""] == df4[""Student""].shift(), ""P(Ln-1)""] = df4[""P(Ln)""].shift() 
+    df4.loc[df4[""right""] == 1, ""P(Ln-1|Result)""] = df4.loc[:, ""P(Ln-1)""]*(1-s)/((df4.loc[:, ""P(Ln-1)""]*(1-s)) + (1-df4.loc[:, ""P(Ln-1)""])*g)
+    df4.loc[df4[""right""] != 1, ""P(Ln-1|Result)""] = df4.loc[:, ""P(Ln-1)""]*s/((df4.loc[:, ""P(Ln-1)""]*s) + (1-df4.loc[:, ""P(Ln-1)""])*(1-g))
+    df4.loc[:, ""P(Ln)""] = df4.loc[:, ""P(Ln-1|Result)""] + (1-df4.loc[:, ""P(Ln-1|Result)""])*t"
+,,"What is the AUC ROC (Area Under the ROC Curve)? For this question, you can use scikit-learn. What did you get?
+keep three decimal places",0.864,"First, import the library and the function you need for this question.
+
+from sklearn.metrics import roc_auc_score"
+,,,,"Set the ground truths and the predicted probabilities.
+
+true_labels = list(df4[""right""])
+
+predicted_probabilities = list(df4[""P(Ln)""]) "
+,,,,"Now, you just need to compute the AUC ROC.
+
+auc_roc1 = roc_auc_score(true_labels, predicted_probabilities)
+
+print(""AUC ROC:"", auc_roc1)"
+,,"Let's try with a different set of parameters and see how it impacts the AUC ROC. Change the parameters like as below. What did you get?
+
+ 
+
+l0 = 0.3
+t = 0.1
+s = 0.4
+g = 0.4",0.802,"Assign the new values to the parameters. 
+
+l0 = 0.3
+t = 0.1
+s = 0.4
+g = 0.4"
+,,,,"Suppose that you're working on a copy called df5. We want to rerun the formula for this dataframe. 
+
+for index, row in df.iterrows():
+    df5.loc[df5[""Student""] != df5[""Student""].shift(), ""P(Ln-1)""] = l0
+    df5.loc[df5[""Student""] == df5[""Student""].shift(), ""P(Ln-1)""] = df5[""P(Ln)""].shift() 
+    df5.loc[df5[""right""] == 1, ""P(Ln-1|Result)""] = df5.loc[:, ""P(Ln-1)""]*(1-s)/((df5.loc[:, ""P(Ln-1)""]*(1-s)) + (1-df5.loc[:, ""P(Ln-1)""])*g)
+    df5.loc[df5[""right""] != 1, ""P(Ln-1|Result)""] = df5.loc[:, ""P(Ln-1)""]*s/((df5.loc[:, ""P(Ln-1)""]*s) + (1-df5.loc[:, ""P(Ln-1)""])*(1-g))
+    df5.loc[:, ""P(Ln)""] = df5.loc[:, ""P(Ln-1|Result)""] + (1-df5.loc[:, ""P(Ln-1|Result)""])*t"
+,,,,"Set the ground truths and the predicted probabilities.
+
+true_labels = list(df5[""right""])
+
+predicted_probabilities = list(df5[""P(Ln)""]) "
+,,,,"Now, you just need to compute the AUC ROC.
+
+auc_roc2 = roc_auc_score(true_labels, predicted_probabilities)
+
+print(""AUC ROC:"", auc_roc2)"
+,,"Which parameter fit was better?
+A. The Former
+B. The New",A,
+,PFA,"The first thing we need to do is to create a column that represents the success so far on skill 1, 2, and 3. This will be used with PFA's gamma parameter. 
+
+ 
+
+Based on the lecture, complete the column 'success-so-far-skill1' by taking the students and their specific skills into consideration. What is the value of the  column 'success-so-far-skill1' on the 260th row?",13,"To represent the student's number of success (or correct answers) so far, we need to consider two things: the student and the skill."
+,,,,"If you're looking at the same student as the previous row and a relevant skill, you can code it as:
+
+for index, row in df.iterrows():
+    conditionSS = (df[""student""] == df[""student""].shift()) & (df[""skill1?""] == 1)"
+,,,,"In this case, the success-so-far-skill should be the sum of its previous value and the first-attempt-correctness"
+,,,,"If the student has not changed, but the skill is not relevant, you should take just the previous value for this field. "
+,,,,"If you're looking at a different student, but it's still a relevant skill, you should take the correctness of the first attempt."
+,,,,"If the student has changed and the skill is also not relevant, you should set the success-so-far-skill as 0. "
+,,,,"The four cases should look something like this:
+
+for index, row in df.iterrows():
+ 
+    caseSS = (df[""student""] == df[""student""].shift()) & (df[""skill1?""] == 1)
+    df.loc[caseSS, ['success-so-far-skill1']] = df['success-so-far-skill1'].shift() + df['first-attempt-correctness'] 
+
+    caseSF = (df[""student""] == df[""student""].shift()) & (df[""skill1?""] != 1)
+    df.loc[caseSF, ['success-so-far-skill1']] = df['success-so-far-skill1'].shift()
+ 
+    caseNS = (df[""student""] != df[""student""].shift()) & (df[""skill1?""] == 1)
+    df.loc[caseNS, ['success-so-far-skill1']] = df['first-attempt-correctness']
+ 
+    caseSF = (df[""student""] != df[""student""].shift()) & (df[""skill1?""] != 1)
+    df.loc[caseSF, ['success-so-far-skill1']] = 0"
+,,,,"Considering that the counting starts from an index of 0, you can find value by coding:
+
+print(""Value: "", df['success-so-far-skill1'].iloc[259])"
+,,"Before we move on to the next step, you can go ahead and use the same formula for skill 2 and 3. Make sure you have the right column, and operators.
+
+
+Now, we will create a column that represents the incorrect answers so far on skill 1, 2, and 3. This will be used with PFA's rho parameter. In the dataset, you will see columns fail-so-far-skill1, fail-so-far-skill2, and fail-so-far-skill3. Using the same method, complete all the fail-so-far-skill columns.
+
+ 
+
+What is the value of the last row in column 'fail-so-far-skill3'?",2,"Similar to what we did to build up success-so-far, we need to consider which student we're looking at, and whether we're looking at a relevant skill. "
+,,,,"Let's say the student has not changed. If we're looking at a relevant skill, the fail-so-far should be the sum of the value from its previous row and the value in column first-attempt-incorrect. (Here, first-attempt-incorrect indicates whether the student's current action is incorrect.) If we're not looking a relevant skill, the fail-so-far should just take the value from its previous row."
+,,,,"We are now left with two cases where the student has changed. If we're looking at a relevant skill, the fail-so-far should take the value in column first-attempt-incorrect. (Here, first-attempt-incorrect indicates whether the student's current action is incorrect.) If we're not looking a relevant skill, the fail-so-far should be 0."
+,,,,"The entire code should look something like this:
+
+for index, row in df.iterrows():
+ 
+    caseSS = (df[""student""] == df[""student""].shift()) & (df[""skill3?""] == 1)
+    df.loc[caseSS, ['fail-so-far-skill3']] = df['fail-so-far-skill3'].shift() + df['first-attempt-incorrect'] 
+
+    caseSF = (df[""student""] == df[""student""].shift()) & (df[""skill3?""] != 1)
+    df.loc[caseSF, ['fail-so-far-skill3']] = df['fail-so-far-skill3'].shift()
+ 
+    caseNS = (df[""student""] != df[""student""].shift()) & (df[""skill3?""] == 1)
+    df.loc[caseNS, ['fail-so-far-skill3']] = df['first-attempt-incorrect']
+ 
+    caseSF = (df[""student""] != df[""student""].shift()) & (df[""skill3?""] != 1)
+    df.loc[caseSF, ['fail-so-far-skill3']] = 0"
+,,,,"Finally, we can use the same approach to get the value in a specific row:
+
+print(""Value: "", df['fail-so-far-skill3'].iloc[-1])"
+,,"With the student's history of success, we can compute the gamma parameters. You can get the gamma of a skill by multiplying the success-so-far-skill by the weight. You can also get the rho parameters using the same approach.
+
+ 
+
+Suppose that the weights of the skills are by default set as 1. What would be the gamma and rho parameters for the last row of the skill3? 
+
+ 
+
+
+Select one:
+A) Gamma: 6, Rho: 3
+B) Gamma: 5, Rho: 1
+C) Gamma: 0, Rho: 1
+D) Gamma: 0, Rho: 0
+E) Gamma: 2, Rho: 2
+",E,"You can start by setting the weight as 0. (Assigning a variable makes it easier to makes changes in the future.)
+
+weight = 1"
+,,,,"To find the gamma for skill1, you can write:
+
+df['gamma-1?'] = weight * df['success-so-far-skill1']"
+,,,,"Repeat the process of skill2 and skill3.
+
+df['gamma-2?'] = weight * df['success-so-far-skill2']
+df['gamma-3?'] = weight * df['success-so-far-skill3']"
+,,,,"Now, you can use the same approach to find the rho.
+
+df['rho-1?'] = weight * df['fail-so-far-skill1']
+df['rho-2?'] = weight * df['fail-so-far-skill2']
+df['rho-3?'] = weight * df['fail-so-far-skill3']"
+,,,,"Let's get the first gamma and rho for skill3.
+
+print(""Gamma: "", df['gamma-3?'].iloc[-1])
+print(""Rho: "", df['rho-3?'].iloc[-1])"
+,,"Now we can get the parameters of success by adding up the gamma of skill1, 2, and 3. We can also get the parameters of failure in the same way -- by adding up the rho of skill1, 2 and 3.
+
+ 
+
+There's one more component to PFA -- the beta. For now, let's say that the beta in column 'beta-param' is 1. Based on what we learned from the lecture, what would be the formula for column 'm'?""
+
+ 
+
+
+Select one:
+A) df['m'] = df['success-param'] - df['fail-param'] - df['beta-param']
+B) df['m'] = df['success-param'] - df['fail-param'] + df['beta-param']
+C) df['m'] = df['success-param'] + df['fail-param'] - df['beta-param']
+D) df['m'] = df['success-param'] + df['fail-param'] + df['beta-param']
+E) df['m'] = df['success-param'] * df['fail-param'] * df['beta-param']
+",D,"The formula requires three elements: column 'success-param', 'fail-param' and the beta."
+,,,,"The column 'success-param' represents the sum of weighted successes, while the column 'fail-param' represents the sum of weighted failures. The column 'beta-param' represents the beta."
+,,,,"According to the formula, it's the sum of weighted successes, plus the sum of weighted failures, and plus beta."
+,,"We're almost there. The final step in PFA is to compute the P(m). What is it? (If you don't remember the formula, re-watch the lecture.)
+
+ 
+
+
+Select one:
+A) df['p(m)'] = 1/(1+np.exp(df['m']-1))
+B) df['p(m)'] = 1/(np.exp(df['m']*(-1)))
+C) df['p(m)'] = 1/(1+np.exp(df['m']*(-1)))
+D) df['p(m)'] = 1/(np.exp(df['m'])**(-1))
+E) df['p(m)'] = 1/(1+np.exp(df['m']))",C,"Remember, PFA predicts the probability of correctness the next time the skill is encountered as a way to measure how much latent skill a student has while they are learning "
+,,,,"The probability that the learner will get the item correct, or P(m), builds off from m, which is a function of the difficulty, and the sum of the number of successes and failures with their weight parameters that students have had on every relevant skill in the problem."
+,,,,"Then, you take the m and put it through an exponential function to compute P(m)."
+,,"With the parameters, m and p(m), we now got PFA! Let's start fitting the seven parameters. Now, let's set up a way to see how well our PFA model fits, using the squared residuals (SR). From the p(m), subtract the 'first-attempt-correctness' and then square it. What is the sum of SR, or SSR?",331,"You can compute the column 'SR' by coding:
+
+df['SR'] = (df['p(m)'] - df['first-attempt-correctness'])**2"
+,,,331.1,You can use the sum function to get the SSR.
+,,,331.11,"If you’re getting the wrong value, there may be an issue with the parameters. Check your formulas to identify the error, or you can always seek help from your peers at the forum! "
+,,,331.111,"The code should look something like this:
+
+SSR = df['SR'].sum()
+print(""SSR: "", SSR)"
+,,Let's experiment a little. What if you change the rho for skill1 from 1 to -1. How does it change the SSR?,256.1663,"You can need to re-assign the new weight and re-establish the rho. 
+
+weight = -1
+df['rho-1?'] = weight * df['fail-so-far-skill1']"
+,,,256.166,"Now, it's just the going over the same procedure! Review and re-do what we did with the parameters."
+,,,256.17,"Think about how we computed the P(m). Since you made a change in the learning rate of gamma, you should start by re-running the formula for the success parameter. "
+,,,256.2,"Here's the procedure you should have followed: 
+
+df['fail-param'] = df['rho-1?'] + df['rho-2?'] + df['rho-3?']
+df['m'] = df['success-param'] + df['fail-param'] + df['beta-param'] 
+df['p(m)'] = 1/(1+np.exp(df['m']*(-1)))
+df['SR'] = (df['p(m)'] - df['first-attempt-correctness'])**2
+
+SSR = df['SR'].sum()
+print(""SSR: "", SSR)"
+,,,256,
+,,"How is the new model with the rho of -1 compared to the earlier model with the rho of 1?
+
+ 
+
+
+Select one:
+A) The Same
+B) Worse
+C) Better",C,
+,,"What does it mean to decrease the rho of skill1 from 1 to -1?
+
+ 
+
+
+Select one:
+A) It means that getting skill 1 right improves your performance on future items involving skill 1
+B) It means that getting skill 1 right worsens your performance on future items involving skill 1
+C) It means that getting skill 1 wrong improves your performance on future items involving skill 1
+D) It means that getting skill 1 wrong worsens your performance on future items involving skill 1
+E) It means that your SSR gets better!",D,
+,,"Let's now find the optimal parameters for this model. For this question, you will use a function in SciPy called optimize.minimize. Among other methods, use the SLSQP (Sequential Least Squares Programming) method which implements GRG(Generalized Reduced Gradient) nonlinear solving method.
+
+ 
+
+What is the resultant SSR?",95.7656,"Before anything, you should start by importing the function you'll use!
+
+from scipy.optimize import minimize"
+,,,95.766,"Then, you should define the function that would achieve our objective, in this case improve the SSR.
+
+def calculate_metric(variables):"
+,,,95.77,"This time, you will specify each variables that are associated with computing the SSR.
+
+G1, G2, G3, R1, R2, R3 = variables"
+,,,95.8,The function is just another iteration of what you did to get the SSR.
+,,,96,"Here's what we built up earlier, but in a function.
+
+def calculate_metric(variables):
+    
+    G1, G2, G3, R1, R2, R3 = variables
+    df['gamma-1?'] = G1 * df['success-so-far-skill1']
+    df['gamma-2?'] = G2 * df['success-so-far-skill2']
+    df['gamma-3?'] = G3 * df['success-so-far-skill3']
+
+
+    df['rho-1?'] = R1 * df['fail-so-far-skill1']
+    df['rho-2?'] = R2 * df['fail-so-far-skill2']
+    df['rho-3?'] = R3 * df['fail-so-far-skill3']
+
+    df['success-param'] = df['gamma-1?'] + df['gamma-2?'] + df['gamma-3?']
+    df['fail-param'] = df['rho-1?'] + df['rho-2?'] + df['rho-3?']
+    df['m'] = df['success-param'] + df['fail-param'] + df['beta-param'] 
+    df['p(m)'] = 1/(1+np.exp(df['m']*(-1)))
+    df['SR'] = (df['p(m)'] - df['first-attempt-correctness'])**2
+ 
+    metric = df['SR'].sum()
+
+    return metric"
+,,,95.29,"To define the initial values for the variables, you can plug in where we left off.
+
+initial_variables = [1, 1, 1, -1, -1, -1]"
+,,,95.3,"You can also set the bounds for the variables. The bounds will include negatives, since we don't want to necessarily limit the unconstrained variables as non-negative.
+
+bounds = [(-10, 10), (-10, 10), (-10, 10), (-10, 10), (-10, 10), (-10, 10)]"
+,,,95,"You want your function to minimize the metric and find the lowest possible SSR. Here, you also specify the method you'll use.
+
+result = minimize(calculate_metric, initial_variables, method='SLSQP', bounds=bounds)
+optimized_variables = result.x"
+,,,,"Now, let's check out the results!
+
+print(""Optimized variables:"", optimized_variables)
+print(""Optimized objective:"", calculate_metric(optimized_variables))"
+,SPM ,"In order to perform association rule mining, we first need to get the most frequently occurring items in the data set using the a priori algorithm (min_support=0.4) as well as the association_rules. From the list of items, which single-item item sets have a support of 1.0?
+
+ 
+
+For this question, you will need to install the mlxtend module. Using pip, execute the following command on your machine's command prompt (e.g., Command Prompt for Windows, Terminal for Mac, etc.): pip install mlxtend
+
+ 
+
+
+Select one:
+A. resources
+B. decorations
+C. rules
+D. motivational_slogans
+",A,"Import the necessary classes: apriori, association rules:
+
+ 
+
+from mlxtend.frequent_patterns import apriori, association_rules"
+,,,,"Do you need all the columns in the data? Before getting the list of frequent item sets, you first need to drop the column that identifies the classroom id.
+
+ 
+
+df = df.drop(['classroom_id'], axis=1) "
+,,,,"You're all set. To get the list of frequent item sets, you can use the apriori operator. 
+
+ 
+
+freq_itemsets = apriori(df, min_support=0.4, use_colnames=True)"
+,,,,"Narrow down the list to the frequent item sets with a support of 1:
+
+ 
+
+freq_itemsets.loc[freq_itemsets['support'] == 1]"
+,,,,"Out of seven item sets with a support of 1, there are 4 occurrences of resources, 4 occurrences of other_non-academic, 4 occurrences of content_specific."
+,,"What does it mean for an item to have a support of 1.0 in this context?
+
+ 
+
+ 
+
+
+Select one:
+A. Each decoration type appears in every association rule.
+B. Each decoration type appears in every itemset.
+C. Each decoration type appears in every classroom.",C,
+,,"Now conduct association rule mining using the list of frequent item sets with a min_threshold=1. Which of these association rules has the highest support?
+
+ 
+
+
+Select one:
+A. resources --> calendar_clocks
+B. resources --> content_specific
+C. resources --> rules
+D. resources --> decorations",B,"Since you already imported the association_rules operator, you need to actually get the set of association rules:
+
+ 
+
+rules = association_rules(freq_itemsets, min_threshold=1)"
+,,,,"Since you already imported the association_rules operator, you need to actually get the set of association rules:
+
+ 
+
+rules = association_rules(freq_itemsets, min_threshold=1)"
+,,"What does it mean for this rule to have a support of 1.0?
+
+ 
+
+
+Select one:
+A. Both resources and content-specific decorations appear in every itemset.
+B. Both resources and content-specific decorations appear in every classroom.
+C. Both resources and content-specific decorations appear in every association rule.
+D. Both resources and content-specific decorations appear in only 1 classroom.",B,
+,,"What does it mean for this rule to have a confidence of 1.0 (which it does)?
+
+ 
+
+ 
+
+
+Select one:
+A. Both resources and content-specific decorations are present in all the classrooms.
+B. Both resources and content-specific are present in all the rules.
+C. Whenever resources appear in an itemset, content-specific is also in the same itemset.
+D. Whenever resources appear in a classroom, content-specific decorations are also present in the same classroom.
+",D,
+,,"What is the support of the following rule: yearly_schedule --> resources, decorations? Round it up to 4 decimal places.",0.6667,"You want to find the support of the rule with the specific values in the ""antecedents"" and ""consequents"" columns."
+,,,,"You can narrow down the list to only include those with an antecedent of frozenset({'yearly_schedule'}). 
+
+ 
+
+rules.loc[(rules['antecedents']==frozenset({'yearly_schedule'}))]
+ "
+,,,,"Then, you can look at the consequents with both resources and decorations. What do you see in the ""support"" column?"
+,,What is the confidence of the same rule?,1,"Look at the value in the ""confidence"" column of the same association rule."
+,,What is the lift value for the same rule? Round it up to 4 decimal places.,1.111,"Look at the value in the ""lift"" column of the same association rule."
+,,"What does it mean to have a lift greater than 1?
+
+ 
+
+ 
+
+
+Select one:
+A. The antecedent and consequent are independent of each other, and this rule is less likely to occur than normal when the antecedent is present.
+B. The antecedent and consequent are independent of each other, and this rule is more likely to occur than normal when the antecedent is present.
+C. The antecedent and consequent are dependent on one another, and this rule is more likely to occur than normal when the antecedent is present.
+D. The antecedent and consequent are dependent on one another, and this rule is less likely to occur than normal when the antecedent is present.",C,
+,,"
+
+
+ 
+
+What is the lift of the correct answer in Question 3 (resources --> content_specific)?",1,
+,,"What does it mean to have a lift of 1.0?
+
+ 
+
+ 
+
+
+Select one:
+A. The antecedent and consequent are independent of each other and are likely to occur together purely by chance.
+B. The antecedent and consequent are independent of each other and are significantly more likely than chance to occur together.
+C. The antecedent and consequent are dependent on one another and are likely to occur together purely by chance.
+D. The antecedent and consequent are dependent on one another and are significantly more likely than chance to occur together.
+",A,
+,Clustering,"Conduct k-means clustering with K=2 with a random_state=0, and you'll see two lists of centers, one from cluster 0 and the other from cluster 1. You will also see that there are six cluster centers, ranging from attribute A to F. Which two attributes have the greatest difference between cluster 0 and cluster 1?
+A
+B
+C
+D
+E
+F
+Please use comma to seperate multiple answers, such as A,B","A,F","To fit a k-Means clustering model, you first need to import KMeans from the sklearn module as follows:
+
+ 
+
+from sklearn.cluster import KMeans "
+,,,,"Once KMeans is imported, you can now fit your model where K=2.
+
+ 
+
+kmeans = KMeans(n_clusters=K, random_state=0).fit(df)"
+,,,,"Now that your model has been fit on the data, you will want to check the cluster centers for each attributes and calculate the differences between clusters 0 and 1. "
+,,,,"If you print out the cluster centers, you should see a 2D list with each entry representing a list of cluster centers, from attribute A to F. Here's one way to organize the cluster centers by their attributes. 
+
+ 
+
+
+cluster0 = kmeans.cluster_centers_[1]
+
+cluster1 = kmeans.cluster_centers_[0]
+
+clusters = list(zip(cluster0, cluster1))
+
+
+
+
+attrributes = ['A', 'B', 'C', 'D', 'E', 'F']
+
+for i, j in zip(attrributes, clusters):
+
+    print(i, j)"
+,,,,"You can tell which attributes have the biggest difference between cluster 0 and 1 by looking at how far apart the centers are between both clusters. Bigger differences between centers indicate a bigger difference between clusters.
+
+ 
+
+For instance, the cluster center for Attribute A in cluster 0 is 381.566, and in cluster 1 is 895.287. That is a difference of 513.721:
+
+ 
+
+print(center['A'][0] - center['A'][1])"
+,,"You will first want to set the colors of the clusters, such that each cluster will be plotted using a different color. Let's use blue and red. You do this by first setting up a dictionary of colors and their cluster assignments:
+
+ 
+
+color_map = {0: 'b', 1: 'r'}",1,"You will first want to set the colors of the clusters, such that each cluster will be plotted using a different color. Let's use blue and red. You do this by first setting up a dictionary of colors and their cluster assignments:
+
+ 
+
+color_map = {0: 'b', 1: 'r'}"
+,,,,"You will now want to get the labels of each point, i.e., the cluster each point was assigned to by your KMeans model:
+
+ 
+
+labels = kmeans.labels_"
+,,,,"You will then use those labels to create an array of colors that hold the color assignments for each point:
+
+ 
+
+colors = [color_map[l] for l in labels]
+"
+,,,,"Finally, you can plot the data. Make sure to select attribute A for the X-axis, and attribute F for the Y-axis. You can do this as follows:
+
+ 
+
+import matplotlib.pyplot as plt
+plt.scatter(df['a'], df['f'], c=colors, s=10)"
+,,,,"Make sure to select attribute A for the X-axis, and attribute F for the Y-axis. You can do this as follows:
+
+
+plt.scatter(df['a'], df['f'], c=colors, s=10)"
+,,,,"Then, show your plot.
+
+ 
+
+plt.show()
+"
+,,,,"If you followed the directions, the dots should all plot in blue and red. The definition of a ""lump"" is a bit fuzzy, but how many dense groups of points are red?"
+,,"What did k-Means do here?
+
+ 
+
+
+Select one:
+A. It split the lumps in the data approximately evenly in clusters
+B. It did a median split on two key variables
+C. It found the least central lump in the data and made it a cluster
+D. It found the most central lump in the data and made it a cluster",C,
+,,"Now re-run k-Means with k=7. Did k-Means find the 7 lumps in the data that you saw earlier?
+
+ 
+
+ 
+
+
+Select one:
+A. Yes
+B. No",B,"To plot the variables against each other, change the attributes plotted each time. For example, try ""B"" and ""C"", ""B"" and ""D"", and so on."
+,,,,"You can do this by changing the values of first and second in the following stub of code below every time you run your script:
+
+first = 'a'
+
+second = 'b'
+
+plt.scatter(df[first], df[second], c=colors, s=10)
+
+plt.show()"
+,,,,Do lumps correspond to colors for any of the pairs of variables?
+,,"Filter out all of the variables except the ones in question 1 (i.e., a and f), and re-run k-Means using just these two variables, with k=7. Are all seven of the seven data lumps now generally/approximately incorporated into seven reasonable clusters?
+
+ 
+
+
+Select one:
+A. Yes
+B. No
+",B,"First, remember that you are keeping values of ONLY attributes A and F. You can do this by dropping the columns of the other attributes:
+
+
+df1 = df.drop(columns=['b', 'c', 'd', 'e'], axis=1)"
+,,,,"Re-run KMeans with your new array, and plot:
+
+
+kmeans = KMeans(n_clusters=7).fit(df1)
+
+plt.scatter(df1['a'], df1['f'], c=colors, s=10)
+
+plt.show()"
+,,,,Now look at the plot. Are the seven data lumps now more or less incorporated into seven reasonable clusters?
+,,"Notice that one color is assigned to many outlier points. Meanwhile, one data lump is split between two other colors. Simply put, six data lumps are connected to six reasonable clusters, while one data lump and one cluster are not properly assigned. What happened?
+
+ 
+
+ 
+
+
+Select one:
+A. It looks the same as when k= 2
+B. One region of space without a lump got a cluster, and two lumps got a single cluster
+C. Several clusters were devoted to regions of space without a lump Several clusters were devoted to regions of space without a lump
+D. Two regions of space without lumps got clusters, and three lumps got a single cluster",B,
+,,"For fun, let's try playing with different values of k, and the other parameters within k-Means.
+
+ 
+
+When you're ready to move on, enter 0 (zero) to proceed to the next question.
+
+ ",0,
+,,"Try running Agglomerative Clustering. Look at the Dendrogram. Nifty, huh? 
+
+ 
+
+ 
+
+
+Select one:
+A. Yes, that is nifty
+B. I dispute the value of this question as assessment",A,"To use Agglomerative Clustering, you will first need to import it from the sklearn module. If you didn't already, you also need numpy.
+
+ 
+
+from sklearn.cluster import AgglomerativeClustering
+
+import numpy as np"
+,,,B,"Next, fit your data into an Agglomerative Clustering model:
+
+ 
+
+aggc = AgglomerativeClustering(n_clusters=2).fit(df1)"
+,,,,"Now that you've fit your model, you will need to plot the dendrogram. Use the following stub of code to produce your dendrogram:
+
+
+from scipy.cluster.hierarchy import dendrogram
+def plot_dendrogram(model, **kwargs):
+
+    # Children of hierarchical clustering
+    children = model.children_
+
+    # Distances between each pair of children
+    # Since we don't have this information, we can use a uniform one for plotting
+    distance = np.arange(children.shape[0])
+
+    # The number of observations contained in each cluster level
+    no_of_observations = np.arange(2, children.shape[0]+2)
+
+    # Create linkage matrix and then plot the dendrogram
+    linkage_matrix = np.column_stack([children, distance, no_of_observations]).astype(float)
+
+    # Plot the corresponding dendrogram
+    dendrogram(linkage_matrix, **kwargs)"
+,,"OK, fine. Squint really hard and look at the top-right of the dendrogram. You'll see at the very top fork, that a branch goes down the right side. How many nodes are in this branch? (e.g. how many data points end up in this branch). Note that an immediate branch to a small subset of the data indicates strong outliers.
+
+ 
+
+If you're working in a Python IDE, you can zoom into the upper-right corner to see the fork. You can then trace it to see how many nodes are in that branch.
+ 
+
+If you're working in Jupyter Notebook, you can use %matplotlib notebook to zoom into the dendrogram. ",2,Enter 2.
+,Correlation Mining ,"The first dataset represents a set of distinct studies conducted on small populations of students — you might see these types of results if you administered a survey to the students of just one classroom teacher.
+
+ 
+
+Let's say we do not apply any sort of post-hoc control for now. How many correlations are statistically significant (according to the customary p < 0.05)?",10,The first step would be to compute for each test whether p < 0.05.
+,,,,"You can do this by creating a function that applies 1 to significant correlations.
+
+def find_SigCorr(row):
+     if row['p'] <= 0.05:
+        val = 1
+     else:
+        val = 0
+     return val
+
+df['SigCorr'] = df.apply(find_SigCorr, axis=1)"
+,,,,"Now you need to find out how many of the correlations are statistically significant.
+
+print(""Significant Correlation:"", df['SigCorr'].sum())"
+,,"Now, let's apply a post-hoc Bonferroni control to these results. How many correlations remain statistically significant?",5,"Remember, for a Bonferroni, you need to compare the tests to an adjusted alpha that is different than 0.05."
+,,,,"The adjusted alpha you use is 0.05/m, where m is the number of statistical significance tests you ran."
+,,,,"In this case, you ran 16 tests, so use 0.05/16 = 0.003125."
+,,,,"You can do this by revising the previous function so that it reflects the adjusted alpha. It can either be the specific value (i.e., 0.003125), or it can also be the formula (i.e., 0.05/m)
+
+row['p'] < 0.05/len(df)"
+,,,,"The entire function should look something like this.
+
+def adjust_FWER(row):
+     if row['p'] < 0.05/len(df):
+        val = 1
+     else:
+       val = 0
+     return val
+
+df['FWER'] = df.apply(adjust_FWER, axis=1)"
+,,,,Now you need to find out how many of the correlations are statistically significant. 
+,,,,"You just need to get the sum.
+
+print(""Significant Correlation:"", df['Bon'].sum())"
+,,"This time, let's apply Benjamini &Hochberg's FDR Correction to these results. How many correlations remain statistically significant?",9,"Remember, for Benjamini & Hochberg, you need to compare the tests to an adjusted alpha that is different than 0.05. And different tests have different alphas. "
+,,,,"The first step is to sort by p, from smallest to largest.
+
+df = df.sort_values(by=""p"")"
+,,,,"Adjust the index so that it reflects the changes in the rank. This is to compute the number of tests you have looked at so far, with a value of 1 for the top (smallest p), adding 1 for each value below it.  
+
+df = df.reset_index(drop = True)"
+,,,,"Now compute an adjusted alpha for each test. The adjusted alpha you use is 0.05/m*k, where m is the total number of statistical significance tests you ran, and k is the number of tests you've compared alpha for so far."
+,,,,"In this case, you ran 16 tests total. Since the index starts from 0, the (index+1) shows how many tests you ran so far. You can create a new column of adjusted alpha that 0.05/16*(index+1).
+
+df['adjusted_p'] = 0.05 / len(df) * (df.index + 1) "
+,,,,"Now you need to compare each p to the alpha value you just computed. You can revise the previous function so that it reflects the adjusted alpha.
+
+row['p'] < row['adjusted_p']"
+,,,,"The entire function should look something like this.
+
+def adjust_FDR(row):
+     if row['p'] < row['adjusted_p']:
+        val = 1
+     else:
+        val = 0
+     return val
+
+df['BH'] = df.apply(adjust_FDR, axis=1)"
+,,,,"Now you need to find out how many of the correlations are statistically significant.
+
+print(""Significant Correlation:"", df['BH'].sum())"
+,,"What is the correlation with the lowest p-value that comes up significant for B&H but not for Bonferroni?
+
+ 
+
+ 
+
+
+Select one:
+A. 0.245614914
+B. 0.237749612
+C. 0.288032855
+D. 0.231753705
+",B,
+,,"The other dataset represents a larger set of correlations within data from a larger population of students — for example, the entire population of students using a medium-sized online learning environment. 
+
+ 
+
+Within this second dataset, how many of the 1,112 correlations are NOT statistically significant (according to the customary p < 0.05) if you do not apply any sort of post-hoc control?",19,"After reading the new dataset, compute for each test whether the test is NOT statistically significant, or p≥0.05"
+,,,,"You can do this by re-using the function you previously created to find significant correlation.
+
+df['SigCorr'] = df.apply(find_SigCorr, axis=1)"
+,,,,Now you need to find out how many of the correlations are NOT statistically significant.
+,,,,"You can either subtract the sum from the total number of tests you ran, or count the number of 0s.
+
+print(""Significant Correlation:"", df['SigCorr'].value_counts()[0])"
+,,"If you apply a post-hoc Bonferroni control to these results, how many correlations are now NOT statistically significant?",28,"Remember, for a Bonferroni, you need to compare the tests to an adjusted alpha that is different than 0.05.  "
+,,,,"The adjusted alpha you use is 0.05/m, where m is the number of statistical significance tests you ran."
+,,,,"In this case, you ran 1112 tests, so use 0.05/1112 = 0.000044964."
+,,,,"You can use the same function that you created earlier.
+
+df['Bon'] = df.apply(adjust_FWER, axis=1)"
+,,,,Now you need to find out how many of the correlations are NOT statistically significant.
+,,,,"You can do that by using value_counts()
+
+print(""Significant Correlation:"", df['Bon'].value_counts()[0])"
+,,"
+If you apply Benjamini & Hochberg's FDR Correction to these results, how many correlations are now NOT statistically significant?",19,"Remember, for Benjamini & Hochberg, you need to compare the tests to an adjusted alpha that is different than 0.05. And different tests have different alphas. "
+,,,,"The first step is to sort by p, from smallest to largest.
+
+df = df.sort_values(by=""p"")"
+,,,,"Adjust the index so that it reflects the changes in the rank. This is to compute the number of tests you have looked at so far, with a value of 1 for the top (smallest p), adding 1 for each value below it.  
+
+df = df.reset_index(drop = True)"
+,,,,"Now compute an adjusted alpha for each test. The adjusted alpha you use is 0.05/m*k, where m is the total number of statistical significance tests you ran, and k is the number of tests you've compared alpha for so far."
+,,,,"In this case, you ran 16 tests total. Since the index starts from 0, the (index+1) shows how many tests you ran so far. You can create a new column of adjusted alpha that 0.05/16*(index+1).
+
+df['adjusted_p'] = 0.05 / len(df) * (df.index + 1) "
+,,,,"Now you need to compare each p to the alpha value you just computed. You can revise the previous function so that it reflects the adjusted alpha.
+
+row['p'] < row['adjusted_p']"
+,,,,"More conveniently, you can use the same function that you created earlier. 
+
+df['BH'] = df.apply(adjust_FDR, axis=1)"
+,,,,Now you need to find out how many of the correlations are NOT statistically significant.
+,,,,"You can either subtract the sum from the total number of tests you ran, or count the number of 0s.
+
+print(""Significant Correlation:"", df['Bon'].value_counts()[0])"
+,,"What is the lowest correlation that is still statistically significant, according to Bonferroni's test?
+
+ 
+
+ 
+
+
+Select one:
+A. 0.26227631
+B. 0.1976639
+C. 0.05965262
+D. 0.01609085
+",D,
+,,"Now do you see why Professor Baker says that statistical significance doesn't matter much for really big data sets? (and this is NOT a big data set by reckoning in other fields)
+
+ 
+
+
+Select one:
+A. Yes — Bonferroni is ridiculously conservative with 1,112 tests, and yet correlations that are absurdly small still come up statistically significant.
+B. No. I think the answer to Question 8 is a fine correlation, perfectly likely to represent a large effect size.
+C. No. Big data is a FAD. No one should ever expect to work with a data set over 150 data points, especially after the societal collapse predicted by James Howard Kunstler occurs.",A,
+,SNA,"How many possible connections are there between individuals in this graph, not counting self-connections, and assuming that link direction does not matter?",,"The number of possible connections between individuals in this graph is a function of the number of individuals. You don't need any further information beyond that.
+
+ "
+,,,,Each individual can connect to every other individual. But you don't want to count that connection twice (because link direction doesn't matter).
+,,,,"If link direction mattered, the number of connections would be n (the number of students) * n-1 (the number of other students they can connect with): n(n-1). But link direction doesn't matter; how can you adjust this formula?"
+,,,,"To ignore link direction, just halve the total number of links, to get the formula: n(n-1)/2."
+,,,,"Now you need to find n. You can do this by counting the number of unique posters. 
+
+poster = len(pd.unique(df['poster'])) "
+,,,,"Use the formula to compute the number of possible connections between the individuals.
+
+connections = poster * (poster-1)/2
+print(""Number of Possible Connections:"", connections)"
+,,"Only counting connections where poster A responds directly to poster B (and not connections where they both simply responded to the same post), how many connections are there between individuals in this graph?
+
+(Don't count self-connections and assume that link direction does not matter.)",110,"For this question, you would need to be able to find the poster for a post responded to, create a formula that creates the combinations, and then count the number of unique combinations."
+,,,,"Let's first find the poster for each post responded. One way you can do this is by creating another column with the IDs and mapping the poster onto the ID.
+
+df.set_index('ID', inplace=True)
+df_dict = df.to_dict()['poster']
+df['poster_responded_to'] = df['poster_responded_to'].map(df_dict)"
+,,,,"Now you know the poster of the current post, and the poster of the post they responded to. We only want the paired connection, so remove the ones without a pair. 
+
+df_drop = df.dropna().astype(int)"
+,,,,The next step would be to build the links between the posters by concatenating them. 
+,,,,"One way is to transform the posters into a *undirected* pair where you don't distinguish between 24601 responding to 29022, and 29022 responding to 24601. You can do this by placing the ID with a greater number before the one with a smaller number. 
+
+def make_undirected(row):
+     if row['poster'] < row['poster_responded_to']:
+        val = row['poster'].astype(str) + ""-"" + row['poster_responded_to'].astype(str)
+     else:
+        val = row['poster_responded_to'].astype(str) + ""-"" + row['poster'].astype(str)
+     return val
+"
+,,,,"Now, you have the all values you need to count the number of undirected pairs. Make sure you remove the self-connections, or the empty rows, before you filter out the duplicates. 
+
+unique = df_drop['undirected_pair'].dropna().unique()"
+,,,,"Remember, we are interested in paired connections. Don't forget to eliminate the self-connections. "
+,,,,"In the end, the function should look something like this.
+
+def make_undirected(row):
+     if row['poster'] < row['poster_responded_to']:
+        val = row['poster'].astype(str) + ""-"" + row['poster_responded_to'].astype(str)
+     elif row['poster'] == row['poster_responded_to']:
+        val = None
+     else:
+        val = row['poster_responded_to'].astype(str) + ""-"" + row['poster'].astype(str)
+     return val
+
+df_drop['undirected_pair'] = df_drop.apply(make_undirected, axis=1)"
+,,,,"As the final step, count the number of rows in the table. 
+
+unique = pd.DataFrame(unique, columns=['undirected_pair'])
+print(""Number of Pairs:"", unique.shape[0])"
+,,"What is the density of the social network graph? (Don't count self-connections and assume that link direction does not matter.)
+
+Give two digits after the decimal.",0.02,"To find the density of the social network graph, you just need to divide the total actual number of connections by the total possible number of connections."
+,,,,"In fact, you computed the total actual number of connections in Question 2, as well as the total possible number of connections in Question 1."
+,,,,"You can find the density with a simple calculation. Remember to round it to 2 decimal places.
+
+density = unique_pairs / connections
+print(""Density:"", round(density, 2))"
+,,What is the geodesic distance between 12345 and 24601?,1,What is the geodesic distance? Re-watch the lecture.
+,,,,"The geodesic distance is the number of edges between one node N and another node M, in the shortest path connecting them."
+,,,,"What is the number of edges between 12345 and 24601, in the shortest path connecting them?"
+,,,,Look at post 12. It connects 12345 directly to 24601.
+,,,,"12345 and 24601 are directly connected, so the geodesic distance between 12345 and 24601 is 1."
+,,What is the geodesic distance between 3903 and 1588?,3,"Recall that the geodesic distance is the number of edges between one node N and another node M, in the shortest path connecting them."
+,,,,"What is the number of edges between 3903 and 1588, in the shortest path connecting them?"
+,,,,Let's look at who connects to 3903 and 1588.You can find everyone who connects to 3903 by searching for that value in Excel.
+,,,,"3903 is connected to 82875, 738981, 9061, 21588, and 24601. 1588 is connected to 97013, 68265, and 12345. What should you do now?"
+,,,,"You *could* exhaustively look at everyone who is connected to 82875, 738981, 9061, 21588, 24601, 97013, 68265, and 12345. But there's an easier way."
+,,,,"Remember from the previous problem, 12345 and 24601 are directly connected."
+,,,,So the shortest path (at least one of them) is 3903â24601â12345â1588. What is the geodesic distance?
+,,"Which of these poster nodes is not reachable?
+
+ 
+
+
+Select one:
+A. 87908
+B. 22986
+C. 74568
+D. 81734
+",A,"A node is not reachable, if no other node connects to it. Which nodes are not reachable?
+
+ 
+
+Comment on this hint"
+,,,,"To not be reachable in this context, it must mean that no other student responded to that student's post(s). Which student was never responded to by anyone else?"
+,,,,Student 87908 only wrote one post (25). No one responded to it.
+,,Which individual has the most posts?,24601,There are a number of ways you can identify the individual with the greatest number of posts. One of the simplest way is to use value_counts()
+,,,,"Now you have a list of poster IDs in the descending order of occurrence. On the top of the list, you can see the ID  in the lead with 24 posts.
+
+df['poster'].value_counts()"
+,,Which individual is most often responded to by other posters (the in-degree)?,12345,"To identify the individual who was most often responded to by other posters, you can refer back to Question 2 where you created a column called ""poster_responded_to."""
+,,,,"You can use the same approach from Question 7. On the top of the list, you can see the ID  in the lead with 16 times they received a response.
+
+df_drop['poster_responded_to'].value_counts()"
+,,"Who are these individuals most likely to be?
+
+ 
+
+
+Select one:
+A. Ryan Baker and Luc Paquette (lead community TA)
+B. Cat Power and Bob Dylan
+C. Anant Agrawal and Piotr Mitros
+D. Herb Simon and Noam Chomsky",A,
+,,"Which individual has the highest centrality, and is therefore most important to the course?
+
+(For this question, you can just guess.)
+
+(Note: this item is intentionally vague as to whether it's requesting betweenness, closeness, or eigenvector centrality.)",B,
