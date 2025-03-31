@@ -18,6 +18,17 @@ Your CSV file (e.g., `KT-Questions-S.csv`) should include the following columns:
 
 ---
 
+### 🎥 Template Example
+
+Please explore this template example to see how the generator handles a CSV with multiple Curriculums, Problem Sets, Questions, Answers, and Hints — and what the corresponding generated webpages look like:
+
+<video width="700" controls>
+  <source src="https://neithan.rocks/LASERWebpageGeneratorExample.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+---
+
 ### ▶️ Running the Generator
 
 1. **Place your CSV** in the same folder as the script or modify the path in the script:
