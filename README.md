@@ -22,7 +22,8 @@ Your CSV file (e.g., `KT-Questions-S.csv`) should include the following columns:
 
 Please explore this template example to see how the generator handles a CSV with multiple Curriculums, Problem Sets, Questions, Answers, and Hints — and what the corresponding generated webpages look like:
 
-[![Watch the demo](https://neithan.rocks/LASERwebpageGeneratorThumbnail.png)](https://neithan.rocks/LASERWebpageGeneratorExample.mp4)
+https://github.com/user-attachments/assets/0a8c5e32-2f50-4280-8ead-db657781dfee
+
 
 ---
 
