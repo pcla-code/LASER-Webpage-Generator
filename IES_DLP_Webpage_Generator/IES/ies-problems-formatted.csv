@@ -1,0 +1,1147 @@
+Curriculum,Problem Set,Question,Answer,Hint
+PSABX638,PRBQ46E,"For this assignment, you will be running and modifying Python code using Google Colab which can be accessed via the link below.
+
+Google Colab Starter Code
+
+Each question in this assignment will refer to sections of output and results from this code - some analyses will require you to modify or add to the code, so please read and follow all instructions for each question and throughout the provided Colab code. The questions here are meant to help you check your work and ensure that the code and analyses are running properly. This assignment is meant to introduce you to the coding environment and explore data that was collected in a digital learning platform. While you are not asked to write or modify large portions of code yourself in this assignment, please note that you may need to do so in future assignments.
+
+Be sure to open the starter code and download any required data before continuing.",I am ready to continue,
+,PRABU3B5,"The starter code can be accessed via the following link: Google Colab Starter Code
+
+Data Descriptives
+
+Run the ""Data Descriptives"" code cells to load the dataset.
+
+Let's make sure that everything was loaded successfully - What is the first ""student_id"" in the dataset?",120915,"When displaying a sample of the dataset, we can look at the ""student_id"" column of the first row to see its value. Note: in Python, as with most programming languages, the ""index"" of the first row is 0 (i.e. we start counting at 0 when iterating through a list or Dataframe)."
+,PRABU3B6,"The starter code can be accessed via the following link: Google Colab Starter Code
+
+Descriptive Statistics
+
+Run the ""Descriptive Statistics"" code cells (Note, these require you to make some small additions to the code).
+
+Among all the features, two stand out as having particularly large standard deviations and maximum values.
+
+What is the largest Max value (rounded to two decimal places)?",605490.88,"We can calculate the max value in a similar manner as the mean, using the ""max"" function with our Dataframe.
+
+stats = {}
+stats['Mean'] = df_features.mean(numeric_only=True)
+stats['SD'] = df_features.std(numeric_only=True)
+stats['Min'] = df_features.min(numeric_only=True)
+stats['Max'] = df_features.max(numeric_only=True)
+
+By setting ""numeric_only"" to True, we are calculating these statistics while ignoring any non-numeric or null values in our data."
+,PRABU3B7,"The starter code can be accessed via the following link: Google Colab Starter Code
+
+Feature Correlations
+
+Run the ""Feature Correlations"" code cells and examine the correlation matrix that gets generated.
+
+Using the default threshold of 0.6, how many feature pairs emerge as being highly correlated?",7,
+,PRABU3B8,"The starter code can be accessed via the following link: Google Colab Starter Code
+
+Feature Selection and Logistic Regression
+
+First, modify the ""Feature Selection"" code cell to remove one feature from each of the highly-correlated pairs identified from the previous analysis. Then, run the ""Logistic Regression"" code cell and examine the output. If you are unfamiliar with the performance metrics reported, note that these and others will be introduced in a later module (but note that higher scores indicate better performance for each of these metrics).
+
+Once you have examined the logistic regression output, continue to the next question",I am ready to continue,
+,PRABU3B9,"The starter code can be accessed via the following link: Google Colab Starter Code
+
+Logistic Regression
+
+Now that you have tried this yourself, try running the code again by modifying (and re-running) the feature selection and logistic regression code cells to utilize the following selected feature set:
+
+- '0_student_prior_completed_problems'
+- 'student_prior_started_skill_builder_count'
+- 'student_prior_skill_builder_percent_completed'
+- 'student_prior_problem_set_percent_completed'
+- 'student_prior_completed_problem_count'
+- 'student_prior_median_first_response_time'
+- 'student_prior_average_attempt_count'
+- 'student_prior_average_correctness'
+- 'opportunity_zone'
+
+Which of these features is found to be most predictive (i.e. has the highest-magnitude coefficient) of students' assignment completion?",student_prior_skill_builder_percent_completed,"In a logistic regression model, among the coefficients (""Coef"" in the output table), higher-magnitude values (in either a positive or negative direction) indicate stronger relationships with the dependent variable (assignment completion, in this case). A positive value indicates a positive relationship (higher values of the feature correlate with higher odds of completion) while a negative value indicates a negative relationship (higher values of the feature correlate with lower odds of completion). Note: within a logistic regression, the coefficient is expressed as ""log-odds"" and is therefore rarely interpreted directly; it is more common to attend to the magnitude and directionality - rather than the specific number value - in most analyses."
+,,,student prior skill builder percent completed,
+,,,student prior skillbuilder percent completed,
+,PRABU3CA,"The starter code can be accessed via the following link: Google Colab Starter Code
+
+Going Deeper
+
+Try re-introducing the features that you had removed earlier -- what would the performance results and coefficients look like if you had not removed the highly-correlated features? Which feature set resulted in the highest model performance? Did the direction of the coefficients (positive or negative) and magnitude align with your expectations? You do not need to answer these here, but do take a moment to consider these questions before proceeding to complete the assignment.
+
+It is important to not only observe the results of an analysis, but also to consider what the results are revealing about the subject matter.",I have completed the assignment,
+PSABX64D,PRABU5QP,"In this assignment, you will first have an opportunity to check your understanding of some of the concepts covered in this module pertaining to comparing the performance of prediction models. After these ""check your understanding"" questions, you will be provided with some starter code that you may use to explore the training and evaluation of prediction models using an educational dataset.",I am ready to continue,
+,PSBE7N8,"In evaluating two models that were trained to predict a binary dependent variable, you've calculated the following performance metrics for each:
+
+| | AUC | Cohen's Kappa |
+| Model 1 | 0.788 | 0.241 |
+| Model 2 | 0.742 | 0.410 |
+
+Which model performs better in terms of AUC, alone?",Model 1,
+,,"In evaluating two models that were trained to predict a binary dependent variable, you've calculated the following performance metrics for each:
+
+| | AUC | Cohen's Kappa |
+| Model 1 | 0.788 | 0.241 |
+| Model 2 | 0.742 | 0.410 |
+
+Assuming that the overall performance is “good enough,” which model would be better for deployment to classify new samples without any further modifications?",Model 2,"If we want our model to classify new samples, we would generally want to attend more to metrics that use the rounded model prediction rather than the probability."
+,,,,"Remember that AUC is calculated from the probability produced by the model while Cohen's Kappa uses a rounded estimate (i.e. for binary prediction, it will round the probability up to 1 or down to 0 before calculating the Kappa value)."
+,,"In evaluating two models that were trained to predict a binary dependent variable, you've calculated the following performance metrics for each:
+
+| | AUC | Cohen's Kappa |
+| Model 1 | 0.788 | 0.241 |
+| Model 2 | 0.742 | 0.410 |
+
+What is likely keeping the other model from being better for deployment?",The other model's rounding threshold likely needs to be adjusted,"While these models may be underfit or overfit to the data, we're missing some key information that would help us determine if either were affecting the models' performances. There is little evidence here to suggest that these are likely."
+,,,,"Both models seem to peform reasonably well, but their largest difference is in their Kappa values. Consider the difference in how each AUC and Kappa is measured."
+,,,,"AUC uses the probability estimates produced by the model, while Cohen's Kappa uses a rounded prediction. In this way, AUC provides a good estimate of how well the model is able to distinguish between labels irregardless of the chosen rounding threshold"
+,PSBE7N9,"In evaluating two models that were trained to predict a binary dependent variable, you've calculated the following performance metrics for each:
+
+| | Accuracy | Cohen's Kappa | Recall |
+| Model 1 | 98% | 0.000 | 1.00 |
+| Model 2 | 92% | 0.178 | 0.68 |
+
+In this specific scenario, which of the three metrics provides the most useful information regarding overall model performance?",Cohen's Kappa,
+,,"In evaluating two models that were trained to predict a binary dependent variable, you've calculated the following performance metrics for each:
+
+| | Accuracy | Cohen's Kappa | Recall |
+| Model 1 | 98% | 0.000 | 1.00 |
+| Model 2 | 92% | 0.178 | 0.68 |
+
+Assuming that the overall performance is “good enough” and that we want to limit false-positive predictions, which model would be better for deployment to classify new samples without any further modifications?",Model 2,
+,PRABU5QS,"In the previous assignment, you explored a dataset and trained a Logistic Regression model. In that assignment, you evaluated the performance of that model using a simple train-test split.
+
+Challenge
+
+The Google Colab link below will direct you to an abbreviated version of the analysis you conducted in the previous assignment. Using this code, revise the Logistic Regression training procedure to instead apply a 10-fold cross validation. For those who are less familiar with Python programming, this may pose a greater challenge, so you are welcome to use additional resources for help. The next problem in this assignment will provide a new Google Colab link which includes a solution (as well as some additional questions/prompts). You are encouraged to use this as an opportunity to try this on your own. If you are lost, the hints here will help guide you in the right direction.
+
+Google Colab Challenge Code
+
+Only continue once you have tried this on your own",I am ready to continue,"To implement K-fold cross validation rather than a simple train-test split, there are a set of steps you will need to follow:
+
+- You may want to import a library to help you. The sklearn library has a ""KFold"" function that can be helpful
+- Once imported, you can call the KFold function to define how you want to split your data, which is stored in a fold object
+- You will need to create a set of lists (or some other object) to store the model performance for each fold (you will need a separate list for each metric)
+- Your fold object (from the KFold function) provides the set of indices for each training and test set -- you will need to loop through this and separate your data
+- Within this loop, you will need to train your model on the training set and evaluate it on the test set, adding the performance to the respective list
+- After the loop, you can find the average performance of each metric and report this as your result"
+,,,,"To implement K-fold cross validation rather than a simple train-test split, there are a set of steps you will need to follow:
+
+- The import will look something like this: from sklearn.model_selection import KFold
+- Calling the Kfold function might look something like this: kf = KFold(n_splits=10, shuffle=True, random_state=42)
+- Lists in Python can be created using square brackets: aucs = []
+- The start of your loop might look something like this: for train_index, test_index in kf.split(X):
+- Within the loop, you can split your data: X_train, X_test = X[train_index], X[test_index] # and then do the same for your 'y'
+- The numpy library provides a useful function for means: mean_auc = np.mean(aucs)"
+,PRABU5QT,"For the remainder of this assignment, you will be running and modifying Python code using Google Colab which can be accessed via the link below.
+
+Google Colab Starter Code
+
+This code again uses the same dataset, but will have you modify and run several code cells to compare the following prediction models:
+
+- Logistic Regression
+- Decision Tree
+- Naive Bayes
+- Support Vector Machine
+
+Before you continue, be sure to first compare your implementation of K-fold cross validation with the solution provided in the new starter code above.
+
+If you still need to access the Challenge Code, the link can be found here:
+
+Google Colab Challenge Code",I am ready to continue,
+,PSBE7PA,"| The starter code can be accessed via the following link: Google Colab Starter Code If you still need to access the Challenge Code, the link can be found here: Google Colab Challenge Code Feature Sets In the previous assignment, you used a correlation matrix to identify sets of features that were highly correlated to create a ""selected"" feature set of only those features that had low correlations. Not all models require us to filter our features in such a way. Let's start by double checking our assumptions to identify which feature set each model should be using. Which feature set should we use with Logistic Regression? |","I should use ""selected"" features that are not highly correlated",
+,,Which feature set should we use with Decision Tree?,I should use all features; this model is not sensitive to multicollinearity,
+,,Which feature set should we use with Naive Bayes?,"I should use ""selected"" features that are not highly correlated",
+,,Which feature set should we use with Support Vector Machines using a Linear Kernel?,"I should use ""selected"" features that are not highly correlated",
+,,Which feature set should we use with Support Vector Machines using a Non-Linear Kernel?,I should use all features; this model is not sensitive to multicollinearity,
+,,"Now that you have identified the correct feature set to use for each model, modify the code of each model to ensure that it is using the correct features.
+
+You will find the following line in each model's code cell:
+
+X_train, X_test = X_all_train, X_all_test # or X_selected_train, X_selected_test
+
+Modify this to use either ""all"" features or the non-highly correlated ""selected"" features before you continue",I am ready to continue,
+,PRABU5QV,"The starter code can be accessed via the following link: Google Colab Starter Code
+
+If you still need to access the Challenge Code, the link can be found here: Google Colab Challenge Code
+
+Model Evaluation
+
+Using the default hyperparameters for each model (i.e. without making any modifications), run each model and compare the performance results.
+
+Which model produces the best AUC values?",Decision Tree,
+,,,Naive Bayes,
+,PRABU5QW,"The starter code can be accessed via the following link: Google Colab Starter Code
+
+If you still need to access the Challenge Code, the link can be found here: Google Colab Challenge Code
+
+Hyperparameter Optimization
+
+Some models require us to set certain hyperparameters which impact how those models are trained. Models such as Decision Tree have several parameters that we can set which may have an impact on the model's overall performance.
+
+Explore several different combinations of the three hyperparameters set for the Decision Tree model. Which of the following combinations results in the best AUC value?",Max Depth = 5; Min Sample Split = 2; Min Leaf Size = 3,
+,PRABU5QY,"Going Deeper
+
+This assignment was intended to help reinforce several concepts related to the training and evaluation of prediction models.
+
+Beyond this, the code provided in this assignment is intended to provide examples of how to to build and apply these models in the future (so be sure to save a copy!)
+
+If you are looking to go deeper with this code, aside from modifying other hyperparameters, there are additional models that you could also implement yourself that were not covered in this (but may be introduced in future modules) -- these are some common ones:
+
+- K Nearest Neighbors
+- Gradient Boosting Machines
+- Stochastic Gradient Descent Classifier
+- Random Forest
+- Multilayer Perceptrons",I am finished with this assignment,
+PSABX64F,PRABU5Q8,"In this assignment, you will first have an opportunity to check your understanding of some of the concepts covered in this module pertaining to neural networks and deep learning. After these ""check your understanding"" questions, you will be provided with some starter code that you may use to explore these types of models using an educational dataset.",I am ready to continue,
+,PRABU5Q9,"Consider a scenario where you want to use a neural network to predict whether or not a student is likely to complete an assignment given some features describing their prior performance.
+
+Which of these activation functions would be most appropriate for the output layer?",Sigmoid,Predicting whether or not a student is likely to complete an assignment can be considered a binary classification task
+,,,,"For this, we would want an activation function that ensures outputs between 0 and 1"
+,PRABU5RA,"Consider a scenario where you want to use a neural network to predict whether a student is concentrating, bored, confused, or frustrated during an assignment (treating these as mutually exclusive such that the student can only be in one of these states at a time.
+
+Which of these activation functions would be most appropriate for the output layer?",Softmax,"Since we are treating these labels as mutually exclusive, we can consider this a multi-class classification problem"
+,,,,"We would want our activation function to output a value between 0 and 1, but ideally should consider all of the classes (i.e. we would want our prediction to represent a probability distribution across all of the labels)"
+,PRABU5RB,"Consider a scenario where you have trained and evaluated a neural network model and have recorded the following performance:
+
+| | AUC | Kappa |
+| Test Set Performance | 0.61 | 0.04 |
+
+From this, is it likely that the model is overfit?",There is not enough information to tell if the model is overfit,
+,PRABU5RC,"Consider a scenario where you have trained and evaluated a neural network model and have recorded the following performance:
+
+| | AUC | Kappa |
+| Training Set Performance | 0.63 | 0.05 |
+| Test Set Performance | 0.61 | 0.04 |
+
+From this, is it likely that the model is overfit?","No, it is not likely that the model is overfit",
+,PRABU5RD,"Consider a scenario where you have trained and evaluated a neural network model and have recorded the following performance:
+
+| | AUC | Kappa |
+| Training Set Performance | 0.85 | 0.08 |
+| Test Set Performance | 0.82 | 0.06 |
+
+From this, is it likely that the model is overfit?","No, it is not likely that the model is overfit",
+,PRABU5RE,"Consider a scenario where you have trained and evaluated a neural network model and have recorded the following performance:
+
+| | AUC | Kappa |
+| Training Set Performance | 0.85 | 0.28 |
+| Test Set Performance | 0.71 | 0.13 |
+
+From this, is it likely that the model is overfit?","Yes, it is likely that the model is overfit",
+,PRABU5RF,"For the remainder of this assignment, you will be running and modifying Python code using Google Colab which can be accessed via the link below.
+
+Google Colab Starter Code
+
+In this assignment, you will be training and evaluating neural networks and other models for the task of developing automated sensor-free detectors of student affect (i.e. concentration, boredom, confusion, and frustration).
+
+The dataset can be downloaded from this link (and is also provided in the starter code: ASSISTments Affect Labels and Features
+
+Please continue once you have accessed the starter code and have downloaded the dataset",I am ready to continue,
+,PRABU5RG,"The starter code can be accessed via the following link: Google Colab Starter Code
+
+Data loading and preprocessing
+
+Please be sure to read the description of the dataset and then run all code cells up to part 1 (we will be running and modifying Part 1 next). Once you have familiarized yourself with the dataset, please continue.",I have loaded the data and am ready for Part 1,
+,PSBE7N4,"The starter code can be accessed via the following link: Google Colab Starter Code
+
+Part 1
+
+In part 1 of this assignment, you will be training and evaluating a Feed Forward Neural Network. To start, run the code cells to prepare the data and conduct your cross validation.
+
+Let's first check our understanding of the model we are evaluating. How many hidden layers are included in the Feed Forward Neural Network model?",2,
+,,"For the model in part 1, how many nodes are in the input layer?",92,"In Keras, the library we are using to build our model, the input layer can be defined as the ""input shape"" to the first hidden layer"
+,,"For the model in part 1, how many nodes are in the first hidden layer?",128,
+,PSBE7N6,"The starter code can be accessed via the following link: Google Colab Starter Code
+
+Part 1 (continued)
+
+There are a large number of possible model configurations that we can try. Please modify the code to implement and evaluate each of these 4 model configurations:
+
+| Configuration | Hidden Layers | Layer Types | Number of Nodes | Activation Functions |
+| A | 2 | Dense / Dense | 128 / 64 | relu / relu |
+| B | 1 | Dense | 128 | relu |
+| C | 2 | Dense / Dense | 128 / 64 | tanh / tanh |
+| D | 3 | Dense / Dense / Dense | 64 / 64 /32 | relu / tanh / tanh |
+
+(Note, if you're having trouble or are unsure, the hint on this problem includes the code for each configuration)
+
+Which model configuration resulted in the highest AUC?",Configuration A,"# Configuration A:
+
+model = Sequential([
+Dense(128, activation='relu', input_shape=(92,)),
+Dense(64, activation='relu'),
+Dense(4, activation='softmax')
+])
+
+# Configuration B:
+
+model = Sequential([
+Dense(128, activation='relu', input_shape=(92,)),
+Dense(4, activation='softmax')
+])
+
+# Configuration C:
+
+model = Sequential([
+Dense(128, activation='tanh', input_shape=(92,)),
+Dense(64, activation='tanh'),
+Dense(4, activation='softmax')
+])
+
+# Configuration D:
+
+model = Sequential([
+Dense(64, activation='relu', input_shape=(92,)),
+Dense(64, activation='tanh'),
+Dense(32, activation='tanh'),
+Dense(4, activation='softmax')
+])"
+,,"| Configuration | Hidden Layers | Layer Types | Number of Nodes | Activation Functions |
+| A | 2 | Dense / Dense | 128 / 64 | relu / relu |
+| B | 1 | Dense | 128 | relu |
+| C | 2 | Dense / Dense | 128 / 64 | tanh / tanh |
+| D | 3 | Dense / Dense / Dense | 64 / 64 /32 | relu / tanh / tanh |
+
+Which model configuration resulted in the highest Kappa?",Configuration B,
+,PSBE7N7,"The starter code can be accessed via the following link: Google Colab Starter Code
+
+Part 2
+
+Run the code cells related to part 2 (note, the model in part 2 may take a longer time to finish training).
+
+Would you say that there is a risk that the current model is overfitting to the data?","Yes, there is a notable difference in training and test set performance",
+,,"Try reducing the number of nodes in the hidden layer from 200 to 50.
+
+Does this reduction in model complexity lead to a lower risk of overfitting?","Yes, it is less likely that the model is overfit","The new model configuration should look something like this:
+
+model = Sequential([
+Masking(mask_value=0.0, input_shape=(X_train[0].shape)),
+normalization_layer,
+LSTM(50, activation='tanh', return_sequences=True),
+TimeDistributed(Dense(4, activation='softmax'))
+])"
+,PRABU5RH,"Going Deeper
+
+If you are looking to go deeper with this code, aside from modifying other hyperparameters, try comparing these neural network models to some of the other prediction models that have been introduced through earlier modules. Note, these would likely use the non-recurrent data (but you could also try other types of recurrent model such as keras' SimpleRNN and GRU).",I am finished with this assignment,
+PSABX64S,PSBENA2,"Use the summary dataset and the Jupyter Notebook to answer the questions about data cleaning.
+
+How many observations are there in the informal condition in the cleaned data after you remove the Mixed condition from the Condition variable and the Training session from the Test variable?",252,Use df['Condition'].value_counts() to count the observations.
+,,,,Remove both the Mixed condition and the Training session from the Condition and Test variables.
+,,,,Ensure you removed both Mixed and Training levels from the Condition and Test variables.
+,,Are the number of observations on the pre-test and post-test the same in the cleaned data after you remove the Mixed condition from the Condition variable and the Training session from the Test variable?,No,Count the observations using df['Test'].value_counts().
+,,,,Ensure you removed both Mixed and Training levels from the Condition and Test variables.
+,PSBENCH,"Visualize the Age variable using matplotlib, plt.hist(df['Age'). How would you describe the shape of the histogram for the Age variable?",Positive Skewed.,Negative skew has a longer left tail. It is also called left-skewed or left-tailed.
+,,,,The Normal Distribution is a true symmetric distribution and its shape is like a symmetrical bell.
+,,"Create a new categorical variable by grouping age into 21-30, 31-40, and above 40.
+
+Among these three age groups, which group has the most observations?",21-30,Use df['age_group'].value_counts() to count the group values.
+,,,,Use df['age_group'].value_counts() to count the group values.
+,,,,"Use pd.cut(df['Age'], bins=[20, 30, 40, float('inf')], labels=['21-30', '31-40', 'above 40'], right=False) to create the group variable."
+,,,,"Use pd.cut(df['Age'], bins=[20, 30, 40, float('inf')], labels=['21-30', '31-40', 'above 40'], right=False) to create the group variable."
+,PSBENDV,Visualize the summary writing time variable. How would you describe the shape of the histogram for this variable?,Positive Skewed,Negative skew has a longer left tail. It is also called left-skewed or left-tailed.
+,,,,The Normal Distribution is a true symmetric distribution and its shape is like a symmetrical bell.
+,,"Create a new categorical variable using log transformation and visualize the transformed variable.
+
+How would you describe the shape of the histogram for this log-transformed variable?",Normal Distribution,"The Normal Distribution is a true symmetric distribution, and its shape is like a symmetrical bell."
+,,,,Negative skew has a longer left tail. It is also called left-skewed or left-tailed.
+,PRABUZ5X,"The integer in the Edu column represents different levels of the highest education: 3:'Some high school', 4:'High School', 5:'Some college', 7:'Associate', 8:'Bachelor', 9:'Master', 11:'Doctoral'
+
+How many observations are labeled to possess a Bachelor's degree?",204,Use df['Edu'].value_counts() to count the observations.
+,,,,"Ensure you replaced the number correctly.
+
+replace_edu = {3:'Some high school', 4:'High School', 5:'Some college', 7:'Associate',
+8:'Bachelor', 9:'Master', 10:'Professional', 11:'Doctoral'}
+df['Edu_cat'] = df_con['Edu']
+df = df.replace({'Edu_cat':replace_edu})"
+,PRABUZ5Y,Which educational levels have less than 50 observations?,Doctoral,Use df['Edu'].value_counts() to count the observations.
+,,,Some College,Use df['Edu'].value_counts() to count the observations.
+,,,Professional,
+,,,High School,
+,,,Associate,
+,,,Some high school,
+,PRABUZ5Z,Which re-grouping method best reduces zeros in the encoded variable?,"Bachelor, Bachelor Below, Bachelor Above",Compare the count of each group in the different methods and check which regrouping method yields less zeros.
+,PRABUZ52,Which encoding method is the most appropriate for the Educational Level variable?,Dummy Coding,"Dummy coding is an efficient representation with k-1 binary variables, and well-suited for ordinal data with a defined order."
+PSABX65E,PRABU5UW,"Imagine you have a dataset of 10,000 learners taking a massive open online course (MOOC). This dataset records every page visit by these learners. Page types include the following: front_page, lecture, quiz, assignment, and forum. For each login session, there is a session id recorded in the dataset. Below is a sample of a few rows:
+
+| timestamp | session_id | user | page_type |
+| 2023-09-01 08:19:34 | 1 | user101 | front_page |
+| 2023-09-01 08:19:39 | 1 | user101 | lecture |
+| 2023-09-01 08:26:02 | 1 | user101 | quiz |
+
+With the data, we hope to answer this question: Which pages did learners tend to visit together during a session? To answer this question, we will conduct mine association rules about page visits. In order to perform association rule mining, we need to get the most frequently occurring items in the dataset using the a priori algorithm.
+
+In this analysis, how should you define a 'basket'?",Records from each session form a basket.,
+,PRABU5UX,Check all statements that are true if item 'front_page' has a support of 1.0.,The item 'front_page' appears in every learner's records.,No hints available.
+,,,The item 'front_page' appears in every session.,
+,,,"When 'lecture' appears in a session, 'front_page' also appears in the same session.",
+,PRABU5UY,"We are interested in the itemset of <lecture, forum>. What does it mean for this rule to have a support of 0.5?",Items 'lecture' and 'forum' appear together in 50% of all sessions.,No hints available.
+,PRABU5UZ,"We are also interested in the rule {front_page} => {lecture}.
+
+What does it mean for this rule to have a confidence of 1.0 (which it does)?","Whenever 'front_page' appear in a session, 'lecture' is also present in the same session.",No hints available.
+,PRABU5U2,What does it mean for the rule {lecture} => {quiz} to have a lift greater than 1?,"The 'lecture' and 'quiz' are dependent on one another, and this rule is more likely to occur than normal when the antecedent is present.",
+PSABX65M,PRABU5VD,"Question 1 out of 3:
+
+Using the mtcars R tutorial discussed in the videos as a guide, first, conduct a hierarchical cluster analysis heatmap using the USJudgeRatings dataset in R using the ComplexHeatmap defaults for the distance measure (Euclidean) and clustering algorithm (complex) clustering both the rows and the columns.
+
+USJudgeRatings is a survey of lawyers on 43 specific judges on a range of 12 survey items including:
+
+[,1] CONT Number of contacts of lawyer with judge.
+[,2] INTG Judicial integrity.
+[,3] DMNR Demeanor.
+[,4] DILG Diligence.
+[,5] CFMG Case flow managing.
+[,6] DECI Prompt decisions.
+[,7] PREP Preparation for trial.
+[,8] FAMI Familiarity with law.
+[,9] ORAL Sound oral rulings.
+[,10] WRIT Sound written rulings.
+[,11] PHYS Physical ability.
+[,12] RTEN Worthy of retention.",DONE,
+,PRABU5VE,"Part A:
+
+Which column (variable) is most different from all other variables as indicated by the column cluster tree?",CONT,"Don't forget to rescale your data
+data<-USJudgeRatings
+data.scale<-scale(data)"
+,,,,"Code for complex heatmap with defaults is:
+
+Heatmap(data.scale, name = ""USJudgeRating heatmap"",
+row_names_gp = gpar(fontsize = 5))"
+,PRABU5VF,"Part B:
+
+In the low (blue) cluster at the bottom of the heatmap, which judge seems to be an outlier with unusually high CONT (contacts)?",Levister,
+,PRABU5VH,"Question 2 out of 3 :
+
+Now using the same USJudgeRatings dataset and the mtcars R markdown tutorial, create a new HCA heatmap using uncentered correlation (cosangle) as the distance metric, and average linkage the clustering algorithm.",DONE,
+,PRABU5VJ,"Part A :
+
+Which other judge is most similar across these survey items to Martin?",Hamill,Make sure to install the hopach package.
+,,,,"Make sure to use the distance calculation:
+uncenter.dist<-function(m) {
+as.dist(as.matrix(distancematrix(m, d=""cosangle"")))
+}"
+,,,,"The code for a Heatmap with uncentered correlation and average linkage
+row.clus<-hclust(uncenter.dist(data.scale), method = ""ave"")
+col.clus<-hclust(uncenter.dist(t(data.scale)), method = ""ave"")
+
+Heatmap(data.scale, name = ""USJudgeRating heatmap"",
+cluster_rows=row.clus, cluster_columns=col.clus,
+row_names_gp = gpar(fontsize = 5))"
+,PRABU5VK,"Part B:
+
+How many row clusters of judges seem to have high CONT (contacts) in red?",2,
+,PRABU5VM,"Question 3 out of 3 :
+
+Now use the same USJudgeRatings dataset but use k-means with 3 groups for rows and columns. Here is the code in R, note that set.seed(123) must match to get the same results:
+
+Heatmap(data2.scale, name = ""USJudgeRating heatmap"",
+row_km=3, column_km=3,
+row_names_gp = gpar(fontsize = 5))",DONE,
+,PRABU5VN,"Part A:
+
+On the rows, which judge seems to be an outlier in cluster 3 from the other high contact judges?",Callahan,
+,PRABU5VP,"Part B:
+
+How columns (variables) did k-means force into cluster 2?",2,
+PSBFYED,PRABU5U3,"Question 1 of 9: How many possible connections are there between individuals in this graph, not counting self-connections, and assuming that link direction does not matter?",5253,The number of possible connections between individuals in this graph is a function of the number of individuals. You don't need any further information beyond that.
+,,,,Each individual can connect to every other individual. But you don't want to count that connection twice (because link direction doesn't matter).
+,,,,"If link direction mattered, the number of connections would be n (the number of students) * n-1 (the number of other students they can connect with): n(n-1). But link direction doesn't matter; how can you adjust this formula?"
+,,,,"To ignore link direction, just halve the total number of links, to get the formula: n(n-1)/2."
+,,,,"Now you need to find n. You can do this by counting the number of unique posters.
+
+poster = len(pd.unique(df['poster']))"
+,,,,"Use the formula to compute the number of possible connections between the individuals.
+
+connections = poster * (poster-1)/2
+print(""Number of Possible Connections:"", connections)"
+,PRABU5U4,"Question 2 of 9: Only counting connections where poster A responds directly to poster B (and not connections where they both simply responded to the same post), how many connections are there between individuals in this graph?
+
+(Don't count self-connections and assume that link direction does not matter.)",110,"For this question, you would need to be able to find the poster for a post responded to, create a formula that creates the combinations, and then count the number of unique combinations."
+,,,,"Let's first find the poster for each post responded. One way you can do this is by creating another column with the IDs and mapping the poster onto the ID.
+
+df.set_index('ID', inplace=True)
+df_dict = df.to_dict()['poster']
+df['poster_responded_to'] = df['poster_responded_to'].map(df_dict)"
+,,,,"Now you know the poster of the current post, and the poster of the post they responded to. We only want the paired connection, so remove the ones without a pair.
+
+df_drop = df.dropna().astype(int)"
+,,,,The next step would be to build the links between the posters by concatenating them.
+,,,,"One way is to transform the posters into a *undirected* pair where you don't distinguish between 24601 responding to 29022, and 29022 responding to 24601. You can do this by placing the ID with a greater number before the one with a smaller number.
+
+def make_undirected(row):
+if row['poster'] < row['poster_responded_to']:
+val = row['poster'].astype(str) + ""-"" + row['poster_responded_to'].astype(str)
+else:
+val = row['poster_responded_to'].astype(str) + ""-"" + row['poster'].astype(str)
+return val"
+,,,,"Now, you have the all values you need to count the number of undirected pairs. Make sure you remove the self-connections, or the empty rows, before you filter out the duplicates.
+
+unique = df_drop['undirected_pair'].dropna().unique()"
+,,,,"Remember, we are interested in paired connections. Don't forget to eliminate the self-connections."
+,,,,"In the end, the function should look something like this.
+
+def make_undirected(row):
+if row['poster'] < row['poster_responded_to']:
+val = row['poster'].astype(str) + ""-"" + row['poster_responded_to'].astype(str)
+elif row['poster'] == row['poster_responded_to']:
+val = None
+else:
+val = row['poster_responded_to'].astype(str) + ""-"" + row['poster'].astype(str)
+return val
+
+df_drop['undirected_pair'] = df_drop.apply(make_undirected, axis=1)"
+,,,,"As the final step, count the number of rows in the table.
+
+unique = pd.DataFrame(unique, columns=['undirected_pair'])
+print(""Number of Pairs:"", unique.shape[0])"
+,PRABU5U5,"Question 3 of 9: What is the density of the social network graph? (Don't count self-connections and assume that link direction does not matter.)
+
+Give two digits after the decimal.",0.02,"To find the density of the social network graph, you just need to divide the total actual number of connections by the total possible number of connections."
+,,,,"In fact, you computed the total actual number of connections in Question 2, as well as the total possible number of connections in Question 1."
+,,,,"You can find the density with a simple calculation. Remember to round it to 2 decimal places.
+
+density = unique_pairs / connections
+print(""Density:"", round(density, 2))"
+,PRABU5U6,Question 4 of 9: What is the geodesic distance between 12345 and 24601?,1,What is the geodesic distance? Re-watch the lecture.
+,,,,"The geodesic distance is the number of edges between one node N and another node M, in the shortest path connecting them."
+,,,,"What is the number of edges between 12345 and 24601, in the shortest path connecting them?"
+,,,,Look at post 12. It connects 12345 directly to 24601.
+,,,,"12345 and 24601 are directly connected, so the geodesic distance between 12345 and 24601 is 1."
+,PRABU5U7,Question 5 of 9: What is the geodesic distance between 3903 and 1588?,3,"Recall that the geodesic distance is the number of edges between one node N and another node M, in the shortest path connecting them."
+,,,,"What is the number of edges between 3903 and 1588, in the shortest path connecting them?"
+,,,,Let's look at who connects to 3903 and 1588.You can find everyone who connects to 3903 by searching for that value in Excel.
+,,,,"3903 is connected to 82875, 738981, 9061, 21588, and 24601. 1588 is connected to 97013, 68265, and 12345. What should you do now?"
+,,,,"You *could* exhaustively look at everyone who is connected to 82875, 738981, 9061, 21588, 24601, 97013, 68265, and 12345. But there's an easier way."
+,,,,"Remember from the previous problem, 12345 and 24601 are directly connected."
+,,,,So the shortest path (at least one of them) is 3903->24601->12345->1588. What is the geodesic distance?
+,PRABU5U8,Question 6 of 9: Which of these poster nodes is not reachable?,87908,"A node is not reachable, if no other node connects to it. Which nodes are not reachable?"
+,,,,"To not be reachable in this context, it must mean that no other student responded to that student's post(s). Which student was never responded to by anyone else?"
+,,,,Student 87908 only wrote one post (25). No one responded to it.
+,PRABU5U9,Question 7 of 9: Which individual has the most posts?,24601,There are a number of ways you can identify the individual with the greatest number of posts. One of the simplest way is to use value_counts()
+,,,,"Now you have a list of poster IDs in the descending order of occurrence. On the top of the list, you can see the ID in the lead with 24 posts.
+
+df['poster'].value_counts()"
+,PRABU5VC,Question 8 of 9: Which individual is most often responded to by other posters (the in-degree)?,12345,"To identify the individual who was most often responded to by other posters, you can refer back to Question 2 where you created a column called ""poster_responded_to."""
+,,,,"You can use the same approach from Question 7. On the top of the list, you can see the ID in the lead with 16 times they received a response.
+
+df_drop['poster_responded_to'].value_counts()"
+,PRABU5VB,"Question 9 of 9: Which individual has the highest centrality, and is therefore most important to the course?
+
+(For this question, you can just guess.)
+
+(Note: this item is intentionally vague as to whether it's requesting betweenness, closeness, or eigenvector centrality. There may be multiple correct options.)",12345,
+,,,24601,
+PSBGCK8,PRABU5RV,What is an example of a cognitive bias?,"A professor decides that a student is not studying int he course because they performed poorly (e.g., horn effect)",
+,PRABU5RW,Which of the following is true?,The box and whisker plots are better for audiences with strong data literacy.,
+,PRABU5RX,Which of the following is true?,Sorting bar graphs makes comparisons easier.,
+,PRABU4EE,Which of the following is true?,None of the above,
+,PRABU5R2,All warnings are prescriptive.,False,
+,PRABU4EF,Predictive data ...,Lets the student know how they might do later.,
+,PRABU5R4,Social comparison visualizations are effective when...,All of the above,
+,PRABU5SB,Blank Box dashboards could help teachers to approach their students as whole people.,True,
+,PRBRN5K,"Once the filters were working on Jerry's dashboard, it was clear that...",Jerry needed more help with calculus.,
+,PRBRQ7Y,"Once the filters were working on Rajit's dashboard, it was clear that...",Rajit was overwhelmed with things happening outside of the course,
+,PRABU5R8,Showing June's grades to Jerry would have helped him to improve.,False,
+,PRABU5R9,June's dashboard data showed exactly how to make improvements by herself.,False,
+PSBJ6XU,PRABU5P5,"Perform text analysis on a dataset containing language assessment essays using the Simple Transformers library. This project aims to introduce you to basic NLP concepts and practices.
+
+- Go to assignment for Week 16
+- Download Dataset
+
+Before you start the assignment, please create a copy of this link in your Google Drive and complete the assignment in the copied Colab environment.
+
+> `File` > `Save a Copy in Drive`You can provide the link of your Colab for submission.",,
+PSBKAV5,PRBUAAM,"This assignment builds on the Explainable in Excel activity completed earlier in the module. You will now carry out a similar process in Python using Google Colab or another Python-compatible environment. While no starter code is provided, the focus is on applying the same ideas and workflow you have already practiced.",I am ready to continue,You can actually create a copy and specify what the copy will contain.
+,,,,"Here's how you can filter specific rows from the dataset and indicate that it's a different version.
+
+df2 = df[df[""KC""]==""VALUING-CAT-FEATURES""]"
+,,,,One way to get the number of rows is to ask for the shape of the dataset.
+,,,,"You can get the number of rows by using the shape method.
+
+print(""Number of Rows:"", df2.shape[0])"
+,PRABU56Q,"Question 1 of 12:
+
+On a copy of the dataset, filter out all actions until you only have actions for KC ""VALUING-CAT-FEATURES"". How many rows of data remain?",2473,You can actually create a copy and specify what the copy will contain.
+,,,,"Here's how you can filter specific rows from the dataset and indicate that it's a different version.
+
+df2 = df[df[""KC""]==""VALUING-CAT-FEATURES""]"
+,,,,One way to get the number of rows is to ask for the shape of the dataset.
+,,,,"You can get the number of rows by using the shape method.
+
+print(""Number of Rows:"", df2.shape[0])"
+,PRABU56R,"Question 2 of 12:
+
+Based on the assumptions of Bayesian Knowledge Tracing, we need to delete some rows. Which rows of the firstattempt column, do we need to delete?",Firstattempt = 0,
+,PRABU56S,"Question 3 of 12:
+
+Go ahead and delete the rows where it's not the first attempt. How many rows of data remain?",1791,"Similar to what we did with the KC, we want to focus on the first-attempts while not losing the original dataset."
+,,,,"You can specify the rows of our interest and give it a different name.
+
+df3 = df2[df2[""firstattempt""]==1]"
+,,,,"You can get the number of rows by using the shape method.
+
+print(""Number of Rows:"", df3.shape[0])"
+,,,,Now count the number of rows. Make sure that you are not counting the header (column name) row.
+,PRABU56T,"Question 4 of 12:
+
+Before we start building the model, we need base values: L0, T, S, G. Assign the each values0.3, 0.1, 0.2, and 0.25 respectively.
+
+What is your slip parameter? (If you're not sure what these represent, re-watch the lecture.)",0.2,"Here, we have four parameters -- two for learning and two for performance. What do you think each represent?
+
+L0 = 0.3
+t = 0.1
+s = 0.2
+g = 0.25"
+,,,,"With regards to learning, it's possible that either the student already has the skill even before having to use the skill, which is referred to as P(L0), or acquires the skill from every opportunity to use it, or P(T)."
+,,,,"As for performance, the student can have the skill and still make a mistake. Alternatively, the student can guess it right even without having the skill."
+,,,,"In Bayesian Knowledge Tracing, ""S"" denotes slip where the skill is known to the student although the performance suggests otherwise."
+,PRABU56U,"Question 5 of 12:
+
+Create three new columns: P(Ln-1), P(Ln-1|RESULT), and P(Ln). Leave the columns below them empty for now. Just temporarily, set up column P(Ln) so that it build on the previous column P(Ln-1) with an increase of 0.1. (This pretends that the student always gets 10% better each time, even going over 100%, which is clearly wrong...; we'll fix it later.)
+
+What should the formula be for column P(Ln-1)? If you're not sure which of these is right, try them out. Select all that apply.","df3.loc[df3[""Student""] != df3[""Student""].shift(), ""P(Ln-1)""] = L0","One way to create new columns is to insert them. (With this method, we have the freedom to add a column at any position we like and not just at the end.)
+
+df3.insert(8, ""P(Ln-1)"", 0)
+df3.insert(9, ""P(Ln-1|Result)"", 0)
+df3.insert(10, ""P(Ln)"", 0)"
+,,,"df3.loc[df3[""Student""] == df3[""Student""].shift(1), ""P(Ln-1)""] = df3[""P(Ln)""].shift()","One way to create new columns is to insert them. (With this method, we have the freedom to add a column at any position we like and not just at the end.)
+
+df3.insert(8, ""P(Ln-1)"", 0)
+df3.insert(9, ""P(Ln-1|Result)"", 0)
+df3.insert(10, ""P(Ln)"", 0)"
+,,,,"Next, let's set up P(Ln). We want it to build up on the previous row in P(Ln-1) with an increment of 0.1.
+
+df3.loc[:, ""P(Ln)""] = df3.loc[:, ""P(Ln-1)""].shift() + 0.1"
+,,,,"Next, let's set up P(Ln). We want it to build up on the previous row in P(Ln-1) with an increment of 0.1.
+
+df3.loc[:, ""P(Ln)""] = df3.loc[:, ""P(Ln-1)""].shift() + 0.1"
+,,,,"With regards to P(Ln-1), what behavior do you want to see? Ideally, you want to refer to the current knowledge when calculating the new knowledge estimate based on performance. When you encounter a new student, however, you want to refer back to the initial P(L0)."
+,,,,"With regards to P(Ln-1), what behavior do you want to see? Ideally, you want to refer to the current knowledge when calculating the new knowledge estimate based on performance. When you encounter a new student, however, you want to refer back to the initial P(L0)."
+,,,,"In other words, we expect the student knowledge to go up steadily by 0.1 with each attempt, and re-set back to 0.3 each time it's a new student. Which formula gives you this result?"
+,,,,"In other words, we expect the student knowledge to go up steadily by 0.1 with each attempt, and re-set back to 0.3 each time it's a new student. Which formula gives you this result?"
+,,,,"Since P(L) and P(Ln-1) are set up in a way that each builds on another, you need to re-run the same formula to check out the final output. Update P(Ln) to reflect the changes made to P(Ln-1), and vice versa."
+,,,,"Since P(L) and P(Ln-1) are set up in a way that each builds on another, you need to re-run the same formula to check out the final output. Update P(Ln) to reflect the changes made to P(Ln-1), and vice versa."
+,,,,"Here's a how you can iterate the process more quickly. In the end, you should see that the NA value in the first row in P(Ln) carries over to the next row in P(Ln-1), and so on and so forth.
+
+for index, row in df.iterrows():
+df3.loc[:, ""P(Ln)""] = df3.loc[:, ""P(Ln-1)""].shift() + 0.1
+df3.loc[df3[""Student""] != df3[""Student""].shift(), ""P(Ln-1)""] = l0
+df3.loc[df3[""Student""] == df3[""Student""].shift(), ""P(Ln-1)""] = df3[""P(Ln)""].shift()"
+,,,,"Here's a how you can iterate the process more quickly. In the end, you should see that the NA value in the first row in P(Ln) carries over to the next row in P(Ln-1), and so on and so forth.
+
+for index, row in df.iterrows():
+df3.loc[:, ""P(Ln)""] = df3.loc[:, ""P(Ln-1)""].shift() + 0.1
+df3.loc[df3[""Student""] != df3[""Student""].shift(), ""P(Ln-1)""] = L0
+df3.loc[df3[""Student""] == df3[""Student""].shift(), ""P(Ln-1)""] = df3[""P(Ln)""].shift()"
+,PRABU56V,"Question 6 of 12:
+
+With the formula for column P(Ln-1) in place, we now need to set up the first row of column P(Ln). Just temporarily, set column P(Ln-1|Result) to be the same as P(Ln-1). (This eliminates Bayesian updating, which is not correct within BKT...; we'll fix it later.) Based on the P(T) parameter, what should the formula be for P(Ln) so that it accurately represents learning?
+
+As always, don't be shy to try out the others, and see whether they return you what you expected. If not, consider why they fail.","df3.loc[:, ""P(Ln)""] = df3.loc[:, ""P(Ln-1|Result)""] + (1-df3.loc[:, ""P(Ln-1|Result)""])*t","Let's set up the P(Ln-1|Result) before we start exploring the formula.
+
+df3.loc[:, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]"
+,,,,"Let's set up the P(Ln-1|Result) before we start exploring the formula.
+
+df3.loc[:, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]"
+,,,,"Think about what behavior you want to see. Ideally, you want to take the current knowledge (based on performance), plus the probability that the student learned if he or she didn't already know the skill."
+,,,,"Think about what behavior you want to see. Ideally, you want to take the current knowledge (based on performance), plus the probability that the student learned if he or she didn't already know the skill."
+,,,,"Since it's set up in a way that P(L), P(Ln-1), and P(Ln-1|Result) builds on another, you need to re-run the same formula to check out the final output.
+
+for index, row in df.iterrows():
+df3.loc[df3[""Student""] != df3[""Student""].shift(), ""P(Ln-1)""] = l0
+df3.loc[df3[""Student""] == df3[""Student""].shift(), ""P(Ln-1)""] = df3[""P(Ln)""].shift()
+df3.loc[:, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]
+In the end, you should no longer see NA value in the dataset."
+,,,,"Since it's set up in a way that P(L), P(Ln-1), and P(Ln-1|Result) builds on another, you need to re-run the same formula to check out the final output.
+
+for index, row in df.iterrows():
+df3.loc[df3[""Student""] != df3[""Student""].shift(), ""P(Ln-1)""] = L0
+df3.loc[df3[""Student""] == df3[""Student""].shift(), ""P(Ln-1)""] = df3[""P(Ln)""].shift()
+df3.loc[:, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]
+In the end, you should no longer see NA value in the dataset."
+,,,,"You should get a result where P(Ln) is always more than P(Ln-1), but the bigger P(Ln-1) is, the smaller the difference is. And P(Ln) should always be less than 1."
+,,,,"You should get a result where P(Ln) is always more than P(Ln-1), but the bigger P(Ln-1) is, the smaller the difference is. And P(Ln) should always be less than 1."
+,,,,"In the list, you have the models that look at only the probability you knew the skill, the models that only look at the probability that you didn't know the skill, and the models that look at both. Which one correctly represents BKT?"
+,,,,"In the list, you have the models that look at only the probability you knew the skill, the models that only look at the probability that you didn't know the skill, and the models that look at both. Which one correctly represents BKT?"
+,,,,"Since BKT looks at both the probability you knew the skill and the probability you didn't know the skill, it's down to two options, whether it's the sum of the probability of future knowledge when you knew the skill and didn't know the skill, or the difference between those probabilities. Which one is it?"
+,,,,"Since BKT looks at both the probability you knew the skill and the probability you didn't know the skill, it's down to two options, whether it's the sum of the probability of future knowledge when you knew the skill and didn't know the skill, or the difference between those probabilities. Which one is it?"
+,,,,You're looking at the sum of those probabilities!
+,,,,You're looking at the sum of those probabilities!
+,PRABU56W,"Question 7 of 12:
+
+What should the formula be for P(Ln-1|Result)?","df3.loc[df3[""right""] != 1, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]*s/((df3.loc[:, ""P(Ln-1)""]*s) + (1-df3.loc[:, ""P(Ln-1)""])*(1-g))","The key question for this problem is: When the student gets the right answer, should the estimate of their updated knowledge be based on the probability they knew it and didn't learn, the probability they knew it and slipped, the probability they knew it and didn't guess, or the probability that they knew it and didn't slip?"
+,,,"df3.loc[df3[""right""] == 1, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]*(1-s)/((df3.loc[:, ""P(Ln-1)""]*(1-s)) + (1-df3.loc[:, ""P(Ln-1)""])*g)","Within BKT, when the student gets the right answer, the estimate of their updated knowledge is based on the probability that they knew it and didn't slip."
+,PRABU56X,"Question 8 of 12:
+
+If a student starts the tutor and then gets 3 problems right in a row for the skill, what is his/her final P(Ln) after these three problems?",0.955,"To answer this question, you need a situation where the student starts the tutor and then gets 3 problems right in a row for the skill. You can achieve this by just changing the first three responses for some student (who has three or more responses) to 1, 1, 1."
+,,,,"To answer this question, you need a situation where the student starts the tutor and then gets 3 problems right in a row for the skill. You can achieve this by just changing the first three responses for some student (who has three or more responses) to 1, 1, 1."
+,,,,"Since student ID of AGUFADE only had two responses, try AOADMAC."
+,,,,"Since student ID of AGUFADE only had two responses, try AOADMAC."
+,,,,"Specify the row and the column of the value that you want to change. To get the row number, you can either count or simply reset the index according to the current version.
+
+df3 = df3.reset_index()
+df3.at[3,'right']=1
+df3.at[4,'right']=1"
+,,,,"Specify the row and the column of the value that you want to change. To get the row number, you can either count or simply reset the index according to the current version.
+
+df3 = df3.reset_index()
+df3.at[3,'right']=1
+df3.at[4,'right']=1"
+,,,,"Then, you should iterate the entire process thus far.
+
+for index, row in df.iterrows():
+df3.loc[df3[""Student""] != df3[""Student""].shift(), ""P(Ln-1)""] = l0
+df3.loc[df3[""Student""] == df3[""Student""].shift(), ""P(Ln-1)""] = df3[""P(Ln)""].shift()
+df3.loc[df3[""right""] == 1, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]*(1-s)/((df3.loc[:, ""P(Ln-1)""]*(1-s)) + (1-df3.loc[:, ""P(Ln-1)""])*g)
+df3.loc[df3[""right""] != 1, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]*s/((df3.loc[:, ""P(Ln-1)""]*s) + (1-df3.loc[:, ""P(Ln-1)""])*(1-g))
+df3.loc[:, ""P(Ln)""] = df3.loc[:, ""P(Ln-1|Result)""] + (1-df3.loc[:, ""P(Ln-1|Result)""])*t"
+,,,,"Then, you should iterate the entire process thus far.
+
+for index, row in df.iterrows():
+df3.loc[df3[""Student""] != df3[""Student""].shift(), ""P(Ln-1)""] = L0
+df3.loc[df3[""Student""] == df3[""Student""].shift(), ""P(Ln-1)""] = df3[""P(Ln)""].shift()
+df3.loc[df3[""right""] == 1, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]*(1-s)/((df3.loc[:, ""P(Ln-1)""]*(1-s)) + (1-df3.loc[:, ""P(Ln-1)""])*g)
+df3.loc[df3[""right""] != 1, ""P(Ln-1|Result)""] = df3.loc[:, ""P(Ln-1)""]*s/((df3.loc[:, ""P(Ln-1)""]*s) + (1-df3.loc[:, ""P(Ln-1)""])*(1-g))
+df3.loc[:, ""P(Ln)""] = df3.loc[:, ""P(Ln-1|Result)""] + (1-df3.loc[:, ""P(Ln-1|Result)""])*t"
+,,,,"Once you've got a student whose first three responses is 1, 1, 1, what is their value for P(Ln) for the third response?
+
+print(""P(Ln) Value: "", df3.iloc[4]['P(Ln)'])"
+,,,,"Once you've got a student whose first three responses is 1, 1, 1, what is their value for P(Ln) for the third response?
+
+print(""P(Ln) Value: "", df3.iloc[4]['P(Ln)'])"
+,PRABU56Y,"Question 9 of 12:
+
+If a student starts the tutor and then gets 3 problems wrong in a row for the skill, what is his/her final P(Ln)?",0.142,"For this question, you need a situation where the student starts the tutor and then gets 3 problems wrong in a row for the skill. You can achieve this by just changing the first three responses for some student (who has three or more responses) to 0, 0, 0."
+,,,,"Since student ID of AGUFADE only had two responses, try AOADMAC once more."
+,,,,"Again, but on a copy, specify the row and the column of the value that you want to change. This time, set it to 0.
+
+df4 = df3
+df4.loc[2,['right']]=0
+df4.loc[3,['right']]=0
+df4.loc[4,['right']]=0"
+,,,,"With the new students' responses, you should iterate the same process.
+
+for index, row in df.iterrows():
+df4.loc[df4[""Student""] != df4[""Student""].shift(), ""P(Ln-1)""] = l0
+df4.loc[df4[""Student""] == df4[""Student""].shift(), ""P(Ln-1)""] = df4[""P(Ln)""].shift()
+df4.loc[df4[""right""] == 1, ""P(Ln-1|Result)""] = df4.loc[:, ""P(Ln-1)""]*(1-s)/((df4.loc[:, ""P(Ln-1)""]*(1-s)) + (1-df4.loc[:, ""P(Ln-1)""])*g)
+df4.loc[df4[""right""] != 1, ""P(Ln-1|Result)""] = df4.loc[:, ""P(Ln-1)""]*s/((df4.loc[:, ""P(Ln-1)""]*s) + (1-df4.loc[:, ""P(Ln-1)""])*(1-g))
+df4.loc[:, ""P(Ln)""] = df4.loc[:, ""P(Ln-1|Result)""] + (1-df4.loc[:, ""P(Ln-1|Result)""])*t"
+,,,,"Once you've got a student whose first three responses is 0, 0, 0, what is their value for P(Ln) for the third response?
+
+print(""P(Ln) Value: "", df4.iloc[4]['P(Ln)'])"
+,PRABU56Z,"Question 10 of 12:
+
+What is the AUC ROC (Area Under the ROC Curve)? For this question, you can use scikit-learn. What did you get?
+
+Provide your answer in three decimal places.",0.586,"First, import the library and the function you need for this question.
+
+from sklearn.metrics import roc_auc_score"
+,,,,"First, import the library and the function you need for this question.
+
+from sklearn.metrics import roc_auc_score"
+,,,,"Set the ground truths and the predicted probabilities.
+
+true_labels = list(df4[""right""])
+
+predicted_probabilities = list(df4[""P(Ln)""])"
+,,,,"Set the ground truths and the predicted probabilities.
+
+true_labels = list(df4[""right""])
+
+predicted_probabilities = list(df4[""P(Ln-1)""])"
+,,,,"Now, you just need to compute the AUC ROC.
+
+auc_roc1 = roc_auc_score(true_labels, predicted_probabilities)
+
+print(""AUC ROC:"", auc_roc1)"
+,,,,"Now, you just need to compute the AUC ROC.
+
+auc_roc1 = roc_auc_score(true_labels, predicted_probabilities)
+
+print(""AUC ROC:"", auc_roc1)"
+,PRABU562,"Question 11 of 12:
+
+Let's try with a different set of parameters and see how it impacts the AUC ROC. Change the parameters like as below. What did you get?
+
+Provide your answer in three decimal places.
+
+L0 = 0.3
+t = 0.1
+s = 0.4
+g = 0.4",0.578,"Assign the new values to the parameters.
+
+l0 = 0.3
+t = 0.1
+s = 0.4
+g = 0.4"
+,,,0.579,"Assign the new values to the parameters.
+
+l0 = 0.3
+t = 0.1
+s = 0.4
+g = 0.4"
+,,,,"Assign the new values to the parameters.
+
+L0 = 0.3
+t = 0.1
+s = 0.4
+g = 0.4"
+,,,,"Suppose that you're working on a copy called df5. We want to rerun the formula for this dataframe.
+
+for index, row in df.iterrows():
+df5.loc[df5[""Student""] != df5[""Student""].shift(), ""P(Ln-1)""] = l0
+df5.loc[df5[""Student""] == df5[""Student""].shift(), ""P(Ln-1)""] = df5[""P(Ln)""].shift()
+df5.loc[df5[""right""] == 1, ""P(Ln-1|Result)""] = df5.loc[:, ""P(Ln-1)""]*(1-s)/((df5.loc[:, ""P(Ln-1)""]*(1-s)) + (1-df5.loc[:, ""P(Ln-1)""])*g)
+df5.loc[df5[""right""] != 1, ""P(Ln-1|Result)""] = df5.loc[:, ""P(Ln-1)""]*s/((df5.loc[:, ""P(Ln-1)""]*s) + (1-df5.loc[:, ""P(Ln-1)""])*(1-g))
+df5.loc[:, ""P(Ln)""] = df5.loc[:, ""P(Ln-1|Result)""] + (1-df5.loc[:, ""P(Ln-1|Result)""])*t"
+,,,,"Suppose that you're working on a copy called df5. We want to rerun the formula for this dataframe.
+
+for index, row in df.iterrows():
+df5.loc[df5[""Student""] != df5[""Student""].shift(), ""P(Ln-1)""] = l0
+df5.loc[df5[""Student""] == df5[""Student""].shift(), ""P(Ln-1)""] = df5[""P(Ln)""].shift()
+df5.loc[df5[""right""] == 1, ""P(Ln-1|Result)""] = df5.loc[:, ""P(Ln-1)""]*(1-s)/((df5.loc[:, ""P(Ln-1)""]*(1-s)) + (1-df5.loc[:, ""P(Ln-1)""])*g)
+df5.loc[df5[""right""] != 1, ""P(Ln-1|Result)""] = df5.loc[:, ""P(Ln-1)""]*s/((df5.loc[:, ""P(Ln-1)""]*s) + (1-df5.loc[:, ""P(Ln-1)""])*(1-g))
+df5.loc[:, ""P(Ln)""] = df5.loc[:, ""P(Ln-1|Result)""] + (1-df5.loc[:, ""P(Ln-1|Result)""])*t"
+,,,,"Suppose that you're working on a copy called df5. We want to rerun the formula for this dataframe.
+
+for index, row in df.iterrows():
+df5.loc[df5[""Student""] != df5[""Student""].shift(), ""P(Ln-1)""] = L0
+df5.loc[df5[""Student""] == df5[""Student""].shift(), ""P(Ln-1)""] = df5[""P(Ln)""].shift()
+df5.loc[df5[""right""] == 1, ""P(Ln-1|Result)""] = df5.loc[:, ""P(Ln-1)""]*(1-s)/((df5.loc[:, ""P(Ln-1)""]*(1-s)) + (1-df5.loc[:, ""P(Ln-1)""])*g)
+df5.loc[df5[""right""] != 1, ""P(Ln-1|Result)""] = df5.loc[:, ""P(Ln-1)""]*s/((df5.loc[:, ""P(Ln-1)""]*s) + (1-df5.loc[:, ""P(Ln-1)""])*(1-g))
+df5.loc[:, ""P(Ln)""] = df5.loc[:, ""P(Ln-1|Result)""] + (1-df5.loc[:, ""P(Ln-1|Result)""])*t"
+,,,,"Set the ground truths and the predicted probabilities.
+
+true_labels = list(df5[""right""])
+
+predicted_probabilities = list(df5[""P(Ln)""])"
+,,,,"Set the ground truths and the predicted probabilities.
+
+true_labels = list(df5[""right""])
+
+predicted_probabilities = list(df5[""P(Ln-1)""])"
+,,,,"Set the ground truths and the predicted probabilities.
+
+true_labels = list(df5[""right""])
+
+predicted_probabilities = list(df5[""P(Ln-1)""])"
+,,,,"Now, you just need to compute the AUC ROC.
+
+auc_roc2 = roc_auc_score(true_labels, predicted_probabilities)
+
+print(""AUC ROC:"", auc_roc2)"
+,,,,"Now, you just need to compute the AUC ROC.
+
+auc_roc2 = roc_auc_score(true_labels, predicted_probabilities)
+
+print(""AUC ROC:"", auc_roc2)"
+,,,,"Now, you just need to compute the AUC ROC.
+
+auc_roc2 = roc_auc_score(true_labels, predicted_probabilities)
+
+print(""AUC ROC:"", auc_roc2)"
+,PRABU563,"Question 12 of 12:
+
+Which parameter fit was better?",The Former,
+PSBKJD8,PRABU56E,"In relational databases, ____________ is a special key that is used to link two tables.",primary key,
+,PRABU56F,Relational databases such as MySQL are more efficient for storing data intended for data science projects.,It depends on your specific data science project.,
+,PRABU56D,"Select the query that correctly answers the following question:
+
+When is the youngest employee's birthday? (Two or more employees may have the same birthday. It's ok to pick any of them).",SELECT birth_date FROM employees ORDER BY birth_date DESC LIMIT 1;,
+,PRABU56G,"What is the following query doing?
+
+select first_name, count(first_name) as first_name_count from employees group by first_name order by first_name_count desc limit 1;",Getting the most common first name,
+,PRABU56H,What advantage does using a programming language like Python have over a GUI-based client such as DBeaver? Check all that apply.,We can perform complex data analysis with a language like Python.,
+,,,We can use Python and other Python packages to create powerful data visualizations.,
+PSBKJED,PRBSWWJ,"In this assignment, we’ll continue with a subset of data from the previous week’s BKT assignment, exploring the effect that the knowledge component model has on the performance of KT. We’ll examine how the properties of a BKT model change as we change the relationships between problems and skills in the data (the “item-skill mapping” or “KC model”).",I am ready to proceed.,
+,PRBSYMR,"In the previous assignment, we calculated the goodness of fit of a Bayesian Knowledge Tracing model on the first attempts to problems involving the KC “VALUING_CAT_FEATURES”. To make sure that you’re starting from the same dataset, re-run your code from the last assignment, using the following new parameters. Report the AUC of the resulting BKT model. Round to the nearest thousandth.
+
+p(L0) = 0.30
+
+P(T) = 0.15
+
+P(S) = 0.10
+
+P(G) = 0.20
+
+Answer:",0.586,
+,PRBSYMS,"A knowledge component represents the common skill that is shared among a given batch of problems. Bayesian Knowledge Tracing assumes that each problem has a single knowledge component, that is shared with other problems. Let's see how the performance of our model changes when we break that assumption and treat two different skills as though they were the same.
+
+Modify your code so that instead of filtering on only problems with 'VALUING-CAT-FEATURES', you also filter on problems that include 'VALUING-SCALE'. Use the same parameters as the previous problem to evaluate the AUC-ROC of a BKT model on these two KCs. What performance do you get?",0.566,
+,PRBSYMT,"The performance of a model with two mixed knowledge components is worse than performance on the model that only contains one. Now let's add even more knowledge components to our dataframe and continue to treat them as a single knowledge component. Modify your code so that it includes data from four separate knowledge components:
+
+- VALUING-CAT-FEATURES
+
+- VALUING-SCALE
+
+- CHOOSE-OK-SPLOT
+
+- CHOOSE-OVERALL-REL
+
+Fit a BKT model with the same parameters to this set of knowledge components, and report the AUC ROC.",0.527,
+,PRBTYM4,"As we include more and more knowledge components in our single BKT model, our performance continues to decrease. Select from the options below why this could be happening.
+
+More than one answer may be correct. Please select all that apply.","Different knowledge components have different best-fitting values for their BKT parameters, so combining them prevents accurate modeling of the underlying parameters.",
+,,,"Different knowledge components represent student knowledge about different skills, and so they can't be included together as a single knowledge component.",
+,,,"Different knowledge components have different numbers of problems associated with them, and can't be compared.",
+,PRBTYM5,"A knowledge component is a representation of an underlying skill or concept that is shared among all problems that are tagged with that knowledge component. Let's say that hypothetically, we treated each individual problem as its own knowledge component. If we tried to fit a Bayesian Knowledge Tracing model to this knowledge mapping, what issues might that model have? Select from the possibilities below.
+
+More than one answer may be correct. Please select all that apply.","A knowledge component can only ever have one first attempt, so it would be difficult to attain mastery.",
+,,,"The resulting BKT model would be too fine-grained, and the parameter values won't have any interpretive meaning.",
+,,,Having too many KCs would make the model infeasible to run computationally.,
+PSBKJEF,PSBKH23,"Construct Validity (Question 1 out of 5):
+
+Suppose we are trying to assess the construct validity of a predictive model. What types of evidence are required to establish construct validity?",Both A and C,
+,,"Construct Validity (Question 2 out of 5):
+
+Consider a study in which data was collected to assess the efficacy of a mathematics technology aid on students' knowledge of algebra and geometry in middle school classrooms. With the aid, students complete multiple problems in algebra and geometry and the problems are scaffolded in such a way that questions of lower difficulty are asked first and the difficulty increases as students answer correctly. An end of unit assessment is given to test students' knowledge of the concepts.
+
+To assess the aid's effectiveness in improving students' understanding, suppose we fit a predictive model using data on the number of attempts made on questions, number of questions of certain types, as well as demographic characteristics of the student. The goal is to predict the student's assessment score. Prior to fitting the model, suppose the researcher believes that demographic characteristics are less correlated with the outcome and decides to omit these features from the model.
+
+What kind of validity is the decision to remove ""irrelevant features"" designed to strengthen?",Discriminant validity,
+,,"Construct Validity (Question 3 out of 5):
+
+Consider the same study in the prior question that assessed the impact of a mathematics technology aid. Suppose that two students who completed the same question correctly on an algebra problem received different rankings.
+
+What type of validity does this raise concerns over?",Convergent validity,
+,,"Construct Validity (Question 4 out of 5):
+
+In building predictive models, why should researchers focus on strengthening construct validity?",To improve predictive accuracy,
+,,"Construct Validity (Question 5 out of 5):
+
+In order to establish construct validity, why is evidence supporting convergent and discriminant validity required?",Both A and C,
+,PSBKJEE,"Statistical conclusion and other types of validity (Question 1 out of 5):
+
+Suppose a team of researchers are conducting an experimental study to assess the impact of an interactive online tutor in improving students' knowledge of geometry. Students in multiple schools are given tablets and the online tutor is randomly assigned as an app among students in half of the classrooms in each school.
+
+To accurately assess the statistical power of the study, what types of considerations in terms of sample size should the research team make?","Number of students, classrooms and schools",
+,,"Statistical conclusion and other types of validity (Question 2 out of 5):
+
+For the purpose of assessing power, why must different sample sizes be taken into account in school settings in which students are nested in classrooms and schools?",To take into account the correlation among students in the nested structure,
+,,"Statistical conclusion and other types of validity (Question 3 out of 5):
+
+When conducting statistical hypothesis tests, why is the level of significance α never set to a value above 0.20?",Because it controls the Type I error rate,
+,,"Statistical conclusion and other types of validity (Question 4 out of 5):
+
+Which of the following presents a threat to the statistical conclusion validity of a study's results?",Periodically checking the data as it is being collected and running preliminary analyses to determine whether future data collection is needed,
+,,"Statistical conclusion and other types of validity (Question 5 out of 5):
+
+When researchers conduct multiple hypothesis tests on the same dataset, what type of error does this lead to an inflation in?",Type I,
+,PSBKH2Y,"Internal Validity and Causality (Question 1 out of 10):
+
+Internal validity refers to the extent to which a relationship between two variables reflects a causal, not correlational, relationship. What is one of the main conditions needed to establish a causal relationship?",There is covariation between the two variables.,
+,,"Internal Validity and Causality (Question 2 out of 10):
+
+Selection into treatment is one of the most common threats to the internal validity of a study's results. Consider a study that evaluates the impact of a mathematics game app on students' knowledge of ordinal numbers. Suppose the app only offers instructions in both English and it is offered to students and their families in predominantly Spanish-speaking communities. Now, if students and families opt in to use or not use the game app, this presents a selection threat because...",There may be systematic differences between families who opt in to use the app compared to those who do not.,
+,,"Internal Validity and Causality (Question 3 out of 10):
+
+The threat of selection to internal validity is commonly seen in nonrandomized studies where students/participants choose the group (treatment or comparison) in which to participate. The concern with selection is that there may be ""systematic differences"" between those who choose one group over the other. Why are systematic differences a threat to internal validity?",Systematic differences make it difficult to determine whether the treatment effect is due to treatment or due to something else.,
+,,"Internal Validity and Causality (Question 4 out of 10):
+
+Randomization of treatment assignment is a feature of experimental studies that have often designated them as the ""gold standard"" of causal inference. However, even after participants are randomized to treatment or control, there can still be differences between the groups. For example, there may be more male participants in one group over the other.
+
+Why does randomization of treatment assignment strengthen the internal validity of a study's results if these differences still remain?","Randomization balances the differences, on average, so that the impact of the differences is no longer systematic.",
+,,"Internal Validity and Causality (Question 5 out of 10):
+
+In addition to selection into treatment, attrition is another serious and common threat to the internal validity of a study. Attrition occurs whenever participants leave the study before it has been completed and no further data is collected on them. Why is attrition a serious threat to internal validity?",Participants who leave may be systematically different from those who stay and these differences affect the results.,
+,,"Internal Validity and Causality (Question 6 out of 10):
+
+Despite the fact that randomization to treatment strengthens the causal nature of a relationship between two variables, experimental studies can be prohibitively expensive. As a result, there has been many approaches developed to establish causality in the absence of randomization to treatment. What are some examples of these quasi-experimental methods?
+
+*Please type the methods in lowercase, separating each method with a comma followed by a space. Keep the normal spacing within each method name (for example: linear regression)","matching, instrumental variables, regression discontinuity",
+,,,instrumental variables,
+,,,instrumental variable,
+,,,"matching, regression discontinuity, instrumental variables",
+,,,"Matching, Instrumental Variables, Regression Discontinuity",
+,,,"regression discontinuity, matching, instrumental variables",
+,,,"regression discontinuity, instrumental variables, matching",
+,,,regression discontinuity,
+,,,"Matching, Regression Discontinuity, Instrumental Variables",
+,,,"Regression Discontinuity, Matching, Instrumental Variables",
+,,,"Regression Discontinuity, Instrumental Variables, Matching",
+,,,"Instrumental Variables, Matching, Regression Discontinuity",
+,,,"Instrumental Variables, Regression Discontinuity, Matching",
+,,,"instrumental variables, matching, regression discontinuity",
+,,,"instrumental variables, regression discontinuity, matching",
+,,,Instrumental Variables,
+,,,Matching,
+,,,Regression Discontinuity,
+,,,"matching, regression discontinuity",
+,,,"matching, instrumental variables",
+,,,"regression discontinuity, matching",
+,,,"regression discontinuity, instrumental variables",
+,,,"instrumental variables, matching",
+,,,"instrumental variables, regression discontinuity",
+,,,"Matching,Regression Discontinuity,Instrumental Variables",
+,,,"Matching,Instrumental Variables,Regression Discontinuity",
+,,,"Regression Discontinuity,Matching,Instrumental Variables",
+,,,"Regression Discontinuity,Instrumental Variables,Matching",
+,,,"Instrumental Variables,Matching,Regression Discontinuity",
+,,,"Instrumental Variables,Regression Discontinuity,Matching",
+,,,"matching,Regression Discontinuity,Instrumental Variables",
+,,,"Matching,regression Discontinuity,Instrumental Variables",
+,,,"Matching,Regression discontinuity,Instrumental Variables",
+,,,"Matching,Regression Discontinuity,instrumental Variables",
+,,,"Matching,Regression Discontinuity,Instrumental variables",
+,,,"Matching,Instrumental Variables,regression Discontinuity",
+,,,"Regression Discontinuity,matching,Instrumental Variables",
+,,,"Regression Discontinuity,Matching,instrumental Variables",
+,,,Matching;Regression Discontinuity;Instrumental Variables,
+,,,Matching;Instrumental Variables;Regression Discontinuity,
+,,,Regression Discontinuity;Matching;Instrumental Variables,
+,,,Regression Discontinuity;Instrumental Variables;Matching,
+,,,Instrumental Variables;Matching;Regression Discontinuity,
+,,,Instrumental Variables;Regression Discontinuity;Matching,
+,,,matching,
+,,"Internal Validity and Causality (Question 7 out of 10):
+
+One type of quasi-experimental approach is known as matching. Matching identifies a subgroup of participants among the treatment and control groups that are similar on a variety of characteristics. How does matching strengthen the internal validity or causality of a study's results without randomization of treatment assignment?",Matching leads to fewer systematic differences among the treatment and control groups.,
+,,"Internal Validity and Causality (Question 8 out of 10):
+
+What is an important limitation of matching methods?",Matching can only be done with observable characteristics.,
+,,"Internal Validity and Causality (Question 9 out of 10):
+
+Propensity scores are univariate summaries of multiple characteristics or features. What kind of quasi-experimental approaches can they be used in?",matching,
+,,,weighting,
+,,,regression,
+,,"Internal Validity and Causality (Question 10 out of 10):
+
+All quasi-experimental approaches, whether it is matching or instrumental variables, all share the following characteristic.",They aim to recover the advantages offered by randomization of treatment assignment.,
+,PSBKH2X,"External Validity and Generalizability (Question 1 out of 5):
+
+Which of the following are frameworks for external validity or generalization?",Both B and C,
+,,"External Validity and Generalizability (Question 2 out of 5):
+
+The most common threat to the external validity of a study's results is selection into the study. Why is it problematic when participants or units choose to participate in a study (over not participating)?",Those who participate may differ systematically from those who choose not to.,
+,,"External Validity and Generalizability (Question 3 out of 5):
+
+Another common threat to the external validity of a study's results is when there is an interaction between the causal relationship and the type of treatment. Consider a study that assessed the impact of a mathematics technology aid among middle school classrooms in the state of Texas. Now, suppose that researchers wanted to assess the external validity of the results if the aid was offered to students in California.
+
+Is this an example of an interaction between the causal relationship and type of treatment?",No,
+,,"External Validity and Generalizability (Question 4 out of 5):
+
+In the prior question on the generalizability of the mathematics technology, suppose the researchers observed that the magnitude of the aid's impact was larger among schools with a technology specialist compared to schools that did not have a specialist.
+
+Is this an example of an interaction between the causal relationship and treatment type?",Yes,
+,,"External Validity and Generalizability (Question 5 out of 5):
+
+Many of the same quasi-experimental methods used to improve the internal validity of a study's results can also be used and extended to improve the external validity of a study's results, particularly in the absence of random sample selection. How does a method like matching improve generalizations in the narrow to broad setting?",Matching minimizes the systematic differences between the sample and population.,
+PSBKJEN,PSBKJEM,"Causal Reasoning (Question 1 out of 10):
+
+What is a necessary characteristics of a quasi-experimental study?","In a quasi-experimental study, there is baseline equivalence between treatment and control groups.",Researchers completing a quasi-experimental study must make sure that the treatment group is similar to the control group with respect to the distribution of pre-treatment covariates.
+,,"Causal Reasoning (Question 2 out of 10):
+
+In Shadish, Cook and Campbell's design validity framework, which type of validity must be strong to ensure that a treatment aiming to improve student self-regulated learning does in fact affect self-regulated learning and not only motivation and self-efficacy?",Construct validity,"In studies aiming to affect latent variables, there should be evidence that the target latent variable is being measured and not other related latent variables."
+,,"Causal Reasoning (Question 3 out of 10):
+
+In a study of teacher professional development, principals decided which teacher should participate in trainings based on the results of his own observations of the teachers' classrooms. Which threat to internal validity is most salient in this situation?",Selection,Only teachers with lowest performance in observations were allowed to obtain professional development.
+,,"Causal Reasoning (Question 4 out of 10):
+
+When analyzing logs of student video views on a learning management system, some students may have unrealistically large counts of video views, such as viewing hundreds of videos per week. If the researcher is interested in the effect of video views on student achievement, which threat to construct validity is most salient in this situation?",Unreliability,"Outliers are a common problem when operationalizing measurement of constructs, such as video views, from system log data, because the system may randomly return large counts that do not reflect actual video views."
+,,"Causal Reasoning (Question 5 out of 10):
+
+In Rubin's causal model, if there is a unobserved covariate that is related to both treatment assignment and the outcome distributions, which assumption necessary for causal inference is violated?",Strong ignorability of treatment assignment,Having no omitted confounders means that the treatment assignment is independent of potential outcome distributions.
+,,"Causal Reasoning (Question 6 out of 10):
+
+To estimate the average treatment effect on the treated (ATT), which of these outcomes is not directly observed?",The untreated outcome of the treated group,Estimating ATT requires that potential outcomes for the treated group are identified under treated and untreated conditions.
+,,"Causal Reasoning (Question 7 out of 10):
+
+Which assumption of Rubin's Causal Model is violated if some individuals are guaranteed participation in the treatment, regardless of their characteristics?",Overlap,Guaranteed participation means that the probability of treatment assignment is one.
+,,"Causal Reasoning (Question 8 out of 10):
+
+Which assumption of Rubin's Causal Model is violated if a student in the one-to-one tutoring group (treatment) is completing homework with his best friend, who was assigned to the no-tutoring condition (control)?",Stable unit treatment value assumption,Students collaborating across treatment and control groups causes an spill over effect.
+,,"Causal Reasoning (Question 9 out of 10):
+
+A researcher made hints available to a randomized group of students completing their homework, but only 30% of students with access to the hints used them. Which type of treatment effect can be estimated in this situation without having to account for non-adherence to treatment?",Intent to treat effect (ITT),the effect would be for the policy of offering a hint rather than reading the hint.
+,,"Causal Reasoning (Question 10 out of 10):
+
+Which of these assumptions of Rubin's causal model is not a concern in experimental designs?",Strong ignorability of treatment assignment,A randomized treatment assignment mechanism is ignorable because all participants have the same probability of treatment assignment.
+,PSBKJEK,"Propensity Score Analysis (Question 1 out of 10):
+
+What property of the propensity score makes it useful for causal inference about treatment effects?",Balancing treatment and control groups on the propensity score leads to balance in the distribution of covariates.,A critical measure of success of propensity score analysis is adequate covariate balance on all covariates.
+,,"Propensity Score Analysis (Question 2 out of 10):
+
+When should the researcher evaluate covariate balance during a propensity score analysis?","After matching, weighting or stratifying on the propensity score",Covariate balance evaluation is the fourth step of propensity score analysis.
+,,"Propensity Score Analysis (Question 3 out of 10):
+
+Which type of variable should not be included in the propensity score model, because including it removes part of the treatment effect?",Mediator,"If the variable is in the middle of the causal sequence from treatment to effect, controlling for it blocks part of the treatment effect"
+,,"Propensity Score Analysis (Question 4 out of 10):
+
+What is one advantage of estimating propensity scores with random forests rather than logistic regression?",It automatically detects interactions between variables,Parametric models such as logistic regression should include all main effects of covariates as well any relevant interactions.
+,,"Propensity Score Analysis (Question 5 out of 10):
+
+Which of these propensity score methods does not produce weights?",One-to-one matching,"In propensity score analysis, the weight of each individual represents how many cases this individual is representing in sample where there is covariate balance between treatment and control."
+,,"Propensity Score Analysis (Question 6 out of 10):
+
+For the next 5 questions, use RStudio to run Guide_to_propensity_score_matching.Rmd notebook (Download file and data). What conclusion is supported by the visual evaluation of common support?",Logistic regression provided adequate common support but random forest did not,Visual inspection of common support for estimating the ATT consists on checking whether the propensity scores of the treated group are within the range of the propensity scores of the untreated group.
+,,"Propensity Score Analysis (Question 7 out of 10):
+
+What matching algorithm was used for the example?",Genetic algorithm,"The ""method"" argument of the matchit package specifies the algorithm."
+,,"Propensity Score Analysis (Question 8 out of 10):
+
+How many control cases were matched to the treated cases?",95,the output of the bal.tab function of the cobalt package shows the number of matched cases
+,,,87.4,
+,,"Propensity Score Analysis (Question 9 out of 10):
+
+How many covariates did not meet the 0.25 standard deviations criterion for adequate covariate balance?",0,
+,,"Propensity Score Analysis (Question 10 out of 10):
+
+What is the conclusion of the propensity score analysis?",The ATT is not statistically significant,
+,PSBKJEJ,"Regression Discontinuity design (Question 1 out of 10):
+
+Why does the regression discontinuity design have strong internal validity?",Because the difference between individuals above and below the cutoff is due to random error,There is natural randomization around the cuttoff
+,,"Regression Discontinuity design (Question 2 out of 10):
+
+What type of treatment effect is estimated by the regression discontinuity design?",LATE,It is the average treatment effect of the program for units at the cutoff point.
+,,"Regression Discontinuity design (Question 3 out of 10):
+
+How does the regression discontinuity design compare with an experimental design with respect to power to detect the treatment effect?",It provides less power,
+,,"Regression Discontinuity design (Question 4 out of 10):
+
+Why is it recommended to include polynomial and interaction terms in an ANCOVA model for the regression discontinuity design?",To prevent bias,It is better to overspecify than to underspecify a parametric model for the regression discontinuity design
+,,"Regression Discontinuity design (Question 5 out of 10):
+
+What happens if the bandwidth of the local linear regression to estimate the treatment effect is too narrow?",Power decreases,
+,,"Regression Discontinuity design (Question 6 out of 10):
+
+The next questions require that you download and run the R Notebook Regression Discontinuity Design. What is the criterion used for treatment assignment?",CLASS scores lower than 3,Check the 3rd code block
+,,"Regression Discontinuity design (Question 7 out of 10):
+
+Which of these terms is included in the ANCOVA model?",quadratic,check the fourth code block
+,,"Regression Discontinuity design (Question 8 out of 10):
+
+What is the estimate of the local average treatment effect provided by the ANCOVA model?",1.00,check the fourth code block
+,,"Regression Discontinuity design (Question 9 out of 10):
+
+What is the bandwidth used in local linear regression?",0.75,Check the span argument
+,,"Regression Discontinuity design (Question 10 out of 10):
+
+Was the local average treatment effect estimated with local linear regression statistically significant?",Yes,Check the confidence interval of the estimate.
+,PSBKJEH,"Heterogeneity of treatment effects (Question 1 out of 9):
+
+What is the advantage of using machine learning for probing heterogeneity of treatment effects?",No specific hypotheses about interaction effects are needed,machine learning methods for detecting heterogeneity of treatment effects are exploratory rather than confirmatory
+,,"Heterogeneity of treatment effects (Question 2 out of 9):
+
+What is the difference between the T-learner and the S-learner?",The T-learner uses separate models for treatment and control groups while the S learner uses a single model,"T in T-learner stands for ""two"" and S in S-learner stands for ""single"""
+,,"Heterogeneity of treatment effects (Question 3 out of 9):
+
+What is the interpretation of the intercept of the best linear predictor of CATE provided by GenericML?",The average treatment effect,
+,,"Heterogeneity of treatment effects (Question 4 out of 9):
+
+Why are the GATES useful?",Because it provides the ATE of the groups who benefited the most and the least from the treatment,"GATES stands for ""Sorted Group Average Treatment Effects"""
+,,"Heterogeneity of treatment effects (Question 5 out of 9):
+
+What is the purpose of the classification analysis (CLAN)?",Identify covariates that are related to benefiting differently from the treatment,"CLAN is like reversing the dependent and independent variables: The covariate becomes the dependent variable, and the GATES become the independent variable."
+,,"Heterogeneity of treatment effects (Question 6 out of 9):
+
+For the following questions, run the example code available on GitHub (results are also available as pdf here). What conclusions do the results support?",There is a statistically significant ATE but no significant heterogeneity,See p values of beta.1 and beta.2 of the output of the get_BLP function.
+,,"Heterogeneity of treatment effects (Question 7 out of 9):
+
+What is true about the difference in treatment effect between the groups that benefits the most and the least from the treatment?",The difference in ATE is not statistically significant,See output of get_GATES function
+,,"Heterogeneity of treatment effects (Question 8 out of 9):
+
+Which of these learners was not included in the example of GenericML?",Regression,
+,,"Heterogeneity of treatment effects (Question 9 out of 9):
+
+What is true of the classification analysis of the variable ""head_age_bl""?",The group that benefited the least from the treatment had the largest head_age_bl,Look at the output of the get_CLAN function
