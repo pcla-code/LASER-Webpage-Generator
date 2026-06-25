@@ -131,7 +131,6 @@ body {
   <div class="question">Question 5 of 12:<br><br>Create three new columns: P(Ln-1), P(Ln-1|RESULT), and P(Ln). Leave the columns below them empty for now. Just temporarily, set up column P(Ln) so that it build on the previous column P(Ln-1) with an increase of 0.1. (This pretends that the student always gets 10% better each time, even going over 100%, which is clearly wrong...; we'll fix it later.)<br><br>What should the formula be for column P(Ln-1)? If you're not sure which of these is right, try them out. Select all that apply.
     <div class="note">Select all that apply.</div>
   </div>
-  <p class="note">(Add an Options column to the CSV with all choices including distractors to make this question non-trivial.)</p>
   <div id="options">
     <label class="option-label"><input type="checkbox" class="ms_check" value="df3.loc[df3["Student"] != df3["Student"].shift(), "P(Ln-1)"] = L0"> df3.loc[df3["Student"] != df3["Student"].shift(), "P(Ln-1)"] = L0</label>
     <label class="option-label"><input type="checkbox" class="ms_check" value="df3.loc[df3["Student"] == df3["Student"].shift(1), "P(Ln-1)"] = df3["P(Ln)"].shift()"> df3.loc[df3["Student"] == df3["Student"].shift(1), "P(Ln-1)"] = df3["P(Ln)"].shift()</label>
