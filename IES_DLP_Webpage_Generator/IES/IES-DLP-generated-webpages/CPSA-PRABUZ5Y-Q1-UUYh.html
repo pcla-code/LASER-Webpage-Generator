@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PSABX64S – PRABUZ5Y – Q1</title>
+  <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    padding: 28px 16px;
+    box-sizing: border-box;
+}
+.container {
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px 44px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    max-width: 740px;
+    width: 100%;
+}
+.header {
+    font-size: 12px;
+    font-weight: 700;
+    color: #999;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+}
+.question {
+    font-size: 16px;
+    line-height: 1.75;
+    color: #1a1a1a;
+    margin-bottom: 28px;
+}
+.note {
+    font-size: 13px;
+    color: #888;
+    font-style: italic;
+    margin-top: 4px;
+}
+.btn {
+    background: #0066ff;
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background .15s;
+}
+.btn:hover  { background: #004ecc; }
+.btn:disabled { background: #bbb; cursor: default; pointer-events: none; }
+.btn-ghost {
+    background: #f0f4ff;
+    color: #0066ff;
+    border: 1.5px solid #cce0ff;
+}
+.btn-ghost:hover { background: #ddeaff; }
+.btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+    align-items: center;
+}
+#feedback {
+    margin-top: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    min-height: 22px;
+}
+.correct   { color: #1b7a2a; }
+.incorrect { color: #c0250a; }
+#hintDisplay {
+    display: none;
+    margin-top: 14px;
+    font-style: italic;
+    color: #555;
+    font-size: 14px;
+    line-height: 1.6;
+    background: #f7faff;
+    border-left: 3px solid #99c2ff;
+    padding: 10px 14px;
+    border-radius: 0 5px 5px 0;
+}
+#nextButton { display: none; }
+.option-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 5px 0;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1.5;
+    transition: background .1s, border-color .1s;
+}
+.option-label:hover { background: #f0f6ff; border-color: #cce0ff; }
+.option-label input { margin-top: 3px; flex-shrink: 0; }
+.text-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+#answer {
+    flex: 1;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    padding: 8px 2px;
+    font-size: 16px;
+    outline: none;
+    background: transparent;
+    transition: border-color .15s;
+}
+#answer:focus { border-bottom-color: #0066ff; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">PSABX64S – PRABUZ5Y – Q1</div>
+  <div class="question">Which educational levels have less than 50 observations?</div>
+  <div class="text-row">
+    <input type="text" id="answer" placeholder="Your answer" autocomplete="off">
+    <button class="btn" id="submitBtn" onclick="checkAnswer()">Submit</button>
+  </div>
+  <div id="feedback"></div>
+  <div id="hintDisplay"></div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" id="hintBtn" onclick="showHint()">Show Hint</button>
+    <a class="btn" id="nextButton" href="CPSA-PRABUZ5Y-QZ-END-HiJqPtB.html">Next &rarr;</a>
+  </div>
+</div>
+<script>
+  var hints = ["Use df['Edu'].value_counts() to count the observations.", "Use df['Edu'].value_counts() to count the observations.", "The answer is: Doctoral"];
+  var hintIndex = 0;
+  var correctAnswers = ["Doctoral", "Some College", "Professional", "High School", "Associate", "Some high school"];
+
+  document.getElementById('answer').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); checkAnswer(); }
+  });
+
+  function showHint() {
+    var d = document.getElementById('hintDisplay');
+    d.style.display = 'block';
+    d.textContent = hintIndex < hints.length ? hints[hintIndex++] : 'No more hints.';
+  }
+
+  function checkAnswer() {
+    var ans = document.getElementById('answer').value.trim();
+    if (!ans) return;
+    var fb = document.getElementById('feedback');
+    if (correctAnswers.map(function(a) { return a.toLowerCase(); }).indexOf(ans.toLowerCase()) !== -1) {
+      fb.innerHTML = '&#10003; Correct!';
+      fb.className = 'feedback correct';
+      document.getElementById('answer').disabled = true;
+      document.getElementById('submitBtn').disabled = true;
+      document.getElementById('hintBtn').style.display = 'none';
+      document.getElementById('hintDisplay').style.display = 'none';
+      document.getElementById('nextButton').style.display = 'inline-block';
+    } else {
+      fb.innerHTML = '&#10007; Incorrect — try again.';
+      fb.className = 'feedback incorrect';
+    }
+  }
+</script>
+</body>
+</html>
