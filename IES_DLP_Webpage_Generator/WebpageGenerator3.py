@@ -18,6 +18,7 @@ Fixes over LASERWebpageGenerator2.py:
   7. Output goes to 'IES-DLP-generated-webpages/' by default.
 """
 
+import html as _html
 import json
 import os
 import random
@@ -326,7 +327,7 @@ def create_mc_page(header: str, formatted_q: str, answers: list, options: list,
 
     opts_html = "\n".join(
         f'    <label class="option-label">'
-        f'<input type="radio" name="mc_choice" value="{opt}"> {opt}</label>'
+        f'<input type="radio" name="mc_choice" value="{_html.escape(opt, quote=True)}"> {opt}</label>'
         for opt in options
     )
 
@@ -399,23 +400,15 @@ def create_multiselect_page(header: str, formatted_q: str, answers: list, option
 
     opts_html = "\n".join(
         f'    <label class="option-label">'
-        f'<input type="checkbox" class="ms_check" value="{opt}"> {opt}</label>'
+        f'<input type="checkbox" class="ms_check" value="{_html.escape(opt, quote=True)}"> {opt}</label>'
         for opt in display_options
     )
-
-    note = ""
-    if not options:
-        note = (
-            '\n  <p class="note">'
-            '(Add an Options column to the CSV with all choices including distractors '
-            'to make this question non-trivial.)</p>'
-        )
 
     body = f"""<div class="container">
   <div class="header">{header}</div>
   <div class="question">{formatted_q}
     <div class="note">Select all that apply.</div>
-  </div>{note}
+  </div>
   <div id="options">
 {opts_html}
   </div>
