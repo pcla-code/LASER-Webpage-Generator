@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PSBFYED – PRABU5U4 – Q1</title>
+  <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    padding: 28px 16px;
+    box-sizing: border-box;
+}
+.container {
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px 44px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    max-width: 740px;
+    width: 100%;
+}
+.header {
+    font-size: 12px;
+    font-weight: 700;
+    color: #999;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+}
+.question {
+    font-size: 16px;
+    line-height: 1.75;
+    color: #1a1a1a;
+    margin-bottom: 28px;
+}
+.note {
+    font-size: 13px;
+    color: #888;
+    font-style: italic;
+    margin-top: 4px;
+}
+.btn {
+    background: #0066ff;
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background .15s;
+}
+.btn:hover  { background: #004ecc; }
+.btn:disabled { background: #bbb; cursor: default; pointer-events: none; }
+.btn-ghost {
+    background: #f0f4ff;
+    color: #0066ff;
+    border: 1.5px solid #cce0ff;
+}
+.btn-ghost:hover { background: #ddeaff; }
+.btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+    align-items: center;
+}
+#feedback {
+    margin-top: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    min-height: 22px;
+}
+.correct   { color: #1b7a2a; }
+.incorrect { color: #c0250a; }
+#hintDisplay {
+    display: none;
+    margin-top: 14px;
+    font-style: italic;
+    color: #555;
+    font-size: 14px;
+    line-height: 1.6;
+    background: #f7faff;
+    border-left: 3px solid #99c2ff;
+    padding: 10px 14px;
+    border-radius: 0 5px 5px 0;
+}
+#nextButton { display: none; }
+.option-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 5px 0;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1.5;
+    transition: background .1s, border-color .1s;
+}
+.option-label:hover { background: #f0f6ff; border-color: #cce0ff; }
+.option-label input { margin-top: 3px; flex-shrink: 0; }
+.text-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+#answer {
+    flex: 1;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    padding: 8px 2px;
+    font-size: 16px;
+    outline: none;
+    background: transparent;
+    transition: border-color .15s;
+}
+#answer:focus { border-bottom-color: #0066ff; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">PSBFYED – PRABU5U4 – Q1</div>
+  <div class="question">Question 2 of 9: Only counting connections where poster A responds directly to poster B (and not connections where they both simply responded to the same post), how many connections are there between individuals in this graph?<br><br>(Don't count self-connections and assume that link direction does not matter.)</div>
+  <div class="text-row">
+    <input type="text" id="answer" placeholder="Your answer" autocomplete="off">
+    <button class="btn" id="submitBtn" onclick="checkAnswer()">Submit</button>
+  </div>
+  <div id="feedback"></div>
+  <div id="hintDisplay"></div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" id="hintBtn" onclick="showHint()">Show Hint</button>
+    <a class="btn" id="nextButton" href="CPSB-PRABU5U4-QZ-END-AFaMbjJ.html">Next &rarr;</a>
+  </div>
+</div>
+<script>
+  var hints = ["For this question, you would need to be able to find the poster for a post responded to, create a formula that creates the combinations, and then count the number of unique combinations.", "Let's first find the poster for each post responded. One way you can do this is by creating another column with the IDs and mapping the poster onto the ID.\n\ndf.set_index('ID', inplace=True)\ndf_dict = df.to_dict()['poster']\ndf['poster_responded_to'] = df['poster_responded_to'].map(df_dict)", "Now you know the poster of the current post, and the poster of the post they responded to. We only want the paired connection, so remove the ones without a pair.\n\ndf_drop = df.dropna().astype(int)", "The next step would be to build the links between the posters by concatenating them.", "One way is to transform the posters into a *undirected* pair where you don't distinguish between 24601 responding to 29022, and 29022 responding to 24601. You can do this by placing the ID with a greater number before the one with a smaller number.\n\ndef make_undirected(row):\nif row['poster'] < row['poster_responded_to']:\nval = row['poster'].astype(str) + \"-\" + row['poster_responded_to'].astype(str)\nelse:\nval = row['poster_responded_to'].astype(str) + \"-\" + row['poster'].astype(str)\nreturn val", "Now, you have the all values you need to count the number of undirected pairs. Make sure you remove the self-connections, or the empty rows, before you filter out the duplicates.\n\nunique = df_drop['undirected_pair'].dropna().unique()", "Remember, we are interested in paired connections. Don't forget to eliminate the self-connections.", "In the end, the function should look something like this.\n\ndef make_undirected(row):\nif row['poster'] < row['poster_responded_to']:\nval = row['poster'].astype(str) + \"-\" + row['poster_responded_to'].astype(str)\nelif row['poster'] == row['poster_responded_to']:\nval = None\nelse:\nval = row['poster_responded_to'].astype(str) + \"-\" + row['poster'].astype(str)\nreturn val\n\ndf_drop['undirected_pair'] = df_drop.apply(make_undirected, axis=1)", "As the final step, count the number of rows in the table.\n\nunique = pd.DataFrame(unique, columns=['undirected_pair'])\nprint(\"Number of Pairs:\", unique.shape[0])", "The answer is: 110"];
+  var hintIndex = 0;
+  var correctAnswers = ["110"];
+
+  document.getElementById('answer').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); checkAnswer(); }
+  });
+
+  function showHint() {
+    var d = document.getElementById('hintDisplay');
+    d.style.display = 'block';
+    d.textContent = hintIndex < hints.length ? hints[hintIndex++] : 'No more hints.';
+  }
+
+  function checkAnswer() {
+    var ans = document.getElementById('answer').value.trim();
+    if (!ans) return;
+    var fb = document.getElementById('feedback');
+    if (correctAnswers.map(function(a) { return a.toLowerCase(); }).indexOf(ans.toLowerCase()) !== -1) {
+      fb.innerHTML = '&#10003; Correct!';
+      fb.className = 'feedback correct';
+      document.getElementById('answer').disabled = true;
+      document.getElementById('submitBtn').disabled = true;
+      document.getElementById('hintBtn').style.display = 'none';
+      document.getElementById('hintDisplay').style.display = 'none';
+      document.getElementById('nextButton').style.display = 'inline-block';
+    } else {
+      fb.innerHTML = '&#10007; Incorrect — try again.';
+      fb.className = 'feedback incorrect';
+    }
+  }
+</script>
+</body>
+</html>

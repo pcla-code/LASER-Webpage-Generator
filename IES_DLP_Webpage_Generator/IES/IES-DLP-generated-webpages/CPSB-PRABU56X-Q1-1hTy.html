@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PSBKAV5 – PRABU56X – Q1</title>
+  <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    padding: 28px 16px;
+    box-sizing: border-box;
+}
+.container {
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px 44px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    max-width: 740px;
+    width: 100%;
+}
+.header {
+    font-size: 12px;
+    font-weight: 700;
+    color: #999;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+}
+.question {
+    font-size: 16px;
+    line-height: 1.75;
+    color: #1a1a1a;
+    margin-bottom: 28px;
+}
+.note {
+    font-size: 13px;
+    color: #888;
+    font-style: italic;
+    margin-top: 4px;
+}
+.btn {
+    background: #0066ff;
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background .15s;
+}
+.btn:hover  { background: #004ecc; }
+.btn:disabled { background: #bbb; cursor: default; pointer-events: none; }
+.btn-ghost {
+    background: #f0f4ff;
+    color: #0066ff;
+    border: 1.5px solid #cce0ff;
+}
+.btn-ghost:hover { background: #ddeaff; }
+.btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+    align-items: center;
+}
+#feedback {
+    margin-top: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    min-height: 22px;
+}
+.correct   { color: #1b7a2a; }
+.incorrect { color: #c0250a; }
+#hintDisplay {
+    display: none;
+    margin-top: 14px;
+    font-style: italic;
+    color: #555;
+    font-size: 14px;
+    line-height: 1.6;
+    background: #f7faff;
+    border-left: 3px solid #99c2ff;
+    padding: 10px 14px;
+    border-radius: 0 5px 5px 0;
+}
+#nextButton { display: none; }
+.option-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 5px 0;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1.5;
+    transition: background .1s, border-color .1s;
+}
+.option-label:hover { background: #f0f6ff; border-color: #cce0ff; }
+.option-label input { margin-top: 3px; flex-shrink: 0; }
+.text-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+#answer {
+    flex: 1;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    padding: 8px 2px;
+    font-size: 16px;
+    outline: none;
+    background: transparent;
+    transition: border-color .15s;
+}
+#answer:focus { border-bottom-color: #0066ff; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">PSBKAV5 – PRABU56X – Q1</div>
+  <div class="question">Question 8 of 12:<br><br>If a student starts the tutor and then gets 3 problems right in a row for the skill, what is his/her final P(Ln) after these three problems?</div>
+  <div class="text-row">
+    <input type="text" id="answer" placeholder="Your answer" autocomplete="off">
+    <button class="btn" id="submitBtn" onclick="checkAnswer()">Submit</button>
+  </div>
+  <div id="feedback"></div>
+  <div id="hintDisplay"></div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" id="hintBtn" onclick="showHint()">Show Hint</button>
+    <a class="btn" id="nextButton" href="CPSB-PRABU56X-QZ-END-6Kenyxn.html">Next &rarr;</a>
+  </div>
+</div>
+<script>
+  var hints = ["To answer this question, you need a situation where the student starts the tutor and then gets 3 problems right in a row for the skill. You can achieve this by just changing the first three responses for some student (who has three or more responses) to 1, 1, 1.", "To answer this question, you need a situation where the student starts the tutor and then gets 3 problems right in a row for the skill. You can achieve this by just changing the first three responses for some student (who has three or more responses) to 1, 1, 1.", "Since student ID of AGUFADE only had two responses, try AOADMAC.", "Since student ID of AGUFADE only had two responses, try AOADMAC.", "Specify the row and the column of the value that you want to change. To get the row number, you can either count or simply reset the index according to the current version.\n\ndf3 = df3.reset_index()\ndf3.at[3,'right']=1\ndf3.at[4,'right']=1", "Specify the row and the column of the value that you want to change. To get the row number, you can either count or simply reset the index according to the current version.\n\ndf3 = df3.reset_index()\ndf3.at[3,'right']=1\ndf3.at[4,'right']=1", "Then, you should iterate the entire process thus far.\n\nfor index, row in df.iterrows():\ndf3.loc[df3[\"Student\"] != df3[\"Student\"].shift(), \"P(Ln-1)\"] = l0\ndf3.loc[df3[\"Student\"] == df3[\"Student\"].shift(), \"P(Ln-1)\"] = df3[\"P(Ln)\"].shift()\ndf3.loc[df3[\"right\"] == 1, \"P(Ln-1|Result)\"] = df3.loc[:, \"P(Ln-1)\"]*(1-s)/((df3.loc[:, \"P(Ln-1)\"]*(1-s)) + (1-df3.loc[:, \"P(Ln-1)\"])*g)\ndf3.loc[df3[\"right\"] != 1, \"P(Ln-1|Result)\"] = df3.loc[:, \"P(Ln-1)\"]*s/((df3.loc[:, \"P(Ln-1)\"]*s) + (1-df3.loc[:, \"P(Ln-1)\"])*(1-g))\ndf3.loc[:, \"P(Ln)\"] = df3.loc[:, \"P(Ln-1|Result)\"] + (1-df3.loc[:, \"P(Ln-1|Result)\"])*t", "Then, you should iterate the entire process thus far.\n\nfor index, row in df.iterrows():\ndf3.loc[df3[\"Student\"] != df3[\"Student\"].shift(), \"P(Ln-1)\"] = L0\ndf3.loc[df3[\"Student\"] == df3[\"Student\"].shift(), \"P(Ln-1)\"] = df3[\"P(Ln)\"].shift()\ndf3.loc[df3[\"right\"] == 1, \"P(Ln-1|Result)\"] = df3.loc[:, \"P(Ln-1)\"]*(1-s)/((df3.loc[:, \"P(Ln-1)\"]*(1-s)) + (1-df3.loc[:, \"P(Ln-1)\"])*g)\ndf3.loc[df3[\"right\"] != 1, \"P(Ln-1|Result)\"] = df3.loc[:, \"P(Ln-1)\"]*s/((df3.loc[:, \"P(Ln-1)\"]*s) + (1-df3.loc[:, \"P(Ln-1)\"])*(1-g))\ndf3.loc[:, \"P(Ln)\"] = df3.loc[:, \"P(Ln-1|Result)\"] + (1-df3.loc[:, \"P(Ln-1|Result)\"])*t", "Once you've got a student whose first three responses is 1, 1, 1, what is their value for P(Ln) for the third response?\n\nprint(\"P(Ln) Value: \", df3.iloc[4]['P(Ln)'])", "Once you've got a student whose first three responses is 1, 1, 1, what is their value for P(Ln) for the third response?\n\nprint(\"P(Ln) Value: \", df3.iloc[4]['P(Ln)'])", "The answer is: 0.955"];
+  var hintIndex = 0;
+  var correctAnswers = ["0.955"];
+
+  document.getElementById('answer').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); checkAnswer(); }
+  });
+
+  function showHint() {
+    var d = document.getElementById('hintDisplay');
+    d.style.display = 'block';
+    d.textContent = hintIndex < hints.length ? hints[hintIndex++] : 'No more hints.';
+  }
+
+  function checkAnswer() {
+    var ans = document.getElementById('answer').value.trim();
+    if (!ans) return;
+    var fb = document.getElementById('feedback');
+    if (correctAnswers.map(function(a) { return a.toLowerCase(); }).indexOf(ans.toLowerCase()) !== -1) {
+      fb.innerHTML = '&#10003; Correct!';
+      fb.className = 'feedback correct';
+      document.getElementById('answer').disabled = true;
+      document.getElementById('submitBtn').disabled = true;
+      document.getElementById('hintBtn').style.display = 'none';
+      document.getElementById('hintDisplay').style.display = 'none';
+      document.getElementById('nextButton').style.display = 'inline-block';
+    } else {
+      fb.innerHTML = '&#10007; Incorrect — try again.';
+      fb.className = 'feedback incorrect';
+    }
+  }
+</script>
+</body>
+</html>
