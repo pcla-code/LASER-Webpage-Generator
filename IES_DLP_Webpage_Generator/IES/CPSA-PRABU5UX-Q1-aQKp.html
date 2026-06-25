@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PSABX65E – PRABU5UX – Q1</title>
+  <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    padding: 28px 16px;
+    box-sizing: border-box;
+}
+.container {
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px 44px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    max-width: 740px;
+    width: 100%;
+}
+.header {
+    font-size: 12px;
+    font-weight: 700;
+    color: #999;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+}
+.question {
+    font-size: 16px;
+    line-height: 1.75;
+    color: #1a1a1a;
+    margin-bottom: 28px;
+}
+.note {
+    font-size: 13px;
+    color: #888;
+    font-style: italic;
+    margin-top: 4px;
+}
+.btn {
+    background: #0066ff;
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background .15s;
+}
+.btn:hover  { background: #004ecc; }
+.btn:disabled { background: #bbb; cursor: default; pointer-events: none; }
+.btn-ghost {
+    background: #f0f4ff;
+    color: #0066ff;
+    border: 1.5px solid #cce0ff;
+}
+.btn-ghost:hover { background: #ddeaff; }
+.btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+    align-items: center;
+}
+#feedback {
+    margin-top: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    min-height: 22px;
+}
+.correct   { color: #1b7a2a; }
+.incorrect { color: #c0250a; }
+#hintDisplay {
+    display: none;
+    margin-top: 14px;
+    font-style: italic;
+    color: #555;
+    font-size: 14px;
+    line-height: 1.6;
+    background: #f7faff;
+    border-left: 3px solid #99c2ff;
+    padding: 10px 14px;
+    border-radius: 0 5px 5px 0;
+}
+#nextButton { display: none; }
+.option-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 5px 0;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1.5;
+    transition: background .1s, border-color .1s;
+}
+.option-label:hover { background: #f0f6ff; border-color: #cce0ff; }
+.option-label input { margin-top: 3px; flex-shrink: 0; }
+.text-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+#answer {
+    flex: 1;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    padding: 8px 2px;
+    font-size: 16px;
+    outline: none;
+    background: transparent;
+    transition: border-color .15s;
+}
+#answer:focus { border-bottom-color: #0066ff; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">PSABX65E – PRABU5UX – Q1</div>
+  <div class="question">Check all statements that are true if item 'front_page' has a support of 1.0.
+    <div class="note">Select all that apply.</div>
+  </div>
+  <div id="options">
+    <label class="option-label"><input type="checkbox" class="ms_check" value="The item &#x27;front_page&#x27; appears in every learner&#x27;s records."> The item 'front_page' appears in every learner's records.</label>
+    <label class="option-label"><input type="checkbox" class="ms_check" value="The item &#x27;front_page&#x27; appears in every session."> The item 'front_page' appears in every session.</label>
+    <label class="option-label"><input type="checkbox" class="ms_check" value="When &#x27;lecture&#x27; appears in a session, &#x27;front_page&#x27; also appears in the same session."> When 'lecture' appears in a session, 'front_page' also appears in the same session.</label>
+  </div>
+  <div id="feedback"></div>
+  <div id="hintDisplay"></div>
+  <div class="btn-row">
+    <button class="btn" id="submitBtn" onclick="checkAnswer()">Submit</button>
+    <button class="btn btn-ghost" id="hintBtn" onclick="showHint()">Show Hint</button>
+    <a class="btn" id="nextButton" href="CPSA-PRABU5UX-QZ-END-A9FkwiU.html">Next &rarr;</a>
+  </div>
+</div>
+<script>
+  var hints = ["No hints available.", "The correct answers are: The item 'front_page' appears in every learner's records.; The item 'front_page' appears in every session.; When 'lecture' appears in a session, 'front_page' also appears in the same session."];
+  var hintIndex = 0;
+  var correctAnswers = ["The item 'front_page' appears in every learner's records.", "The item 'front_page' appears in every session.", "When 'lecture' appears in a session, 'front_page' also appears in the same session."];
+
+  function showHint() {
+    var d = document.getElementById('hintDisplay');
+    d.style.display = 'block';
+    d.textContent = hintIndex < hints.length ? hints[hintIndex++] : 'No more hints.';
+  }
+
+  function checkAnswer() {
+    var checked = Array.from(document.querySelectorAll('.ms_check:checked'))
+                       .map(function(cb) { return cb.value.trim().toLowerCase(); });
+    var fb = document.getElementById('feedback');
+    if (checked.length === 0) {
+      fb.textContent = 'Please select at least one answer.';
+      fb.className = 'feedback incorrect';
+      return;
+    }
+    // Lowercase at comparison time — correctAnswers stores original case from the CSV
+    var correctLower = correctAnswers.map(function(a) { return a.toLowerCase(); });
+    var allCorrect = correctLower.every(function(a) { return checked.indexOf(a) !== -1; });
+    var noExtras   = checked.every(function(a) { return correctLower.indexOf(a) !== -1; });
+    if (allCorrect && noExtras) {
+      fb.innerHTML = '&#10003; Correct!';
+      fb.className = 'feedback correct';
+      document.getElementById('submitBtn').disabled = true;
+      document.querySelectorAll('.ms_check').forEach(function(cb) { cb.disabled = true; });
+      document.getElementById('hintBtn').style.display = 'none';
+      document.getElementById('hintDisplay').style.display = 'none';
+      document.getElementById('nextButton').style.display = 'inline-block';
+    } else if (!allCorrect) {
+      fb.innerHTML = '&#10007; Not all correct answers are selected.';
+      fb.className = 'feedback incorrect';
+    } else {
+      fb.innerHTML = '&#10007; One or more selected answers is incorrect.';
+      fb.className = 'feedback incorrect';
+    }
+  }
+</script>
+</body>
+</html>
