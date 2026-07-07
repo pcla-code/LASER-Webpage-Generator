@@ -132,7 +132,11 @@ body {
     <div class="note">Select all that apply.</div>
   </div>
   <div id="options">
+    <label class="option-label"><input type="checkbox" class="ms_check" value="df3.loc[df3[&quot;Student&quot;] != df3[&quot;Student&quot;].shift(-1), &quot;P(Ln-1)&quot;] = L0"> df3.loc[df3["Student"] != df3["Student"].shift(-1), "P(Ln-1)"] = L0</label>
     <label class="option-label"><input type="checkbox" class="ms_check" value="df3.loc[df3[&quot;Student&quot;] != df3[&quot;Student&quot;].shift(), &quot;P(Ln-1)&quot;] = L0"> df3.loc[df3["Student"] != df3["Student"].shift(), "P(Ln-1)"] = L0</label>
+    <label class="option-label"><input type="checkbox" class="ms_check" value="df3.loc[df3[&quot;Student&quot;] != df3[&quot;Student&quot;].shift(1), &quot;P(Ln-1)&quot;] = df3[&quot;Student&quot;].shift(1)"> df3.loc[df3["Student"] != df3["Student"].shift(1), "P(Ln-1)"] = df3["Student"].shift(1)</label>
+    <label class="option-label"><input type="checkbox" class="ms_check" value="df3.loc[df3[&quot;Student&quot;] == df3[&quot;Student&quot;].shift(), &quot;P(Ln-1)&quot;] = L0"> df3.loc[df3["Student"] == df3["Student"].shift(), "P(Ln-1)"] = L0</label>
+    <label class="option-label"><input type="checkbox" class="ms_check" value="df3.loc[df3[&quot;Student&quot;] == df3[&quot;Student&quot;].shift(-1), &quot;P(Ln-1)&quot;] = df3[&quot;P(Ln)&quot;].shift()"> df3.loc[df3["Student"] == df3["Student"].shift(-1), "P(Ln-1)"] = df3["P(Ln)"].shift()</label>
     <label class="option-label"><input type="checkbox" class="ms_check" value="df3.loc[df3[&quot;Student&quot;] == df3[&quot;Student&quot;].shift(1), &quot;P(Ln-1)&quot;] = df3[&quot;P(Ln)&quot;].shift()"> df3.loc[df3["Student"] == df3["Student"].shift(1), "P(Ln-1)"] = df3["P(Ln)"].shift()</label>
   </div>
   <div id="feedback"></div>
