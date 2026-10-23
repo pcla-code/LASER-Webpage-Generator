@@ -287,6 +287,15 @@ def create_text_page(header: str, formatted_q: str, answers: list, hints: list, 
   var hintIndex = 0;
   var correctAnswers = {correct_js};
 
+  // Lenient comparison: case-insensitive, trims, collapses whitespace, and
+  // ignores surrounding punctuation so long sentence answers match the hint text.
+  function norm(s) {{
+    return String(s).toLowerCase()
+      .replace(/[\u2018\u2019]/g, "'").replace(/[\u201c\u201d]/g, '"')
+      .replace(/[.,;:!?"'()\[\]]/g, ' ')
+      .replace(/\s+/g, ' ').trim();
+  }}
+
   document.getElementById('answer').addEventListener('keypress', function(e) {{
     if (e.key === 'Enter') {{ e.preventDefault(); checkAnswer(); }}
   }});
@@ -301,7 +310,7 @@ def create_text_page(header: str, formatted_q: str, answers: list, hints: list, 
     var ans = document.getElementById('answer').value.trim();
     if (!ans) return;
     var fb = document.getElementById('feedback');
-    if (correctAnswers.map(function(a) {{ return a.toLowerCase(); }}).indexOf(ans.toLowerCase()) !== -1) {{
+    if (correctAnswers.map(norm).indexOf(norm(ans)) !== -1) {{
       fb.innerHTML = '&#10003; Correct!';
       fb.className = 'feedback correct';
       document.getElementById('answer').disabled = true;
