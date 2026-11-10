@@ -168,7 +168,6 @@ def curriculum_for(problem_set_xref: str) -> str:
 
 
 # ── multiple-choice option inference ─────────────────────────────────────────
-
 # Standard closed-domain option sets used by the "check your understanding"
 # questions. The source CSV stores only the correct answer (no distractors), so
 # genuine multiple-choice items otherwise fall back to a free-text box whose only
@@ -179,6 +178,103 @@ _FEATURE_SET_OPTIONS = [
     'I should use all features; this model is not sensitive to multicollinearity',
 ]
 _METRIC_VOCAB = ["AUC", "Cohen's Kappa", "Accuracy", "Recall", "Precision", "F1"]
+
+# Manually supplied answer choices for questions whose A/B/C/D option text is
+# absent from the source CSV export. Keyed by (problem_set_xref, problem_order).
+# Each entry provides the displayed options (in order) and the correct option(s).
+# These render as real multiple-choice questions.
+MANUAL_OPTIONS = {
+    ("PSBKJEF", 1): {
+        "options": [
+            "A. Evidence that the model measures what it is expected to measure, only",
+            "B. Evidence that the model measures some of what it is expected to measure, only",
+            "C. Evidence that the model does not measure unimportant attributes, only",
+            "D. Both A and C",
+        ],
+        "answers": ["D. Both A and C"],
+    },
+    ("PSBKJEF", 5): {
+        "options": [
+            "A. They are both needed as a model or tool that measures both relevant and irrelevant features may not be efficient.",
+            "B. They are both needed as a model or tool that only focuses on one type of validity leads to a reduction in sample size.",
+            "C. They are both needed as a model or tool that only focuses on one type of validity may lead to inappropriate conclusions and inferences.",
+            "D. Both A and C",
+        ],
+        "answers": ["D. Both A and C"],
+    },
+    ("PSBKJEF", 21): {
+        "options": [
+            "A. Narrow to narrow",
+            "B. Narrow to broad",
+            "C. Broad to narrow",
+            "D. Both B and C",
+        ],
+        "answers": ["D. Both B and C"],
+    },
+    # ── Module 15: Data Visualization (PSBGCK8) ──────────────────────────────
+    ("PSBGCK8", 2): {
+        "options": [
+            "A. The box and whisker plots are better for all audiences.",
+            "B. The box and whisker plots are better for students so that they can see exactly where they are compared to other students.",
+            "C. The box and whisker plots are better for audiences with strong data literacy.",
+            "D. None of the above",
+        ],
+        "answers": ["C. The box and whisker plots are better for audiences with strong data literacy."],
+    },
+    ("PSBGCK8", 3): {
+        "options": [
+            "A. Sorting bar graphs makes comparisons easier.",
+            "B. The bucket values in histograms do not need to be qualitatively meaningful.",
+            "C. Once we can pinpoint which students are failing, we know exactly what to do.",
+            "D. All of the above",
+            "E. None of the above",
+        ],
+        "answers": ["A. Sorting bar graphs makes comparisons easier."],
+    },
+    ("PSBGCK8", 4): {
+        "options": [
+            "A. Most learning analytics dashboards have very little descriptive data that indicate how a student is performing.",
+            "B. Most learning analytics dashboards have a lot of predictions that tell students what they can do to improve.",
+            "C. All of the above",
+            "D. None of the above",
+        ],
+        "answers": ["D. None of the above"],
+    },
+    ("PSBGCK8", 5): {
+        "options": ["True", "False"],
+        "answers": ["False"],
+    },
+    ("PSBGCK8", 6): {
+        "options": [
+            "A. Explains why a person is failing.",
+            "B. Tells the student what to do differently to improve.",
+            "C. Lets the student know how they might do later.",
+            "D. All of the above",
+        ],
+        "answers": ["C. Lets the student know how they might do later."],
+    },
+    ("PSBGCK8", 7): {
+        "options": [
+            "A. There is a small gap between you and the person you're being compared to.",
+            "B. You have picked the person you are being compared to.",
+            "C. All of the above",
+            "D. None of the above",
+        ],
+        "answers": ["C. All of the above"],
+    },
+    ("PSBGCK8", 8): {
+        "options": ["True", "False"],
+        "answers": ["True"],
+    },
+    # ── Module 13: Knowledge Tracing (PSBKAV5) ───────────────────────────────
+    ("PSBKAV5", 13): {
+        "options": [
+            "A. The Former",
+            "B. The New",
+        ],
+        "answers": ["A. The Former"],
+    },
+}
 
 
 def infer_options(question: str, answers: list) -> list:
@@ -236,6 +332,7 @@ def build_intermediate() -> list:
         for _, r in grp.iterrows():
             key = int(r["problem_order"])
             q = questions.setdefault(key, {
+                "order": key,
                 "question": clean_html(r["problem_body"]),
                 "answers": parse_pg_array(r["correct_answer"]),
                 "hints": {},
@@ -256,8 +353,14 @@ def build_intermediate() -> list:
         for q in assignments[ps]:
             first = True
             hints = [q["hints"][k] for k in sorted(q["hints"])]
-            answers = q["answers"] if q["answers"] else [""]
-            options = infer_options(q["question"], q["answers"])
+            # Manual A/B/C/D overrides take precedence over inferred options
+            manual = MANUAL_OPTIONS.get((ps, q.get("order")))
+            if manual:
+                answers = manual["answers"]
+                options = manual["options"]
+            else:
+                answers = q["answers"] if q["answers"] else [""]
+                options = infer_options(q["question"], q["answers"])
             opts_str = "|".join(options) if options else ""
             max_len = max(len(answers), len(hints), 1)
             for i in range(max_len):
