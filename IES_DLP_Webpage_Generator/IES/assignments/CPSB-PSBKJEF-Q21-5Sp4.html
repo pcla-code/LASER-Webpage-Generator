@@ -123,20 +123,30 @@ body {
     transition: border-color .15s;
 }
 #answer:focus { border-bottom-color: #0066ff; }
+
+.progress { font-size: 13px; color: #555; font-weight: 600; margin: -6px 0 14px; }
+.opt-letter { font-weight: 700; min-width: 1.4em; }
+#hintDisplay { white-space: pre-wrap; }
+#hintDisplay .hint-item + .hint-item { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #c8d8f0; }
+#answerDisplay { display: none; margin-top: 14px; padding: 10px 14px; border-radius: 0 5px 5px 0;
+    background: #eefaf0; border-left: 4px solid #1b7a2a; color: #134d1c; font-size: 14px; font-weight: 600; white-space: pre-wrap; }
+#hintBtn:disabled { background: #e4e4e4; color: #999; border-color: #d0d0d0; cursor: not-allowed; }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">PSBKJEF – PSBKJEF – Q21</div>
+  <div class="progress">Question 21 of 25</div>
   <div class="question">External Validity and Generalizability (Question 1 out of 5):<br><br>Which of the following are frameworks for external validity or generalization?</div>
   <div id="options">
-    <label class="option-label"><input type="radio" name="mc_choice" value="A. Narrow to narrow"> A. Narrow to narrow</label>
-    <label class="option-label"><input type="radio" name="mc_choice" value="B. Narrow to broad"> B. Narrow to broad</label>
-    <label class="option-label"><input type="radio" name="mc_choice" value="C. Broad to narrow"> C. Broad to narrow</label>
-    <label class="option-label"><input type="radio" name="mc_choice" value="D. Both B and C"> D. Both B and C</label>
+    <label class="option-label"><input type="radio" name="mc_choice" value="A"> <span class="opt-letter">A.</span> <span>Narrow to narrow</span></label>
+    <label class="option-label"><input type="radio" name="mc_choice" value="B"> <span class="opt-letter">B.</span> <span>Narrow to broad</span></label>
+    <label class="option-label"><input type="radio" name="mc_choice" value="C"> <span class="opt-letter">C.</span> <span>Broad to narrow</span></label>
+    <label class="option-label"><input type="radio" name="mc_choice" value="D"> <span class="opt-letter">D.</span> <span>Both B and C</span></label>
   </div>
   <div id="feedback"></div>
   <div id="hintDisplay"></div>
+  <div id="answerDisplay"></div>
   <div class="btn-row">
     <button class="btn" id="submitBtn" onclick="checkAnswer()">Submit</button>
     <button class="btn btn-ghost" id="hintBtn" onclick="showHint()">Show Hint</button>
@@ -144,15 +154,10 @@ body {
   </div>
 </div>
 <script>
-  var hints = ["The answer is: D. Both B and C"];
+  var hints = ["The answer is: D"];
   var hintIndex = 0;
-  var correctAnswers = ["D. Both B and C"];
+  var correctAnswers = ["D"];
 
-  function showHint() {
-    var d = document.getElementById('hintDisplay');
-    d.style.display = 'block';
-    d.textContent = hintIndex < hints.length ? hints[hintIndex++] : 'No more hints.';
-  }
 
   function checkAnswer() {
     var sel = document.querySelector('input[name="mc_choice"]:checked');
@@ -169,12 +174,51 @@ body {
       document.querySelectorAll('input[name="mc_choice"]').forEach(function(r) { r.disabled = true; });
       document.getElementById('hintBtn').style.display = 'none';
       document.getElementById('hintDisplay').style.display = 'none';
+      document.getElementById('answerDisplay').style.display = 'none';
       document.getElementById('nextButton').style.display = 'inline-block';
     } else {
       fb.innerHTML = '&#10007; Incorrect — try again.';
       fb.className = 'feedback incorrect';
     }
   }
+  // ---- hint / answer reveal ----
+  var ANSWER_RE = /^(The answer is|The correct answers are|The correct answer is)\s*:/i;
+  var hintSteps = hints.filter(function(h) { return !ANSWER_RE.test(h); });
+  var answerText = hints.filter(function(h) { return ANSWER_RE.test(h); }).pop() || null;
+  function updateHintBtn() {
+    var b = document.getElementById('hintBtn');
+    if (!b) return;
+    if (hintIndex < hintSteps.length) {
+      b.textContent = 'Show Hint (' + (hintIndex + 1) + ' of ' + hintSteps.length + ')';
+      b.disabled = false;
+    } else if (answerText && hintIndex === hintSteps.length) {
+      b.textContent = 'Reveal Answer';
+      b.disabled = false;
+    } else {
+      b.textContent = (hintSteps.length || answerText) ? 'No more hints' : 'No hints available';
+      b.disabled = true;
+    }
+  }
+  function showHint() {
+    if (hintIndex < hintSteps.length) {
+      var d = document.getElementById('hintDisplay');
+      var item = document.createElement('div');
+      item.className = 'hint-item';
+      item.textContent = 'Hint ' + (hintIndex + 1) + ': ' + hintSteps[hintIndex];
+      d.appendChild(item);
+      d.style.display = 'block';
+      hintIndex++;
+    } else if (answerText && hintIndex === hintSteps.length) {
+      if (!confirm('This will reveal the correct answer. Continue?')) return;
+      var a = document.getElementById('answerDisplay');
+      a.textContent = answerText.replace(ANSWER_RE, function(m) { return m.replace(/\s*:$/, '') + ': '; }).replace(/:\s+/, ': ');
+      a.style.display = 'block';
+      hintIndex++;
+    }
+    updateHintBtn();
+  }
+  updateHintBtn();
 </script>
+<!-- ux-v2 -->
 </body>
 </html>

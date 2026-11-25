@@ -123,21 +123,34 @@ body {
     transition: border-color .15s;
 }
 #answer:focus { border-bottom-color: #0066ff; }
+
+.progress { font-size: 13px; color: #555; font-weight: 600; margin: -6px 0 14px; }
+.opt-letter { font-weight: 700; min-width: 1.4em; }
+#hintDisplay { white-space: pre-wrap; }
+#hintDisplay .hint-item + .hint-item { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #c8d8f0; }
+#answerDisplay { display: none; margin-top: 14px; padding: 10px 14px; border-radius: 0 5px 5px 0;
+    background: #eefaf0; border-left: 4px solid #1b7a2a; color: #134d1c; font-size: 14px; font-weight: 600; white-space: pre-wrap; }
+#hintBtn:disabled { background: #e4e4e4; color: #999; border-color: #d0d0d0; cursor: not-allowed; }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">PSBKJED – PSBKJED – Q5</div>
+  <div class="progress">Question 5 of 6</div>
   <div class="question">As we include more and more knowledge components in our single BKT model, our performance continues to decrease. Select from the options below why this could be happening.<br><br>More than one answer may be correct. Please select all that apply.
+    <div class="note">Select all that apply.
     <div class="note">Select all that apply.</div>
   </div>
   <div id="options">
-    <label class="option-label"><input type="checkbox" class="ms_check" value="Different knowledge components have different best-fitting values for their BKT parameters, so combining them prevents accurate modeling of the underlying parameters."> Different knowledge components have different best-fitting values for their BKT parameters, so combining them prevents accurate modeling of the underlying parameters.</label>
-    <label class="option-label"><input type="checkbox" class="ms_check" value="Different knowledge components represent student knowledge about different skills, and so they can&#x27;t be included together as a single knowledge component."> Different knowledge components represent student knowledge about different skills, and so they can't be included together as a single knowledge component.</label>
-    <label class="option-label"><input type="checkbox" class="ms_check" value="Different knowledge components have different numbers of problems associated with them, and can&#x27;t be compared."> Different knowledge components have different numbers of problems associated with them, and can't be compared.</label>
+    <label class="option-label"><input type="checkbox" class="ms_check" value="A"> <span class="opt-letter">A.</span> <span>Different knowledge components have different best-fitting values for their BKT parameters, so combining them prevents accuratemodeling of the underlying parameters.</span></label>
+    <label class="option-label"><input type="checkbox" class="ms_check" value="B"> <span class="opt-letter">B.</span> <span>Adding more problems into the dataset increases the noise present in the data, making true parameters harder to capture.</span></label>
+    <label class="option-label"><input type="checkbox" class="ms_check" value="C"> <span class="opt-letter">C.</span> <span>Different knowledge components represent student knowledge about different skills, and so they can't be included together as a singleknowledge component.</span></label>
+    <label class="option-label"><input type="checkbox" class="ms_check" value="D"> <span class="opt-letter">D.</span> <span>Students have worked on problems in these knowledge components in order, so they may know more about specific problems than others.</span></label>
+    <label class="option-label"><input type="checkbox" class="ms_check" value="E"> <span class="opt-letter">E.</span> <span>Different knowledge components have different numbers of problems associated with them, and can't be compared.</span></label>
   </div>
   <div id="feedback"></div>
   <div id="hintDisplay"></div>
+  <div id="answerDisplay"></div>
   <div class="btn-row">
     <button class="btn" id="submitBtn" onclick="checkAnswer()">Submit</button>
     <button class="btn btn-ghost" id="hintBtn" onclick="showHint()">Show Hint</button>
@@ -145,16 +158,9 @@ body {
   </div>
 </div>
 <script>
-  var hints = ["The correct answers are: Different knowledge components have different best-fitting values for their BKT parameters, so combining them prevents accurate modeling of the underlying parameters.; Different knowledge components represent student knowledge about different skills, and so they can't be included together as a single knowledge component.; Different knowledge components have different numbers of problems associated with them, and can't be compared."];
+  var hints = ["The correct answers are: A, C, E"];
   var hintIndex = 0;
-  var correctAnswers = ["Different knowledge components have different best-fitting values for their BKT parameters, so combining them prevents accurate modeling of the underlying parameters.", "Different knowledge components represent student knowledge about different skills, and so they can't be included together as a single knowledge component.", "Different knowledge components have different numbers of problems associated with them, and can't be compared."];
-
-  function showHint() {
-    var d = document.getElementById('hintDisplay');
-    d.style.display = 'block';
-    d.textContent = hintIndex < hints.length ? hints[hintIndex++] : 'No more hints.';
-  }
-
+  var correctAnswers = ["A", "C", "E"];
   function checkAnswer() {
     var checked = Array.from(document.querySelectorAll('.ms_check:checked'))
                        .map(function(cb) { return cb.value.trim().toLowerCase(); });
@@ -164,7 +170,6 @@ body {
       fb.className = 'feedback incorrect';
       return;
     }
-    // Lowercase at comparison time — correctAnswers stores original case from the CSV
     var correctLower = correctAnswers.map(function(a) { return a.toLowerCase(); });
     var allCorrect = correctLower.every(function(a) { return checked.indexOf(a) !== -1; });
     var noExtras   = checked.every(function(a) { return correctLower.indexOf(a) !== -1; });
@@ -175,6 +180,7 @@ body {
       document.querySelectorAll('.ms_check').forEach(function(cb) { cb.disabled = true; });
       document.getElementById('hintBtn').style.display = 'none';
       document.getElementById('hintDisplay').style.display = 'none';
+      document.getElementById('answerDisplay').style.display = 'none';
       document.getElementById('nextButton').style.display = 'inline-block';
     } else if (!allCorrect) {
       fb.innerHTML = '&#10007; Not all correct answers are selected.';
@@ -184,6 +190,44 @@ body {
       fb.className = 'feedback incorrect';
     }
   }
+  // ---- hint / answer reveal ----
+  var ANSWER_RE = /^(The answer is|The correct answers are|The correct answer is)\s*:/i;
+  var hintSteps = hints.filter(function(h) { return !ANSWER_RE.test(h); });
+  var answerText = hints.filter(function(h) { return ANSWER_RE.test(h); }).pop() || null;
+  function updateHintBtn() {
+    var b = document.getElementById('hintBtn');
+    if (!b) return;
+    if (hintIndex < hintSteps.length) {
+      b.textContent = 'Show Hint (' + (hintIndex + 1) + ' of ' + hintSteps.length + ')';
+      b.disabled = false;
+    } else if (answerText && hintIndex === hintSteps.length) {
+      b.textContent = 'Reveal Answer';
+      b.disabled = false;
+    } else {
+      b.textContent = (hintSteps.length || answerText) ? 'No more hints' : 'No hints available';
+      b.disabled = true;
+    }
+  }
+  function showHint() {
+    if (hintIndex < hintSteps.length) {
+      var d = document.getElementById('hintDisplay');
+      var item = document.createElement('div');
+      item.className = 'hint-item';
+      item.textContent = 'Hint ' + (hintIndex + 1) + ': ' + hintSteps[hintIndex];
+      d.appendChild(item);
+      d.style.display = 'block';
+      hintIndex++;
+    } else if (answerText && hintIndex === hintSteps.length) {
+      if (!confirm('This will reveal the correct answer. Continue?')) return;
+      var a = document.getElementById('answerDisplay');
+      a.textContent = answerText.replace(ANSWER_RE, function(m) { return m.replace(/\s*:$/, '') + ': '; }).replace(/:\s+/, ': ');
+      a.style.display = 'block';
+      hintIndex++;
+    }
+    updateHintBtn();
+  }
+  updateHintBtn();
 </script>
+<!-- ux-v2 -->
 </body>
 </html>

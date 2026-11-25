@@ -123,20 +123,33 @@ body {
     transition: border-color .15s;
 }
 #answer:focus { border-bottom-color: #0066ff; }
+
+.progress { font-size: 13px; color: #555; font-weight: 600; margin: -6px 0 14px; }
+.opt-letter { font-weight: 700; min-width: 1.4em; }
+#hintDisplay { white-space: pre-wrap; }
+#hintDisplay .hint-item + .hint-item { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #c8d8f0; }
+#answerDisplay { display: none; margin-top: 14px; padding: 10px 14px; border-radius: 0 5px 5px 0;
+    background: #eefaf0; border-left: 4px solid #1b7a2a; color: #134d1c; font-size: 14px; font-weight: 600; white-space: pre-wrap; }
+#hintBtn:disabled { background: #e4e4e4; color: #999; border-color: #d0d0d0; cursor: not-allowed; }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">PSBKJD8 – PSBKJD8 – Q5</div>
+  <div class="progress">Question 5 of 5</div>
   <div class="question">What advantage does using a programming language like Python have over a GUI-based client such as DBeaver? Check all that apply.
+    <div class="note">Select all that apply.
     <div class="note">Select all that apply.</div>
   </div>
   <div id="options">
-    <label class="option-label"><input type="checkbox" class="ms_check" value="We can perform complex data analysis with a language like Python."> We can perform complex data analysis with a language like Python.</label>
-    <label class="option-label"><input type="checkbox" class="ms_check" value="We can use Python and other Python packages to create powerful data visualizations."> We can use Python and other Python packages to create powerful data visualizations.</label>
+    <label class="option-label"><input type="checkbox" class="ms_check" value="A"> <span class="opt-letter">A.</span> <span>We can perform complex data analysis with a language like Python.</span></label>
+    <label class="option-label"><input type="checkbox" class="ms_check" value="B"> <span class="opt-letter">B.</span> <span>We can visualize the database schema better with Python (tables, columns, and relationships between tables)</span></label>
+    <label class="option-label"><input type="checkbox" class="ms_check" value="C"> <span class="opt-letter">C.</span> <span>it is easier to perform database administration tasks with Python.</span></label>
+    <label class="option-label"><input type="checkbox" class="ms_check" value="D"> <span class="opt-letter">D.</span> <span>We can use Python and other Python packages to create powerful data visualizations.</span></label>
   </div>
   <div id="feedback"></div>
   <div id="hintDisplay"></div>
+  <div id="answerDisplay"></div>
   <div class="btn-row">
     <button class="btn" id="submitBtn" onclick="checkAnswer()">Submit</button>
     <button class="btn btn-ghost" id="hintBtn" onclick="showHint()">Show Hint</button>
@@ -144,16 +157,9 @@ body {
   </div>
 </div>
 <script>
-  var hints = ["The correct answers are: We can perform complex data analysis with a language like Python.; We can use Python and other Python packages to create powerful data visualizations."];
+  var hints = ["The correct answers are: A, D"];
   var hintIndex = 0;
-  var correctAnswers = ["We can perform complex data analysis with a language like Python.", "We can use Python and other Python packages to create powerful data visualizations."];
-
-  function showHint() {
-    var d = document.getElementById('hintDisplay');
-    d.style.display = 'block';
-    d.textContent = hintIndex < hints.length ? hints[hintIndex++] : 'No more hints.';
-  }
-
+  var correctAnswers = ["A", "D"];
   function checkAnswer() {
     var checked = Array.from(document.querySelectorAll('.ms_check:checked'))
                        .map(function(cb) { return cb.value.trim().toLowerCase(); });
@@ -163,7 +169,6 @@ body {
       fb.className = 'feedback incorrect';
       return;
     }
-    // Lowercase at comparison time — correctAnswers stores original case from the CSV
     var correctLower = correctAnswers.map(function(a) { return a.toLowerCase(); });
     var allCorrect = correctLower.every(function(a) { return checked.indexOf(a) !== -1; });
     var noExtras   = checked.every(function(a) { return correctLower.indexOf(a) !== -1; });
@@ -174,6 +179,7 @@ body {
       document.querySelectorAll('.ms_check').forEach(function(cb) { cb.disabled = true; });
       document.getElementById('hintBtn').style.display = 'none';
       document.getElementById('hintDisplay').style.display = 'none';
+      document.getElementById('answerDisplay').style.display = 'none';
       document.getElementById('nextButton').style.display = 'inline-block';
     } else if (!allCorrect) {
       fb.innerHTML = '&#10007; Not all correct answers are selected.';
@@ -183,6 +189,44 @@ body {
       fb.className = 'feedback incorrect';
     }
   }
+  // ---- hint / answer reveal ----
+  var ANSWER_RE = /^(The answer is|The correct answers are|The correct answer is)\s*:/i;
+  var hintSteps = hints.filter(function(h) { return !ANSWER_RE.test(h); });
+  var answerText = hints.filter(function(h) { return ANSWER_RE.test(h); }).pop() || null;
+  function updateHintBtn() {
+    var b = document.getElementById('hintBtn');
+    if (!b) return;
+    if (hintIndex < hintSteps.length) {
+      b.textContent = 'Show Hint (' + (hintIndex + 1) + ' of ' + hintSteps.length + ')';
+      b.disabled = false;
+    } else if (answerText && hintIndex === hintSteps.length) {
+      b.textContent = 'Reveal Answer';
+      b.disabled = false;
+    } else {
+      b.textContent = (hintSteps.length || answerText) ? 'No more hints' : 'No hints available';
+      b.disabled = true;
+    }
+  }
+  function showHint() {
+    if (hintIndex < hintSteps.length) {
+      var d = document.getElementById('hintDisplay');
+      var item = document.createElement('div');
+      item.className = 'hint-item';
+      item.textContent = 'Hint ' + (hintIndex + 1) + ': ' + hintSteps[hintIndex];
+      d.appendChild(item);
+      d.style.display = 'block';
+      hintIndex++;
+    } else if (answerText && hintIndex === hintSteps.length) {
+      if (!confirm('This will reveal the correct answer. Continue?')) return;
+      var a = document.getElementById('answerDisplay');
+      a.textContent = answerText.replace(ANSWER_RE, function(m) { return m.replace(/\s*:$/, '') + ': '; }).replace(/:\s+/, ': ');
+      a.style.display = 'block';
+      hintIndex++;
+    }
+    updateHintBtn();
+  }
+  updateHintBtn();
 </script>
+<!-- ux-v2 -->
 </body>
 </html>
