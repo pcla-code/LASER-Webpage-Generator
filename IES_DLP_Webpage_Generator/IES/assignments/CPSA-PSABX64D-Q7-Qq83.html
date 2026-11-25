@@ -123,15 +123,36 @@ body {
     transition: border-color .15s;
 }
 #answer:focus { border-bottom-color: #0066ff; }
+
+.progress { font-size: 13px; color: #555; font-weight: 600; margin: -6px 0 14px; }
+.opt-letter { font-weight: 700; min-width: 1.4em; }
+#hintDisplay { white-space: pre-wrap; }
+#hintDisplay .hint-item + .hint-item { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #c8d8f0; }
+#answerDisplay { display: none; margin-top: 14px; padding: 10px 14px; border-radius: 0 5px 5px 0;
+    background: #eefaf0; border-left: 4px solid #1b7a2a; color: #134d1c; font-size: 14px; font-weight: 600; white-space: pre-wrap; }
+#hintBtn:disabled { background: #e4e4e4; color: #999; border-color: #d0d0d0; cursor: not-allowed; }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">PSABX64D – PSABX64D – Q7</div>
-  <div class="question">In the previous assignment, you explored a dataset and trained a Logistic Regression model. In that assignment, you evaluated the performance of that model using a simple train-test split.<br><br>Challenge<br><br>The Google Colab link below will direct you to an abbreviated version of the analysis you conducted in the previous assignment. Using this code, revise the Logistic Regression training procedure to instead apply a 10-fold cross validation. For those who are less familiar with Python programming, this may pose a greater challenge, so you are welcome to use additional resources for help. The next problem in this assignment will provide a new Google Colab link which includes a solution (as well as some additional questions/prompts). You are encouraged to use this as an opportunity to try this on your own. If you are lost, the hints here will help guide you in the right direction.<br><br>Google Colab Challenge Code<br><br>Only continue once you have tried this on your own</div>
+  <div class="progress">Question 7 of 17</div>
+  <div class="question">In the previous assignment, you explored a dataset and trained a Logistic Regression model. In that assignment, you evaluated the performance of that model using a simple train-test split.<br><br>Challenge<br><br>The Google Colab link below will direct you to an abbreviated version of the analysis you conducted in the previous assignment. Using this code, revise the Logistic Regression training procedure to instead apply a 10-fold cross validation. For those who are less familiar with Python programming, this may pose a greater challenge, so you are welcome to use additional resources for help. The next problem in this assignment will provide a new Google Colab link which includes a solution (as well as some additional questions/prompts). You are encouraged to use this as an opportunity to try this on your own. If you are lost, the hints here will help guide you in the right direction.<br><br><a href="https://colab.research.google.com/drive/1jxqiWdIOtd33JHJhbfxT658uhLRttc2J?usp=sharing" target="_blank" rel="noopener">Google Colab Challenge Code</a><br><br>Only continue once you have tried this on your own</div>
+  <div id="options">
+    <label class="option-label"><input type="radio" name="mc_choice" value="I am ready to continue"> I am ready to continue</label>
+  </div>
   <div class="btn-row">
-    <a class="btn" href="CPSA-PSABX64D-Q8-spBV.html">Continue &rarr;</a>
+    <a class="btn" id="nextButton" href="CPSA-PSABX64D-Q8-spBV.html" style="display:inline-block;pointer-events:none;background:#bbb">Continue &rarr;</a>
   </div>
 </div>
+<script>
+  document.querySelectorAll('input[name="mc_choice"]').forEach(function(r) {
+    r.addEventListener('change', function() {
+      var b = document.getElementById('nextButton');
+      b.classList.remove('disabled-link'); b.style.pointerEvents = 'auto'; b.style.background = '';
+    });
+  });
+</script>
+<!-- ux-v2 -->
 </body>
 </html>

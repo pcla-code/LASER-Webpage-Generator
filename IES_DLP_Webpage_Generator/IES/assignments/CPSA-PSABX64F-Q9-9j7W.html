@@ -123,15 +123,36 @@ body {
     transition: border-color .15s;
 }
 #answer:focus { border-bottom-color: #0066ff; }
+
+.progress { font-size: 13px; color: #555; font-weight: 600; margin: -6px 0 14px; }
+.opt-letter { font-weight: 700; min-width: 1.4em; }
+#hintDisplay { white-space: pre-wrap; }
+#hintDisplay .hint-item + .hint-item { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #c8d8f0; }
+#answerDisplay { display: none; margin-top: 14px; padding: 10px 14px; border-radius: 0 5px 5px 0;
+    background: #eefaf0; border-left: 4px solid #1b7a2a; color: #134d1c; font-size: 14px; font-weight: 600; white-space: pre-wrap; }
+#hintBtn:disabled { background: #e4e4e4; color: #999; border-color: #d0d0d0; cursor: not-allowed; }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">PSABX64F – PSABX64F – Q9</div>
-  <div class="question">The starter code can be accessed via the following link: Google Colab Starter Code<br><br>Data loading and preprocessing<br><br>Please be sure to read the description of the dataset and then run all code cells up to part 1 (we will be running and modifying Part 1 next). Once you have familiarized yourself with the dataset, please continue.</div>
+  <div class="progress">Question 9 of 17</div>
+  <div class="question">The starter code can be accessed via the following link: <a href="https://colab.research.google.com/drive/1YStU1g3wJcl1X6kY355Z-VpD5OqIwEA5?usp=sharing" target="_blank" rel="noopener">Google Colab Starter Code</a><br><br>Data loading and preprocessing<br><br>Please be sure to read the description of the dataset and then run all code cells up to part 1 (we will be running and modifying Part 1 next). Once you have familiarized yourself with the dataset, please continue.</div>
+  <div id="options">
+    <label class="option-label"><input type="radio" name="mc_choice" value="I have loaded the data and am ready for Part 1"> I have loaded the data and am ready for Part 1</label>
+  </div>
   <div class="btn-row">
-    <a class="btn" href="CPSA-PSABX64F-Q10-uD0s.html">Continue &rarr;</a>
+    <a class="btn" id="nextButton" href="CPSA-PSABX64F-Q10-uD0s.html" style="display:inline-block;pointer-events:none;background:#bbb">Continue &rarr;</a>
   </div>
 </div>
+<script>
+  document.querySelectorAll('input[name="mc_choice"]').forEach(function(r) {
+    r.addEventListener('change', function() {
+      var b = document.getElementById('nextButton');
+      b.classList.remove('disabled-link'); b.style.pointerEvents = 'auto'; b.style.background = '';
+    });
+  });
+</script>
+<!-- ux-v2 -->
 </body>
 </html>

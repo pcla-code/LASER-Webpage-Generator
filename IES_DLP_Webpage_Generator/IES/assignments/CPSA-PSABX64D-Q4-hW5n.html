@@ -123,64 +123,100 @@ body {
     transition: border-color .15s;
 }
 #answer:focus { border-bottom-color: #0066ff; }
+
+.progress { font-size: 13px; color: #555; font-weight: 600; margin: -6px 0 14px; }
+.opt-letter { font-weight: 700; min-width: 1.4em; }
+#hintDisplay { white-space: pre-wrap; }
+#hintDisplay .hint-item + .hint-item { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #c8d8f0; }
+#answerDisplay { display: none; margin-top: 14px; padding: 10px 14px; border-radius: 0 5px 5px 0;
+    background: #eefaf0; border-left: 4px solid #1b7a2a; color: #134d1c; font-size: 14px; font-weight: 600; white-space: pre-wrap; }
+#hintBtn:disabled { background: #e4e4e4; color: #999; border-color: #d0d0d0; cursor: not-allowed; }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">PSABX64D – PSABX64D – Q4</div>
-  <div class="question">In evaluating two models that were trained to predict a binary dependent variable, you've calculated the following performance metrics for each:<br><br><table style="border-collapse:collapse;margin:14px 0;" border="1"><tr><th style="border:1px solid #bbb;padding:6px 12px;background:#f0f4ff;text-align:left;"></th><th style="border:1px solid #bbb;padding:6px 12px;background:#f0f4ff;text-align:left;">AUC</th><th style="border:1px solid #bbb;padding:6px 12px;background:#f0f4ff;text-align:left;">Cohen's Kappa</th></tr><tr><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">Model 1</td><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">0.788</td><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">0.241</td></tr><tr><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">Model 2</td><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">0.742</td><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">0.410</td></tr></table><br><br>What is likely keeping the other model from being better for deployment?</div>
-  <div class="text-row">
-    <input type="text" id="answer" placeholder="Your answer" autocomplete="off">
-    <button class="btn" id="submitBtn" onclick="checkAnswer()">Submit</button>
+  <div class="progress">Question 4 of 17</div>
+  <div class="question">In evaluating two models that were trained to predict a binary dependent variable, you've calculated the following performance metrics for each:<br><br><table style="border-collapse:collapse;margin:12px 0;font-size:14px"><tr><th style="border:1px solid #ccc;padding:4px 8px"></th><th style="border:1px solid #ccc;padding:4px 8px">AUC</th><th style="border:1px solid #ccc;padding:4px 8px">Cohen&#x27;s Kappa</th></tr><tr><td style="border:1px solid #ccc;padding:4px 8px">Model 1</td><td style="border:1px solid #ccc;padding:4px 8px">0.788</td><td style="border:1px solid #ccc;padding:4px 8px">0.241</td></tr><tr><td style="border:1px solid #ccc;padding:4px 8px">Model 2</td><td style="border:1px solid #ccc;padding:4px 8px">0.742</td><td style="border:1px solid #ccc;padding:4px 8px">0.410</td></tr></table><br><br>What is likely keeping the other model from being better for deployment?</div>
+  <div id="options">
+    <label class="option-label"><input type="radio" name="mc_choice" value="A"> <span class="opt-letter">A.</span> <span>The other model isn't able to distinguish between labels</span></label>
+    <label class="option-label"><input type="radio" name="mc_choice" value="B"> <span class="opt-letter">B.</span> <span>The other model's rounding threshold likely needs to be adjusted</span></label>
+    <label class="option-label"><input type="radio" name="mc_choice" value="C"> <span class="opt-letter">C.</span> <span>the other model is likely underfit to the data</span></label>
+    <label class="option-label"><input type="radio" name="mc_choice" value="D"> <span class="opt-letter">D.</span> <span>The other model is likely overfit to the data</span></label>
   </div>
   <div id="feedback"></div>
   <div id="hintDisplay"></div>
+  <div id="answerDisplay"></div>
   <div class="btn-row">
+    <button class="btn" id="submitBtn" onclick="checkAnswer()">Submit</button>
     <button class="btn btn-ghost" id="hintBtn" onclick="showHint()">Show Hint</button>
     <a class="btn" id="nextButton" href="CPSA-PSABX64D-Q5-aBcf.html">Next &rarr;</a>
   </div>
 </div>
 <script>
-  var hints = ["While these models may be underfit or overfit to the data, we're missing some key information that would help us determine if either were affecting the models' performances. There is little evidence here to suggest that these are likely.", "Both models seem to peform reasonably well, but their largest difference is in their Kappa values. Consider the difference in how each AUC and Kappa is measured.", "AUC uses the probability estimates produced by the model, while Cohen's Kappa uses a rounded prediction. In this way, AUC provides a good estimate of how well the model is able to distinguish between labels irregardless of the chosen rounding threshold", "The answer is: The other model's rounding threshold likely needs to be adjusted"];
+  var hints = ["The answer is: B"];
   var hintIndex = 0;
-  var correctAnswers = ["The other model's rounding threshold likely needs to be adjusted"];
-
-  // Lenient comparison: case-insensitive, trims, collapses whitespace, and
-  // ignores surrounding punctuation so long sentence answers match the hint text.
-  function norm(s) {
-    return String(s).toLowerCase()
-      .replace(/[‘’]/g, "'").replace(/[“”]/g, '"')
-      .replace(/[.,;:!?"'()\[\]]/g, ' ')
-      .replace(/\s+/g, ' ').trim();
-  }
-
-  document.getElementById('answer').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') { e.preventDefault(); checkAnswer(); }
-  });
-
-  function showHint() {
-    var d = document.getElementById('hintDisplay');
-    d.style.display = 'block';
-    d.textContent = hintIndex < hints.length ? hints[hintIndex++] : 'No more hints.';
-  }
-
+  var correctAnswers = ["B"];
   function checkAnswer() {
-    var ans = document.getElementById('answer').value.trim();
-    if (!ans) return;
+    var sel = document.querySelector('input[name="mc_choice"]:checked');
     var fb = document.getElementById('feedback');
-    if (correctAnswers.map(norm).indexOf(norm(ans)) !== -1) {
+    if (!sel) {
+      fb.textContent = 'Please select an answer.';
+      fb.className = 'feedback incorrect';
+      return;
+    }
+    if (correctAnswers.map(function(a) { return a.toLowerCase(); }).indexOf(sel.value.trim().toLowerCase()) !== -1) {
       fb.innerHTML = '&#10003; Correct!';
       fb.className = 'feedback correct';
-      document.getElementById('answer').disabled = true;
       document.getElementById('submitBtn').disabled = true;
+      document.querySelectorAll('input[name="mc_choice"]').forEach(function(r) { r.disabled = true; });
       document.getElementById('hintBtn').style.display = 'none';
       document.getElementById('hintDisplay').style.display = 'none';
+      document.getElementById('answerDisplay').style.display = 'none';
       document.getElementById('nextButton').style.display = 'inline-block';
     } else {
-      fb.innerHTML = '&#10007; Incorrect — try again.';
+      fb.innerHTML = '&#10007; Incorrect &mdash; try again.';
       fb.className = 'feedback incorrect';
     }
   }
+  // ---- hint / answer reveal ----
+  var ANSWER_RE = /^(The answer is|The correct answers are|The correct answer is)\s*:/i;
+  var hintSteps = hints.filter(function(h) { return !ANSWER_RE.test(h); });
+  var answerText = hints.filter(function(h) { return ANSWER_RE.test(h); }).pop() || null;
+  function updateHintBtn() {
+    var b = document.getElementById('hintBtn');
+    if (!b) return;
+    if (hintIndex < hintSteps.length) {
+      b.textContent = 'Show Hint (' + (hintIndex + 1) + ' of ' + hintSteps.length + ')';
+      b.disabled = false;
+    } else if (answerText && hintIndex === hintSteps.length) {
+      b.textContent = 'Reveal Answer';
+      b.disabled = false;
+    } else {
+      b.textContent = (hintSteps.length || answerText) ? 'No more hints' : 'No hints available';
+      b.disabled = true;
+    }
+  }
+  function showHint() {
+    if (hintIndex < hintSteps.length) {
+      var d = document.getElementById('hintDisplay');
+      var item = document.createElement('div');
+      item.className = 'hint-item';
+      item.textContent = 'Hint ' + (hintIndex + 1) + ': ' + hintSteps[hintIndex];
+      d.appendChild(item);
+      d.style.display = 'block';
+      hintIndex++;
+    } else if (answerText && hintIndex === hintSteps.length) {
+      if (!confirm('This will reveal the correct answer. Continue?')) return;
+      var a = document.getElementById('answerDisplay');
+      a.textContent = answerText.replace(ANSWER_RE, function(m) { return m.replace(/\s*:$/, '') + ': '; }).replace(/:\s+/, ': ');
+      a.style.display = 'block';
+      hintIndex++;
+    }
+    updateHintBtn();
+  }
+  updateHintBtn();
 </script>
+<!-- ux-v2 -->
 </body>
 </html>

@@ -123,15 +123,36 @@ body {
     transition: border-color .15s;
 }
 #answer:focus { border-bottom-color: #0066ff; }
+
+.progress { font-size: 13px; color: #555; font-weight: 600; margin: -6px 0 14px; }
+.opt-letter { font-weight: 700; min-width: 1.4em; }
+#hintDisplay { white-space: pre-wrap; }
+#hintDisplay .hint-item + .hint-item { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #c8d8f0; }
+#answerDisplay { display: none; margin-top: 14px; padding: 10px 14px; border-radius: 0 5px 5px 0;
+    background: #eefaf0; border-left: 4px solid #1b7a2a; color: #134d1c; font-size: 14px; font-weight: 600; white-space: pre-wrap; }
+#hintBtn:disabled { background: #e4e4e4; color: #999; border-color: #d0d0d0; cursor: not-allowed; }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">PSABX638 – PSABX638 – Q1</div>
-  <div class="question">For this assignment, you will be running and modifying Python code using Google Colab which can be accessed via the link below.<br><br>Google Colab Starter Code<br><br>Each question in this assignment will refer to sections of output and results from this code - some analyses will require you to modify or add to the code, so please read and follow all instructions for each question and throughout the provided Colab code. The questions here are meant to help you check your work and ensure that the code and analyses are running properly. This assignment is meant to introduce you to the coding environment and explore data that was collected in a digital learning platform. While you are not asked to write or modify large portions of code yourself in this assignment, please note that you may need to do so in future assignments.<br><br>Be sure to open the starter code and download any required data before continuing.</div>
+  <div class="progress">Question 1 of 7</div>
+  <div class="question">For this assignment, you will be running and modifying Python code using Google Colab which can be accessed via the link below.<br><br><a href="https://colab.research.google.com/drive/1YStU1g3wJcl1X6kY355Z-VpD5OqIwEA5?usp=sharing" target="_blank" rel="noopener">Google Colab Starter Code</a><br><br>Each question in this assignment will refer to sections of output and results from this code - some analyses will require you to modify or add to the code, so please read and follow all instructions for each question and throughout the provided Colab code. The questions here are meant to help you check your work and ensure that the code and analyses are running properly. This assignment is meant to introduce you to the coding environment and explore data that was collected in a digital learning platform. While you are not asked to write or modify large portions of code yourself in this assignment, please note that you may need to do so in future assignments.<br><br>Be sure to open the starter code and download any required data before continuing.</div>
+  <div id="options">
+    <label class="option-label"><input type="radio" name="mc_choice" value="I am ready to continue"> I am ready to continue</label>
+  </div>
   <div class="btn-row">
-    <a class="btn" href="CPSA-PSABX638-Q2-r2Vb.html">Continue &rarr;</a>
+    <a class="btn" id="nextButton" href="CPSA-PSABX638-Q2-r2Vb.html" style="display:inline-block;pointer-events:none;background:#bbb">Continue &rarr;</a>
   </div>
 </div>
+<script>
+  document.querySelectorAll('input[name="mc_choice"]').forEach(function(r) {
+    r.addEventListener('change', function() {
+      var b = document.getElementById('nextButton');
+      b.classList.remove('disabled-link'); b.style.pointerEvents = 'auto'; b.style.background = '';
+    });
+  });
+</script>
+<!-- ux-v2 -->
 </body>
 </html>

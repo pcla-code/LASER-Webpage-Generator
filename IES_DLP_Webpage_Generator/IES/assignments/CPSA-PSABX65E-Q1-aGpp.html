@@ -123,64 +123,99 @@ body {
     transition: border-color .15s;
 }
 #answer:focus { border-bottom-color: #0066ff; }
+
+.progress { font-size: 13px; color: #555; font-weight: 600; margin: -6px 0 14px; }
+.opt-letter { font-weight: 700; min-width: 1.4em; }
+#hintDisplay { white-space: pre-wrap; }
+#hintDisplay .hint-item + .hint-item { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #c8d8f0; }
+#answerDisplay { display: none; margin-top: 14px; padding: 10px 14px; border-radius: 0 5px 5px 0;
+    background: #eefaf0; border-left: 4px solid #1b7a2a; color: #134d1c; font-size: 14px; font-weight: 600; white-space: pre-wrap; }
+#hintBtn:disabled { background: #e4e4e4; color: #999; border-color: #d0d0d0; cursor: not-allowed; }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">PSABX65E – PSABX65E – Q1</div>
-  <div class="question">Imagine you have a dataset of 10,000 learners taking a massive open online course (MOOC). This dataset records every page visit by these learners. Page types include the following: front_page, lecture, quiz, assignment, and forum. For each login session, there is a session id recorded in the dataset. Below is a sample of a few rows:<br><br><table style="border-collapse:collapse;margin:14px 0;" border="1"><tr><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">timestamp</td><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">session_id</td><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">user</td><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">page_type</td></tr><tr><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">2023-09-01 08:19:34</td><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">1</td><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">user101</td><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">front_page</td></tr><tr><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">2023-09-01 08:19:39</td><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">1</td><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">user101</td><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">lecture</td></tr><tr><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">2023-09-01 08:26:02</td><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">1</td><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">user101</td><td style="border:1px solid #bbb;padding:6px 12px;text-align:left;">quiz</td></tr></table><br><br>With the data, we hope to answer this question: Which pages did learners tend to visit together during a session? To answer this question, we will conduct mine association rules about page visits. In order to perform association rule mining, we need to get the most frequently occurring items in the dataset using the a priori algorithm.<br><br>In this analysis, how should you define a 'basket'?</div>
-  <div class="text-row">
-    <input type="text" id="answer" placeholder="Your answer" autocomplete="off">
-    <button class="btn" id="submitBtn" onclick="checkAnswer()">Submit</button>
+  <div class="progress">Question 1 of 5</div>
+  <div class="question">Imagine you have a dataset of 10,000 learners taking a massive open online course (MOOC). This dataset records every page visit by these learners. Page types include the following: front_page, lecture, quiz, assignment, and forum. For each login session, there is a session id recorded in the dataset. Below is a sample of a few rows:<br><br><table style="border-collapse:collapse;margin:12px 0;font-size:14px"><tr><th style="border:1px solid #ccc;padding:4px 8px">timestamp</th><th style="border:1px solid #ccc;padding:4px 8px">session_id</th><th style="border:1px solid #ccc;padding:4px 8px">user</th><th style="border:1px solid #ccc;padding:4px 8px">page_type</th></tr><tr><td style="border:1px solid #ccc;padding:4px 8px">2023-09-01 08:19:34</td><td style="border:1px solid #ccc;padding:4px 8px">1</td><td style="border:1px solid #ccc;padding:4px 8px">user101</td><td style="border:1px solid #ccc;padding:4px 8px">front_page</td></tr><tr><td style="border:1px solid #ccc;padding:4px 8px">2023-09-01 08:19:39</td><td style="border:1px solid #ccc;padding:4px 8px">1</td><td style="border:1px solid #ccc;padding:4px 8px">user101</td><td style="border:1px solid #ccc;padding:4px 8px">lecture</td></tr><tr><td style="border:1px solid #ccc;padding:4px 8px">2023-09-01 08:26:02</td><td style="border:1px solid #ccc;padding:4px 8px">1</td><td style="border:1px solid #ccc;padding:4px 8px">user101</td><td style="border:1px solid #ccc;padding:4px 8px">quiz</td></tr></table><br><br>With the data, we hope to answer this question: Which pages did learners tend to visit together during a session? To answer this question, we will conduct mine association rules about page visits. In order to perform association rule mining, we need to get the most frequently occurring items in the dataset using the a priori algorithm.<br><br>In this analysis, how should you define a 'basket'?</div>
+  <div id="options">
+    <label class="option-label"><input type="radio" name="mc_choice" value="A"> <span class="opt-letter">A.</span> <span>Records from each learner form a basket.</span></label>
+    <label class="option-label"><input type="radio" name="mc_choice" value="B"> <span class="opt-letter">B.</span> <span>Records from each session form a basket.</span></label>
+    <label class="option-label"><input type="radio" name="mc_choice" value="C"> <span class="opt-letter">C.</span> <span>Records from each page type form a basket.</span></label>
   </div>
   <div id="feedback"></div>
   <div id="hintDisplay"></div>
+  <div id="answerDisplay"></div>
   <div class="btn-row">
+    <button class="btn" id="submitBtn" onclick="checkAnswer()">Submit</button>
     <button class="btn btn-ghost" id="hintBtn" onclick="showHint()">Show Hint</button>
     <a class="btn" id="nextButton" href="CPSA-PSABX65E-Q2-ygLZ.html">Next &rarr;</a>
   </div>
 </div>
 <script>
-  var hints = ["The answer is: Records from each session form a basket."];
+  var hints = ["The answer is: B"];
   var hintIndex = 0;
-  var correctAnswers = ["Records from each session form a basket."];
-
-  // Lenient comparison: case-insensitive, trims, collapses whitespace, and
-  // ignores surrounding punctuation so long sentence answers match the hint text.
-  function norm(s) {
-    return String(s).toLowerCase()
-      .replace(/[‘’]/g, "'").replace(/[“”]/g, '"')
-      .replace(/[.,;:!?"'()\[\]]/g, ' ')
-      .replace(/\s+/g, ' ').trim();
-  }
-
-  document.getElementById('answer').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') { e.preventDefault(); checkAnswer(); }
-  });
-
-  function showHint() {
-    var d = document.getElementById('hintDisplay');
-    d.style.display = 'block';
-    d.textContent = hintIndex < hints.length ? hints[hintIndex++] : 'No more hints.';
-  }
-
+  var correctAnswers = ["B"];
   function checkAnswer() {
-    var ans = document.getElementById('answer').value.trim();
-    if (!ans) return;
+    var sel = document.querySelector('input[name="mc_choice"]:checked');
     var fb = document.getElementById('feedback');
-    if (correctAnswers.map(norm).indexOf(norm(ans)) !== -1) {
+    if (!sel) {
+      fb.textContent = 'Please select an answer.';
+      fb.className = 'feedback incorrect';
+      return;
+    }
+    if (correctAnswers.map(function(a) { return a.toLowerCase(); }).indexOf(sel.value.trim().toLowerCase()) !== -1) {
       fb.innerHTML = '&#10003; Correct!';
       fb.className = 'feedback correct';
-      document.getElementById('answer').disabled = true;
       document.getElementById('submitBtn').disabled = true;
+      document.querySelectorAll('input[name="mc_choice"]').forEach(function(r) { r.disabled = true; });
       document.getElementById('hintBtn').style.display = 'none';
       document.getElementById('hintDisplay').style.display = 'none';
+      document.getElementById('answerDisplay').style.display = 'none';
       document.getElementById('nextButton').style.display = 'inline-block';
     } else {
-      fb.innerHTML = '&#10007; Incorrect — try again.';
+      fb.innerHTML = '&#10007; Incorrect &mdash; try again.';
       fb.className = 'feedback incorrect';
     }
   }
+  // ---- hint / answer reveal ----
+  var ANSWER_RE = /^(The answer is|The correct answers are|The correct answer is)\s*:/i;
+  var hintSteps = hints.filter(function(h) { return !ANSWER_RE.test(h); });
+  var answerText = hints.filter(function(h) { return ANSWER_RE.test(h); }).pop() || null;
+  function updateHintBtn() {
+    var b = document.getElementById('hintBtn');
+    if (!b) return;
+    if (hintIndex < hintSteps.length) {
+      b.textContent = 'Show Hint (' + (hintIndex + 1) + ' of ' + hintSteps.length + ')';
+      b.disabled = false;
+    } else if (answerText && hintIndex === hintSteps.length) {
+      b.textContent = 'Reveal Answer';
+      b.disabled = false;
+    } else {
+      b.textContent = (hintSteps.length || answerText) ? 'No more hints' : 'No hints available';
+      b.disabled = true;
+    }
+  }
+  function showHint() {
+    if (hintIndex < hintSteps.length) {
+      var d = document.getElementById('hintDisplay');
+      var item = document.createElement('div');
+      item.className = 'hint-item';
+      item.textContent = 'Hint ' + (hintIndex + 1) + ': ' + hintSteps[hintIndex];
+      d.appendChild(item);
+      d.style.display = 'block';
+      hintIndex++;
+    } else if (answerText && hintIndex === hintSteps.length) {
+      if (!confirm('This will reveal the correct answer. Continue?')) return;
+      var a = document.getElementById('answerDisplay');
+      a.textContent = answerText.replace(ANSWER_RE, function(m) { return m.replace(/\s*:$/, '') + ': '; }).replace(/:\s+/, ': ');
+      a.style.display = 'block';
+      hintIndex++;
+    }
+    updateHintBtn();
+  }
+  updateHintBtn();
 </script>
+<!-- ux-v2 -->
 </body>
 </html>

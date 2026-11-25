@@ -123,15 +123,36 @@ body {
     transition: border-color .15s;
 }
 #answer:focus { border-bottom-color: #0066ff; }
+
+.progress { font-size: 13px; color: #555; font-weight: 600; margin: -6px 0 14px; }
+.opt-letter { font-weight: 700; min-width: 1.4em; }
+#hintDisplay { white-space: pre-wrap; }
+#hintDisplay .hint-item + .hint-item { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #c8d8f0; }
+#answerDisplay { display: none; margin-top: 14px; padding: 10px 14px; border-radius: 0 5px 5px 0;
+    background: #eefaf0; border-left: 4px solid #1b7a2a; color: #134d1c; font-size: 14px; font-weight: 600; white-space: pre-wrap; }
+#hintBtn:disabled { background: #e4e4e4; color: #999; border-color: #d0d0d0; cursor: not-allowed; }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">PSABX64D – PSABX64D – Q14</div>
+  <div class="progress">Question 14 of 17</div>
   <div class="question">Now that you have identified the correct feature set to use for each model, modify the code of each model to ensure that it is using the correct features.<br><br>You will find the following line in each model's code cell:<br><br>X_train, X_test = X_all_train, X_all_test # or X_selected_train, X_selected_test<br><br>Modify this to use either "all" features or the non-highly correlated "selected" features before you continue</div>
+  <div id="options">
+    <label class="option-label"><input type="radio" name="mc_choice" value="I am ready to continue"> I am ready to continue</label>
+  </div>
   <div class="btn-row">
-    <a class="btn" href="CPSA-PSABX64D-Q15-vZra.html">Continue &rarr;</a>
+    <a class="btn" id="nextButton" href="CPSA-PSABX64D-Q15-vZra.html" style="display:inline-block;pointer-events:none;background:#bbb">Continue &rarr;</a>
   </div>
 </div>
+<script>
+  document.querySelectorAll('input[name="mc_choice"]').forEach(function(r) {
+    r.addEventListener('change', function() {
+      var b = document.getElementById('nextButton');
+      b.classList.remove('disabled-link'); b.style.pointerEvents = 'auto'; b.style.background = '';
+    });
+  });
+</script>
+<!-- ux-v2 -->
 </body>
 </html>

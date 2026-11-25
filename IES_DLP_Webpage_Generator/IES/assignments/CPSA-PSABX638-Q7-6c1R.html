@@ -123,15 +123,36 @@ body {
     transition: border-color .15s;
 }
 #answer:focus { border-bottom-color: #0066ff; }
+
+.progress { font-size: 13px; color: #555; font-weight: 600; margin: -6px 0 14px; }
+.opt-letter { font-weight: 700; min-width: 1.4em; }
+#hintDisplay { white-space: pre-wrap; }
+#hintDisplay .hint-item + .hint-item { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #c8d8f0; }
+#answerDisplay { display: none; margin-top: 14px; padding: 10px 14px; border-radius: 0 5px 5px 0;
+    background: #eefaf0; border-left: 4px solid #1b7a2a; color: #134d1c; font-size: 14px; font-weight: 600; white-space: pre-wrap; }
+#hintBtn:disabled { background: #e4e4e4; color: #999; border-color: #d0d0d0; cursor: not-allowed; }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">PSABX638 – PSABX638 – Q7</div>
-  <div class="question">The starter code can be accessed via the following link: Google Colab Starter Code<br><br>Going Deeper<br><br>Try re-introducing the features that you had removed earlier -- what would the performance results and coefficients look like if you had not removed the highly-correlated features? Which feature set resulted in the highest model performance? Did the direction of the coefficients (positive or negative) and magnitude align with your expectations? You do not need to answer these here, but do take a moment to consider these questions before proceeding to complete the assignment.<br><br>It is important to not only observe the results of an analysis, but also to consider what the results are revealing about the subject matter.</div>
+  <div class="progress">Question 7 of 7</div>
+  <div class="question">The starter code can be accessed via the following link: <a href="https://colab.research.google.com/drive/1YStU1g3wJcl1X6kY355Z-VpD5OqIwEA5?usp=sharing" target="_blank" rel="noopener">Google Colab Starter Code</a><br><br>Going Deeper<br><br>Try re-introducing the features that you had removed earlier -- what would the performance results and coefficients look like if you had not removed the highly-correlated features? Which feature set resulted in the highest model performance? Did the direction of the coefficients (positive or negative) and magnitude align with your expectations? You do not need to answer these here, but do take a moment to consider these questions before proceeding to complete the assignment.<br><br>It is important to not only observe the results of an analysis, but also to consider what the results are revealing about the subject matter.</div>
+  <div id="options">
+    <label class="option-label"><input type="radio" name="mc_choice" value="I have completed the assignment"> I have completed the assignment</label>
+  </div>
   <div class="btn-row">
-    <a class="btn" href="CPSA-PSABX638-QZ-END-MjIjhwU.html">Continue &rarr;</a>
+    <a class="btn" id="nextButton" href="CPSA-PSABX638-QZ-END-MjIjhwU.html" style="display:inline-block;pointer-events:none;background:#bbb">Continue &rarr;</a>
   </div>
 </div>
+<script>
+  document.querySelectorAll('input[name="mc_choice"]').forEach(function(r) {
+    r.addEventListener('change', function() {
+      var b = document.getElementById('nextButton');
+      b.classList.remove('disabled-link'); b.style.pointerEvents = 'auto'; b.style.background = '';
+    });
+  });
+</script>
+<!-- ux-v2 -->
 </body>
 </html>

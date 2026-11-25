@@ -123,15 +123,36 @@ body {
     transition: border-color .15s;
 }
 #answer:focus { border-bottom-color: #0066ff; }
+
+.progress { font-size: 13px; color: #555; font-weight: 600; margin: -6px 0 14px; }
+.opt-letter { font-weight: 700; min-width: 1.4em; }
+#hintDisplay { white-space: pre-wrap; }
+#hintDisplay .hint-item + .hint-item { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #c8d8f0; }
+#answerDisplay { display: none; margin-top: 14px; padding: 10px 14px; border-radius: 0 5px 5px 0;
+    background: #eefaf0; border-left: 4px solid #1b7a2a; color: #134d1c; font-size: 14px; font-weight: 600; white-space: pre-wrap; }
+#hintBtn:disabled { background: #e4e4e4; color: #999; border-color: #d0d0d0; cursor: not-allowed; }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">PSABX64D – PSABX64D – Q17</div>
+  <div class="progress">Question 17 of 17</div>
   <div class="question">Going Deeper<br><br>This assignment was intended to help reinforce several concepts related to the training and evaluation of prediction models.<br><br>Beyond this, the code provided in this assignment is intended to provide examples of how to to build and apply these models in the future (so be sure to save a copy!)<br><br>If you are looking to go deeper with this code, aside from modifying other hyperparameters, there are additional models that you could also implement yourself that were not covered in this (but may be introduced in future modules) -- these are some common ones:<br><br>- K Nearest Neighbors<br><br>- Gradient Boosting Machines<br><br>- Stochastic Gradient Descent Classifier<br><br>- Random Forest<br><br>- Multilayer Perceptrons</div>
+  <div id="options">
+    <label class="option-label"><input type="radio" name="mc_choice" value="I am finished with this assignment"> I am finished with this assignment</label>
+  </div>
   <div class="btn-row">
-    <a class="btn" href="CPSA-PSABX64D-QZ-END-hCBLrlR.html">Continue &rarr;</a>
+    <a class="btn" id="nextButton" href="CPSA-PSABX64D-QZ-END-hCBLrlR.html" style="display:inline-block;pointer-events:none;background:#bbb">Continue &rarr;</a>
   </div>
 </div>
+<script>
+  document.querySelectorAll('input[name="mc_choice"]').forEach(function(r) {
+    r.addEventListener('change', function() {
+      var b = document.getElementById('nextButton');
+      b.classList.remove('disabled-link'); b.style.pointerEvents = 'auto'; b.style.background = '';
+    });
+  });
+</script>
+<!-- ux-v2 -->
 </body>
 </html>

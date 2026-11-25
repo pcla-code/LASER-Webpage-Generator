@@ -123,20 +123,30 @@ body {
     transition: border-color .15s;
 }
 #answer:focus { border-bottom-color: #0066ff; }
+
+.progress { font-size: 13px; color: #555; font-weight: 600; margin: -6px 0 14px; }
+.opt-letter { font-weight: 700; min-width: 1.4em; }
+#hintDisplay { white-space: pre-wrap; }
+#hintDisplay .hint-item + .hint-item { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #c8d8f0; }
+#answerDisplay { display: none; margin-top: 14px; padding: 10px 14px; border-radius: 0 5px 5px 0;
+    background: #eefaf0; border-left: 4px solid #1b7a2a; color: #134d1c; font-size: 14px; font-weight: 600; white-space: pre-wrap; }
+#hintBtn:disabled { background: #e4e4e4; color: #999; border-color: #d0d0d0; cursor: not-allowed; }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">PSBGCK8 – PSBGCK8 – Q7</div>
+  <div class="progress">Question 7 of 12</div>
   <div class="question">Social comparison visualizations are effective when...</div>
   <div id="options">
-    <label class="option-label"><input type="radio" name="mc_choice" value="A. There is a small gap between you and the person you&#x27;re being compared to."> A. There is a small gap between you and the person you're being compared to.</label>
-    <label class="option-label"><input type="radio" name="mc_choice" value="B. You have picked the person you are being compared to."> B. You have picked the person you are being compared to.</label>
-    <label class="option-label"><input type="radio" name="mc_choice" value="C. All of the above"> C. All of the above</label>
-    <label class="option-label"><input type="radio" name="mc_choice" value="D. None of the above"> D. None of the above</label>
+    <label class="option-label"><input type="radio" name="mc_choice" value="A"> <span class="opt-letter">A.</span> <span>There is a small gap between you and the person you're being compared to.</span></label>
+    <label class="option-label"><input type="radio" name="mc_choice" value="B"> <span class="opt-letter">B.</span> <span>You have picked the person you are being compared to.</span></label>
+    <label class="option-label"><input type="radio" name="mc_choice" value="C"> <span class="opt-letter">C.</span> <span>All of the above</span></label>
+    <label class="option-label"><input type="radio" name="mc_choice" value="D"> <span class="opt-letter">D.</span> <span>None of the above</span></label>
   </div>
   <div id="feedback"></div>
   <div id="hintDisplay"></div>
+  <div id="answerDisplay"></div>
   <div class="btn-row">
     <button class="btn" id="submitBtn" onclick="checkAnswer()">Submit</button>
     <button class="btn btn-ghost" id="hintBtn" onclick="showHint()">Show Hint</button>
@@ -144,16 +154,9 @@ body {
   </div>
 </div>
 <script>
-  var hints = ["The answer is: C. All of the above"];
+  var hints = ["The answer is: C"];
   var hintIndex = 0;
-  var correctAnswers = ["C. All of the above"];
-
-  function showHint() {
-    var d = document.getElementById('hintDisplay');
-    d.style.display = 'block';
-    d.textContent = hintIndex < hints.length ? hints[hintIndex++] : 'No more hints.';
-  }
-
+  var correctAnswers = ["C"];
   function checkAnswer() {
     var sel = document.querySelector('input[name="mc_choice"]:checked');
     var fb = document.getElementById('feedback');
@@ -169,12 +172,51 @@ body {
       document.querySelectorAll('input[name="mc_choice"]').forEach(function(r) { r.disabled = true; });
       document.getElementById('hintBtn').style.display = 'none';
       document.getElementById('hintDisplay').style.display = 'none';
+      document.getElementById('answerDisplay').style.display = 'none';
       document.getElementById('nextButton').style.display = 'inline-block';
     } else {
-      fb.innerHTML = '&#10007; Incorrect — try again.';
+      fb.innerHTML = '&#10007; Incorrect &mdash; try again.';
       fb.className = 'feedback incorrect';
     }
   }
+  // ---- hint / answer reveal ----
+  var ANSWER_RE = /^(The answer is|The correct answers are|The correct answer is)\s*:/i;
+  var hintSteps = hints.filter(function(h) { return !ANSWER_RE.test(h); });
+  var answerText = hints.filter(function(h) { return ANSWER_RE.test(h); }).pop() || null;
+  function updateHintBtn() {
+    var b = document.getElementById('hintBtn');
+    if (!b) return;
+    if (hintIndex < hintSteps.length) {
+      b.textContent = 'Show Hint (' + (hintIndex + 1) + ' of ' + hintSteps.length + ')';
+      b.disabled = false;
+    } else if (answerText && hintIndex === hintSteps.length) {
+      b.textContent = 'Reveal Answer';
+      b.disabled = false;
+    } else {
+      b.textContent = (hintSteps.length || answerText) ? 'No more hints' : 'No hints available';
+      b.disabled = true;
+    }
+  }
+  function showHint() {
+    if (hintIndex < hintSteps.length) {
+      var d = document.getElementById('hintDisplay');
+      var item = document.createElement('div');
+      item.className = 'hint-item';
+      item.textContent = 'Hint ' + (hintIndex + 1) + ': ' + hintSteps[hintIndex];
+      d.appendChild(item);
+      d.style.display = 'block';
+      hintIndex++;
+    } else if (answerText && hintIndex === hintSteps.length) {
+      if (!confirm('This will reveal the correct answer. Continue?')) return;
+      var a = document.getElementById('answerDisplay');
+      a.textContent = answerText.replace(ANSWER_RE, function(m) { return m.replace(/\s*:$/, '') + ': '; }).replace(/:\s+/, ': ');
+      a.style.display = 'block';
+      hintIndex++;
+    }
+    updateHintBtn();
+  }
+  updateHintBtn();
 </script>
+<!-- ux-v2 -->
 </body>
 </html>
